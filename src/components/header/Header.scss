@@ -1,0 +1,51 @@
+.header {
+  display: flex;
+  justify-content: flex-end;
+
+  &-menu {
+    position: relative;
+    width: 220px;
+    background-color: #fff;
+    font-size: 0.8889rem;
+
+    &-open {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 50px;
+      padding: 0 25px 0 15px;
+      border: none;
+      border-radius: 2px;
+      font-size: 0.8889rem;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+      }
+
+      .more-btn {
+        margin: 0 0 0 auto;
+      }
+    }
+
+    &-list {
+      position: absolute;
+      width: 100%;
+      margin: 0;
+      background-color: #fff;
+
+      li {
+        display: flex;
+        align-items: center;
+        height: 50px;
+        padding: 0 25px 0 15px;
+        border-radius: 2px;
+        cursor: pointer;
+      }
+    }
+
+    img {
+      margin-right: 10px;
+    }
+  }
+}

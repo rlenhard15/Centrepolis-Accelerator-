@@ -1,0 +1,19 @@
+.dashboard-page {
+  display: flex;
+  min-height: 100vh;
+}
+
+.dashboard {
+  flex: 1;
+  background: #E5E5E5;
+}
+
+.dashboard-menu {
+  width: 375px;
+  background-color: #4A4A4A;
+}
+
+.dashboard-content {
+  width: 1000px;
+  margin: 25px auto 80px;
+}

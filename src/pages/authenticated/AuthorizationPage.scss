@@ -1,0 +1,64 @@
+.auth-page {
+  display: flex;
+  min-height: 100vh;
+
+  &-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 35%;
+    background-color: #4A4A4A;
+    color: #fff;
+  }
+
+  &-form {
+    display: flex;
+    flex-direction: column;
+
+    form {
+      width: 370px;
+    }
+
+    width: 65%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-title {
+      margin: 0rem;
+      color: #0A0E2E;
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    &-subtitle {
+      margin: 15px 0 40px;
+      color: #515151;
+      font-weight: 300;
+      font-size: 1rem;
+    }
+  }
+
+  .button {
+    margin-top: 40px;
+  }
+
+  &-alternative {
+    display: flex;
+    flex-direction: column;
+    color: #515151;
+    text-align: center;
+
+    span {
+      margin: 5px 0;
+    }
+    
+    a {
+      color: #515151;
+      margin-left: 5px;
+      font-weight: 700;
+      text-decoration: underline;
+    }
+  }
+}

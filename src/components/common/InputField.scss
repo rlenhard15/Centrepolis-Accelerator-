@@ -1,0 +1,28 @@
+.text-field {
+  position: relative;
+  margin-bottom: 25px;
+  color: #0A0E2E;
+
+  &-label {
+    display: inline-block;
+    margin-bottom: 10px;
+    font-size: 1rem;
+  }
+
+  &-input {
+    width: 100%;
+    padding: 11px 16px 13px;
+    border: 1px solid #EFEFEF;
+    border-radius: 4px;
+    font-size: 0.8889rem;
+  }
+
+  .error-text {
+    position: absolute;
+    bottom: -20px;
+    left: 5px;
+    margin: 0;
+    font-size: 12px;
+    color: #FF4B32;
+  }
+}
