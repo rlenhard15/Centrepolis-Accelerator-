@@ -6,14 +6,76 @@
 .dashboard {
   flex: 1;
   background: #E5E5E5;
-}
 
-.dashboard-menu {
-  width: 375px;
-  background-color: #4A4A4A;
+  &-title {
+    margin: 0;
+    color: #0A0E2E;
+    font-size: 2rem;
+  }
 }
 
 .dashboard-content {
   width: 1000px;
   margin: 25px auto 80px;
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 40px 0;
+
+    .button {
+      width: 170px;
+    }
+  }
+}
+
+.empty-dashboard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 700px;
+  background-color: #fff;
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 425px;
+    text-align: center;
+
+    &-title {
+      margin: 25px 0 15px;
+      font-size: 1.5556rem;
+      font-weight: 700;
+    }
+
+    &-subtitle {
+      margin: 0 0 40px;
+      font-size: 0.8889rem;
+      line-height: 1.3333rem;
+      font-weight: 400;
+    }
+
+    .button {
+      width: 170px;
+    }
+  }
+}
+
+.thanks-text {
+  margin-top: 200px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media screen and (max-width: 1440px) {
+  .dashboard-content {
+    width: 850px;
+  }
+  .empty-dashboard {
+    height: 550px;
+  }
 }

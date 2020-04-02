@@ -1,0 +1,51 @@
+.popup {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(74, 74, 74, .4);
+
+  &-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 570px;
+    padding: 80px 0;
+    background-color: #fff;
+    border-radius: 2px;
+
+    &-title {
+      margin: 0 0 40px;
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    form {
+      width: 370px;
+    }
+
+    .button {
+      margin-top: 40px;
+    }
+  }
+
+  &-close-btn {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    background-color: transparent;
+    border: 0;
+  }
+}
+
+.invite-popup {
+  .text-field-label {
+    font-size: 0.7778rem;
+  }
+}

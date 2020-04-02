@@ -65,6 +65,7 @@ const SignInPage = props => {
           <Button
             type="submit"
             label="Sign In"
+            disabled={loading}
           />
         </form>
         <p className="auth-page-alternative">

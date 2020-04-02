@@ -1,0 +1,27 @@
+.assessment {
+
+  &-header {
+    margin: 40px 0;
+
+    p {
+      color: #515151;
+      font-size: 0.8889rem; 
+
+      a {
+        color: #171C48;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &-title {
+    margin: 15px 0 0;
+    font-size: 2rem;
+  }
+
+  .back-btn {
+    margin-left: -10px;
+    background-color: transparent;
+    border: none;
+  }
+}

@@ -2,6 +2,10 @@
 
 html {
   font-size: 18px;
+
+  @media screen and (max-width: 1440px) {
+    font-size: 16px;
+  }
 }
 
 body {
@@ -20,4 +24,12 @@ input, label, textarea {
 ul {
   padding: 0;
   list-style-type: none;
+}
+
+button {
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
 }

@@ -1,0 +1,44 @@
+.dashboard-menu {
+  display: flex;
+  flex-direction: column;
+  width: 375px;
+  background-color: #4A4A4A;
+  text-align: center;
+
+  &-title {
+    margin: 35px 0 80px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  &-list {
+    margin: 0 auto;
+
+    li a {
+      display: flex;
+      align-items: center;
+      padding: 15px 35px;
+      background: #3F3F3F;
+      border-radius: 40px;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    img {
+      margin-right: 10px;
+    }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .dashboard-menu {
+    width: 300px;
+
+    &-list {
+      li {
+        padding: 10px 30px;
+      }
+    }
+  }
+}

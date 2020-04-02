@@ -7,12 +7,9 @@ export default function validate(values) {
     errors.email = true;
     errors.email_message = '* email address is invalid';
   }
-  if (!values.password) {
-    errors.password = true;
-    errors.password_message = '* password is required';
-  } else if (values.password.length < 6) {
-    errors.password = true;
-    errors.password_message = '* password must be 8 or more characters';
+  if (!values.company_name) {
+    errors.company_name = true;
+    errors.company_name_message = '* company name is required';
   }
 
   return errors;
