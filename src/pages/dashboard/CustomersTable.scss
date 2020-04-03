@@ -53,7 +53,7 @@
     li:nth-child(3),
     li:nth-child(4) {
       width: 20%;
-      color: #0A0E2E;
+      color: #355C97;
       font-size: 0.8889rem;
       text-align: center;
     }
@@ -63,11 +63,25 @@
 
       span {
         padding: 10px 20px;
-        background: #F3F3F3;
+        background: #F5FAFF;
         border-radius: 60px;
 
         &.have-assessment {
-          background: #DCDCDC;
+
+          &.low {
+            background-color: #E2F5D9;
+            color: #3D821D;
+          }
+
+          &.medium {
+            background-color: #fff5d6;
+            color: #FFD865;
+          }
+
+          &.hight {
+            background-color: #FEECEB;
+            color: #D32F2F;
+          }
         }
       }
     }

@@ -1,12 +1,12 @@
 .text-field {
   position: relative;
   margin-bottom: 25px;
-  color: #0A0E2E;
+  color: #9E9E9E;
 
   &-label {
     display: inline-block;
     margin-bottom: 10px;
-    font-size: 1rem;
+    font-size: 0.7778rem;
   }
 
   &-input {
@@ -14,7 +14,21 @@
     padding: 11px 16px 13px;
     border: 1px solid #EFEFEF;
     border-radius: 4px;
+    color: rgba(10, 14, 46, .6);
     font-size: 0.8889rem;
+
+    &::placeholder {
+      color: rgba(10, 14, 46, .6);
+      opacity: 1;
+    }
+
+    &:-ms-input-placeholder {
+      color: rgba(10, 14, 46, .6);
+    }
+
+    &::-ms-input-placeholder {
+      color: rgba(10, 14, 46, .6);
+    }
   }
 
   .error-text {

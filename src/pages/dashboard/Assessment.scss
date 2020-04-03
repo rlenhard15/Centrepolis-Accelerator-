@@ -4,11 +4,11 @@
     margin: 40px 0;
 
     p {
-      color: #515151;
+      color: #555C66;
       font-size: 0.8889rem;
 
       a {
-        color: #171C48;
+        color: #4971FF;
         text-decoration: underline;
       }
     }
@@ -23,6 +23,24 @@
     margin-left: -10px;
     background-color: transparent;
     border: none;
+  }
+
+  &-breadcrumbs {
+    display: flex;
+    align-items: center;
+    margin-bottom: 40px;
+    color: #0A0E2E;
+    font-size: 0.7778rem;
+    font-weight: 400;
+
+    img {
+      margin: 0 10px;
+    }
+
+    .active {
+      color: #4971FF;
+      cursor: pointer;
+    }
   }
 }
 
@@ -55,8 +73,9 @@
 
   &-type {
     padding: 10px 30px;
-    background-color: #F3F3F3;
+    background-color: #F5FAFF;
     border-radius: 60px;
+    color: #355C97;
     font-size: 0.8889rem;
   }
 
@@ -69,6 +88,7 @@
     position: relative;
     display: flex;
     align-items: center;
+    color: #515151;
     font-size: 0.8889rem;
     font-weight: 300;
 
@@ -80,7 +100,7 @@
       height: 14px;
       margin-right: 10px;
       border-radius: 12px;
-      background-color: #EBEBEB;
+      background-color: #F5FAFF;
     }
   }
 }
@@ -117,6 +137,21 @@
 .assessment-item.have-assessment {
   .assessment-item-type {
     background-color: #DCDCDC;
+
+    &.low {
+      background-color: #E2F5D9;
+      color: #3D821D;
+    }
+
+    &.medium {
+      background-color: #fff5d6;
+      color: #FFD865;
+    }
+
+    &.hight {
+      background-color: #FEECEB;
+      color: #D32F2F;
+    }
   }
 
   .assessment-item-risk {

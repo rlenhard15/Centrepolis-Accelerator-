@@ -27,7 +27,7 @@ const CustomersTable = props => {
                       {customer.company_name}
                     </button>
                   </li>
-                  <li><span className="have-assessment">Low Risk</span></li>
+                  <li><span className="have-assessment low">Low Risk</span></li>
                   <li><span>Incomplete</span></li>
                   <li><span>Incomplete</span></li>
                 </ul>

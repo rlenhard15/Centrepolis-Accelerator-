@@ -35,9 +35,7 @@ const ConfirmAccountPage = props => {
 
   return (
     <div className="auth-page">
-      <div className="auth-page-logo">
-        <h3 className="auth-page-logo-title">Image</h3>
-      </div>
+      <div className="auth-page-logo"></div>
       <div className="auth-page-form">
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <h3 className="auth-page-form-title">Confirm Account</h3>

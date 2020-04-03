@@ -1,6 +1,15 @@
 .header {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  height: 90px;
+  background-color: #fff;
+
+  &-block {
+    display: flex;
+    justify-content: flex-end;
+    width: 1000px;
+    margin: 0 auto;
+  }
 
   &-menu {
     position: relative;
@@ -38,14 +47,27 @@
         display: flex;
         align-items: center;
         height: 50px;
-        padding: 0 25px 0 15px;
+        padding: 0 15px 0 20px;
         border-radius: 2px;
         cursor: pointer;
+
+        img {
+          margin-left: auto;
+        }
       }
     }
 
     img {
       margin-right: 10px;
     }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .header {
+    height: 70px;
+  }
+  .header-block {
+    width: 950px;
   }
 }

@@ -49,8 +49,8 @@ const DashboardPage = props => {
     <div className="dashboard-page">
       <DashboardMenu />
       <div className="dashboard">
+        <Header {...props} />
         <div className="dashboard-content">
-          <Header {...props} />
           {
             props.userData.user_type === 'Admin' ? (
               !assessments.showAssessments ?

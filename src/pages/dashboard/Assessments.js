@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Loader from '../../components/loader/Loader';
 import AssessmentsItem from './AssessmentItem';
 import ArrowLeftIcon from '../../images/icons/arrow-left.svg';
+import ArrowRightSmallImg from '../../images/icons/arrow-right-small.svg'
 
 import useHttp from '../../hooks/useHttp.hook';
 
@@ -25,20 +26,25 @@ const Assessments = props => {
   const setAssessments = data => {
     data.forEach(ass => {
       let value = ass.risk_value;
+      let risk = '';
       let type = '';
       let index = initialAssessments.findIndex(initial => initial.name === ass.name.split(' ')[0]);
       if (value) {
         if (value <= 33) {
-          type = 'Low Risk'
+          type = 'Low Risk';
+          risk = 'low';
         } else if (value > 33 && value <= 66) {
           type = 'Medium Risk'
+          risk = 'medium';
         } else if (value > 66) {
-          type = 'Hight Risk'
+          type = 'Hight Risk';
+          risk = 'hight';
         }
       } else {
         type = 'Incomplete'
       }
       initialAssessments[index].type = type;
+      initialAssessments[index].risk = risk;
     })
     setState({
       loading: false,
@@ -58,12 +64,11 @@ const Assessments = props => {
   return (
     <div className="assessment">
       <div className="assessment-header">
-        <button
-          className="back-btn"
-          onClick={props.hideAssessments}
-        >
-          <img src={ArrowLeftIcon} alt="" />
-        </button>
+        <div className="assessment-breadcrumbs">
+          <span onClick={props.hideAssessments} className="active">Dashboard</span>
+          <img src={ArrowRightSmallImg} alt="" />
+          <span>{props.customer.company_name}</span>
+        </div>
         <h3 className="assessment-title">{props.customer.company_name}</h3>
         <p>The progress report for {props.customer.company_name} is ready for your review - <Link to="">learn more</Link></p>
       </div>
