@@ -21,7 +21,7 @@ const Header = props => {
           className="header-menu-open"
           onClick={() => setOpen(!open)}
         >
-          <img src={UserIcon} atl="" />
+          <img src={UserIcon} alt="" />
           <span>{`Hi, ${props.userData.user.first_name}`}</span>
           <img src={MoreIcon} alt="" className="more-btn" />
         </button>
@@ -29,7 +29,7 @@ const Header = props => {
           open &&
           <ul className="header-menu-list">
             <li onClick={logOut}>
-              <img src={LogoutIcon} atl="" />
+              <img src={LogoutIcon} alt="" />
               <span>Log Out</span>
             </li>
           </ul>

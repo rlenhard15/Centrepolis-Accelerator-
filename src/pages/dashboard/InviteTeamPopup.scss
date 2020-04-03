@@ -49,3 +49,17 @@
     font-size: 0.7778rem;
   }
 }
+
+@media screen and (max-width: 1440px) {
+  .popup {
+    &-content {
+      width: 500px;
+      padding: 40px 0;
+    }
+
+    &-close-btn {
+      top: 20px;
+      right: 20px;
+    }
+  }
+}

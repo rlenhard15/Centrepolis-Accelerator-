@@ -70,6 +70,7 @@ const InviteTeamPopup = props => {
           />
           <Button
             label="Invite team"
+            disabled={loading}
           />
         </form>
       </div>

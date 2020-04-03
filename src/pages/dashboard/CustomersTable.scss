@@ -1,9 +1,9 @@
 .customers-table {
-  padding: 25px 40px;
+  padding: 25px 0;
   background-color: #fff;
 
   &-head {
-    margin-bottom: 25px;
+    padding: 0 40px 25px;
     color: #656565;
     font-size: 0.8889rem;
 
@@ -25,6 +25,7 @@
 
   &-body {
     & > ul {
+      margin: 0;
       flex-direction: column;
     }
   }
@@ -33,6 +34,12 @@
 .customers-table-body-row {
   display: flex;
   align-items: center;
+  padding: 0 40px;
+  border-bottom: 1px solid #F4F4F4;
+
+  &:last-child {
+    border-bottom: none;
+  }
 
   ul {
     display: flex;
@@ -52,7 +59,7 @@
     }
 
     li {
-      padding: 25px 0;
+      padding: 25px 0 23px;
 
       span {
         padding: 10px 20px;
@@ -71,5 +78,17 @@
     border: none;
     color: #171C48;
     font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .customers-table-head {
+    padding: 0 40px 15px;
+    color: #656565;
+    font-size: 0.8889rem;
+  }
+
+  .customers-table-body-row ul li{
+    padding: 20px 0 18px;
   }
 }

@@ -5,7 +5,7 @@
 
     p {
       color: #515151;
-      font-size: 0.8889rem; 
+      font-size: 0.8889rem;
 
       a {
         color: #171C48;
@@ -23,5 +23,124 @@
     margin-left: -10px;
     background-color: transparent;
     border: none;
+  }
+}
+
+.assessment-risks {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  min-height: 300px;
+}
+
+.assessment-item {
+  width: 320px;
+  padding: 25px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-sizing: border-box;
+
+  &-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #0A0E2E;
+  }
+
+  &-name {
+    font-size: 1.3333rem;
+    font-weight: 700;
+  }
+
+  &-type {
+    padding: 10px 30px;
+    background-color: #F3F3F3;
+    border-radius: 60px;
+    font-size: 0.8889rem;
+  }
+
+  &-bottom {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &-risk {
+    position: relative;
+    display: flex;
+    align-items: center;
+    font-size: 0.8889rem;
+    font-weight: 300;
+
+    &:before {
+      content: "";
+      position: relative;
+      display: inline-block;
+      width: 22px;
+      height: 14px;
+      margin-right: 10px;
+      border-radius: 12px;
+      background-color: #EBEBEB;
+    }
+  }
+}
+
+.assessment-risk-progress {
+  text-align: center;
+}
+
+.progress-block {
+  position: relative;
+  margin: 20px 0;
+
+  .risk-circle {
+    position: absolute;
+
+    &.low {
+      top: 5px;
+      left: 70px;
+    }
+
+    &.medium {
+      top: 5px;
+      right: 70px;
+    }
+
+    &.hight {
+      bottom: 0;
+      right: 27px;
+    }
+
+  }
+}
+
+.assessment-item.have-assessment {
+  .assessment-item-type {
+    background-color: #DCDCDC;
+  }
+
+  .assessment-item-risk {
+    &.low:before {
+      background-color: #3e821d;
+    }
+
+    &.medium:before {
+      background-color: #FFE143;
+    }
+
+    &.hight:before {
+      background-color: #FF4B32;
+    }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .assessment-item {
+    width: 300px;
+    padding: 15px;
+
+    &-type {
+      padding: 10px 20px;
+    }
   }
 }
