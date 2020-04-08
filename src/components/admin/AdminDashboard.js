@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import EmptyDashboard from './EmptyDashboard';
 import CustomersTable from './CustomersTable';
 import InviteTeamPopup from './InviteTeamPopup';
-import { Button } from '../../components/common/Button';
+import { Button } from '../common/Button';
 
 const Dashboard = props => {
   const [showInvitePopup, setShowInvitePopup] = useState(false);

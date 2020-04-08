@@ -13,18 +13,33 @@
   }
 
   &-list {
-    margin: 0 auto;
+    margin: 0;
 
     li a {
-      display: flex;
-      align-items: center;
-      padding: 15px 35px;
-      border-radius: 40px;
-      color: #fff;
-      font-size: 1rem;
+      span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: -15px;
+        padding: 20px 0;
+        color: #fff;
+        font-size: 1rem;
+        text-align: center;
+      }
+
+      &.active {
+        span {
+          background-color: #3A6BB5;
+          color: #FFA842;
+        }
+
+        svg path {
+          stroke: #FFA842;
+        }
+      }
     }
 
-    img {
+    svg {
       margin-right: 10px;
     }
   }

@@ -15,8 +15,11 @@ const Header = props => {
   }
 
   return (
-    <header className="header">
+    <header className={`header ${props.className}`}>
       <div className="header-block">
+        {
+          props.className === 'page' ? <p>Lean Rocket Lab</p> : null
+        }
         <div className="header-menu">
           <button
             className="header-menu-open"

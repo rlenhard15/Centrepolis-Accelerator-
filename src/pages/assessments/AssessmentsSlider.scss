@@ -1,0 +1,50 @@
+.range {
+  position: relative;
+  margin: 20px 45px 40px;
+  z-index: 10;
+
+  input {
+    width: 100%;
+    height: 8px;
+    -webkit-appearance: none;
+    -moz-apperance: none;
+    background-color: transparent;
+    pointer-events: none;
+    z-index: 1;
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      -moz-apperance: none;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background-color: #4971FF;
+      pointer-events: auto;
+      cursor: grab;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.range-track {
+  position: absolute;
+  width: 85%;
+  left: 7%;
+  height: 9px;
+  background: url('../../images/progress-line.svg');
+  top: -53px;
+  z-index: 1;
+
+  &.disable {
+    opacity: 0;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .range {
+    margin: 20px 35px 40px;
+  }
+}

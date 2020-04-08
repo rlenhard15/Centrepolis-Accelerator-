@@ -32,24 +32,4 @@ const RiskProgress = props => {
   )
 }
 
-const AssessmentsItem = props => {
-  const {type, name, risk} = props;
-  return (
-    <div className={`assessment-item ${type !== 'Incomplete' ? 'have-assessment' : ''}`}>
-      <div className="assessment-item-top">
-        <span className="assessment-item-name">{name} Risk</span>
-        <span className={`assessment-item-type ${risk || ''}`}>{type}</span>
-      </div>
-      <div className="assessment-risk-progress">
-        <RiskProgress type={type} />
-      </div>
-      <div className="assessment-item-bottom">
-        <span className="assessment-item-risk low">Low</span>
-        <span className="assessment-item-risk medium">Medium</span>
-        <span className="assessment-item-risk hight">Hight</span>
-      </div>
-    </div>
-  )
-}
-
-export default AssessmentsItem
+export default RiskProgress

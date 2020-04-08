@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { InputField } from '../../components/common/InputField';
-import { Button } from '../../components/common/Button';
+import { InputField } from '../common/InputField';
+import { Button } from '../common/Button';
 
 import useHttp from '../../hooks/useHttp.hook';
 import useForm from '../../hooks/useForm.hook';
@@ -50,7 +50,7 @@ const InviteTeamPopup = props => {
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <InputField
             label="Email Address"
-            placeholder="Enter your email address"
+            placeholder="Enter customer email address"
             type="email"
             name="email"
             value={values.email}

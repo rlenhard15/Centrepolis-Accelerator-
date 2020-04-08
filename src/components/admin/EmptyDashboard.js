@@ -2,7 +2,7 @@ import React from 'react';
 
 import GridImg from '../../images/icons/empty-db-img.svg';
 
-import { Button } from '../../components/common/Button';
+import { Button } from '../common/Button';
 
 const EmptyDashboard = props => {
   return(

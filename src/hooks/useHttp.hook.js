@@ -3,10 +3,11 @@ import { useState, useCallback } from 'react';
 const useHttp = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  
   const request = useCallback(async (endpoint, method = 'GET', body = null, headers = {}) => {
     setLoading(true);
     const authData =  JSON.parse(localStorage.getItem('userData'));
+
     try {
       if (body) {
         body = JSON.stringify(body);
@@ -25,7 +26,6 @@ const useHttp = () => {
       }
 
       setLoading(false)
-
       return data
 
     } catch (err) {

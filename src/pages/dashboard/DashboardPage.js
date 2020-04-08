@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 import Header from '../../components/header/Header';
 import DashboardMenu from './DashboardMenu';
-import Dashboard from './Dashboard';
-import Assessments from './Assessments';
+import AdminDashboard from '../../components/admin/AdminDashboard';
+import CustomerDashboard from '../../components/customer/CustomerDashboard';
+import Assessments from '../../components/assessments/Assessments';
 
 import useHttp from '../../hooks/useHttp.hook';
 
@@ -37,24 +38,32 @@ const DashboardPage = props => {
   }
 
   const getCustomersRequest = async () => {
-    const customers = await request(`/api/customers`);
-    setCustomers(customers);
+    try {
+      const customers = await request(`/api/customers`);
+      setCustomers(customers);
+    } catch (err) {
+      if (err === 403) {
+        localStorage.removeItem('userData');
+        props.history.push('/sign_in');
+      }
+    }
   }
 
   useEffect(() => {
-    getCustomersRequest();
+    props.userData.user_type === 'Admin' &&
+      getCustomersRequest();
   }, [])
 
   return (
     <div className="dashboard-page">
       <DashboardMenu />
       <div className="dashboard">
-        <Header {...props} />
+        <Header className="board" {...props} />
         <div className="dashboard-content">
           {
             props.userData.user_type === 'Admin' ? (
               !assessments.showAssessments ?
-                <Dashboard
+                <AdminDashboard
                   user={user}
                   customers={customers}
                   addCustomers={addCustomers}
@@ -62,11 +71,15 @@ const DashboardPage = props => {
                   loading={loading}
                 /> :
                 <Assessments
-                  customer={assessments.customer}
+                  isPage={false}
+                  userType={props.userData.user_type}
+                  user={assessments.customer}
                   hideAssessments={hideAssessments}
                 />
             ) :
-              <p className="thanks-text">Confirmation is successful. <br/> Thank you for accepting the invitation!</p>
+              <CustomerDashboard
+                userType={props.userData.user_type}
+                user={props.userData.user} />
           }
 
         </div>

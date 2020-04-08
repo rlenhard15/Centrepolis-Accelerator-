@@ -1,4 +1,5 @@
 .assessment {
+  width: 100%;
 
   &-header {
     margin: 40px 0;
@@ -42,6 +43,24 @@
       cursor: pointer;
     }
   }
+
+  &-link {
+    display: block;
+    width: 250px;
+    margin: 40px auto 0;
+    padding: 15px 0;
+    background: #4971FF;
+    border-radius: 60px;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: center;
+
+    &.disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
 }
 
 .assessment-risks {
@@ -49,6 +68,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap;
   min-height: 300px;
 }
 
@@ -77,6 +97,11 @@
     border-radius: 60px;
     color: #355C97;
     font-size: 0.8889rem;
+
+    &.in-progress {
+      background-color: #154EA5;
+      color: #FFF0BC;
+    }
   }
 
   &-bottom {
@@ -166,6 +191,12 @@
     &.hight:before {
       background-color: #FF4B32;
     }
+  }
+}
+
+.assessment.admin {
+  .assessment-link {
+    width: 160px;
   }
 }
 
