@@ -3,23 +3,23 @@ import React, { useState } from 'react';
 import EmptyDashboard from './EmptyDashboard';
 import CustomersTable from './CustomersTable';
 import InviteTeamPopup from './InviteTeamPopup';
-import { Button } from '../common/Button';
+import { CustomButton } from '../common/Button';
 
 const Dashboard = props => {
   const [showInvitePopup, setShowInvitePopup] = useState(false);
 
   return (
     <>
-      <div className="dashboard-content-header">
-        <h3 className="dashboard-title">{`Welcome, ${props.user.first_name} ${props.user.last_name}!`}</h3>
-        {
-          props.customers.length ?
-            <Button
-              label="Invite team"
+      {
+        props.customers.length ?
+          <div className="dashboard-content-header">
+            <h3 className="dashboard-title">{`Welcome, ${props.user.first_name} ${props.user.last_name}!`}</h3>
+            <CustomButton
+              label="Invite Team Manager"
               handleClick={() => setShowInvitePopup(true)}
-            /> : null
-        }
-      </div>
+            />
+          </div> : null
+      }
       {
         !props.loading ? (
           props.customers.length ?

@@ -1,16 +1,18 @@
 import React from 'react';
 
+import Button from '@material-ui/core/Button';
+
 import './Button.scss';
 
-export const Button = props => {
+export const CustomButton = props => {
   return (
-    <button
+    <Button
       className={`button`}
       type={props.type}
       disabled={props.disabled}
       onClick={props.handleClick}
     >
       {props.label}
-    </button>
+    </Button>
   )
 }

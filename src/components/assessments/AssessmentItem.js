@@ -21,8 +21,8 @@ const AssessmentsItem = props => {
       </div>
       {
         userType !== 'Admin' ?
-          <Link to={`/assessments/${1}/${risk_name}`} className="assessment-link">Take assessment</Link> :
-          <Link to={`/assessments/${1}/${risk_name}`} className="assessment-link">View</Link>
+          <Link to={`/assessments/${id || props.firstItemId}/${risk_name}`} className="assessment-link">Take assessment</Link> :
+          <Link to={`/assessments/${id || props.firstItemId}/${risk_name}`} className="assessment-link">View</Link>
       }
     </div>
   )

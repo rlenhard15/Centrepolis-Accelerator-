@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { InputField } from '../common/InputField';
-import { Button } from '../common/Button';
+import { CustomButton } from '../common/Button';
 
 import useHttp from '../../hooks/useHttp.hook';
 import useForm from '../../hooks/useForm.hook';
@@ -41,7 +41,7 @@ const InviteTeamPopup = props => {
   return (
     <div className="popup">
       <div className="popup-content invite-popup">
-        <p className="popup-content-title">Invite team</p>
+        <p className="popup-content-title">Invite Team Manager</p>
         <button
           className="popup-close-btn"
           onClick={props.handleClosePopup}>
@@ -50,7 +50,7 @@ const InviteTeamPopup = props => {
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <InputField
             label="Email Address"
-            placeholder="Enter customer email address"
+            placeholder="Enter team manager’s email address"
             type="email"
             name="email"
             value={values.email}
@@ -60,7 +60,7 @@ const InviteTeamPopup = props => {
           />
           <InputField
             label="Company"
-            placeholder="Enter company name"
+            placeholder="Enter team name"
             type="text"
             name="company_name"
             value={values.company_name}
@@ -68,8 +68,9 @@ const InviteTeamPopup = props => {
             error={errors.company_name || inviteErrors.inviteCompanyError}
             errorText={errors.company_name_message || '* this company name has already exists'}
           />
-          <Button
-            label="Invite team"
+          <CustomButton
+            type='submit'
+            label="Invite Team Manager"
             disabled={loading}
           />
         </form>

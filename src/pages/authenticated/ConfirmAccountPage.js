@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { InputField } from '../../components/common/InputField';
-import { Button } from '../../components/common/Button';
+import { CustomButton } from '../../components/common/Button';
 
 import useHttp from '../../hooks/useHttp.hook';
 import useForm from '../../hooks/useForm.hook';
@@ -80,7 +80,7 @@ const ConfirmAccountPage = props => {
             error={errors.password_confirmation}
             errorText={errors.password_confirmation_message}
           />
-          <Button
+          <CustomButton
             type="submit"
             label="Sign Up"
             disabled={loading}

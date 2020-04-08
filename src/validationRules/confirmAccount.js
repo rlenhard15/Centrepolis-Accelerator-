@@ -20,7 +20,7 @@ export default function validate(values) {
     errors.password_confirmation_message = '* password confirmation is required';
   } else if (values.password !== values.password_confirmation) {
     errors.password_confirmation = true;
-    errors.password_confirmation_message = '* password does not match ';
+    errors.password_confirmation_message = '* password do not match ';
   }
   return errors;
 };

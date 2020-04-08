@@ -1,9 +1,9 @@
 .customers-table {
-  padding: 25px 0;
+  padding: 25px 0 0;
   background-color: #fff;
 
   &-head {
-    padding: 0 40px 25px;
+    padding: 0 0 25px 40px;
     color: #656565;
     font-size: 0.8889rem;
 
@@ -34,15 +34,12 @@
 .customers-table-body-row {
   display: flex;
   align-items: center;
-  padding: 0 40px;
+  padding: 0 0 0 40px;
   border-bottom: 1px solid #F4F4F4;
-
-  &:last-child {
-    border-bottom: none;
-  }
 
   ul {
     display: flex;
+    align-items: center;
     width: 100%;
 
     li:nth-child(1) {
@@ -56,10 +53,16 @@
       color: #355C97;
       font-size: 0.8889rem;
       text-align: center;
+
+      span {
+        display: block;
+        width: 130px;
+        margin: 0 auto;
+      }
     }
 
     li {
-      padding: 25px 0 23px;
+      padding: 20px 0;
 
       span {
         padding: 10px 20px;
@@ -67,6 +70,9 @@
         border-radius: 60px;
 
         &.have-assessment {
+          width: 130px;
+          margin: 0 auto;
+          display: block;
 
           &.low {
             background-color: #E2F5D9;
@@ -90,8 +96,13 @@
   .customers-link {
     background-color: transparent;
     border: none;
-    color: #171C48;
+    color: #4971FF;
     font-size: 1rem;
+    text-decoration: underline;
+
+    &:hover {
+      color: rgb(20, 60, 202);
+    }
   }
 }
 

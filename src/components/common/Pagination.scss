@@ -1,0 +1,44 @@
+.pagination-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 30px 20px 40px;
+
+  button:disabled {
+    opacity: 0.5;
+  }
+}
+
+.pagination-wrapper-common {
+  display: flex;
+  align-items: center;
+}
+
+.pagination-items-counter {
+  color: #171C48;
+  font-size: 0.8889rem;
+}
+
+.pagination-pages-counter {
+  margin-right: 30px;
+  font-size: 0.8889rem;
+}
+
+.pagination-arrows {
+  button {
+    padding: 5px;
+    svg {
+      fill: #262F34;
+    }
+  }
+
+  button:nth-child(2),
+  button:nth-child(3) {
+
+    &:not(:disabled) {
+      svg {
+        fill: #4971FF
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { InputField } from '../../components/common/InputField';
-import { Button } from '../../components/common/Button';
+import { CustomButton } from '../../components/common/Button';
 
 import useHttp from '../../hooks/useHttp.hook';
 import useForm from '../../hooks/useForm.hook';
@@ -60,17 +60,13 @@ const SignInPage = props => {
             error={errors.password || authorizationError}
             errorText={errors.password_message || 'Invalid email/password'}
           />
-          <Button
+          <CustomButton
             type="submit"
             label="Sign In"
             disabled={loading}
           />
         </form>
         <p className="auth-page-alternative">
-          <span>
-            Don’t remember your password?
-            <Link to="/reset_password">Reset Password</Link>
-          </span>
           <span>
             Don’t have an account yet?
             <Link to="/sign_up">Sign up</Link>

@@ -10,7 +10,7 @@ export const InputField = props => {
         {props.label}
       </label>
       <input
-        className="text-field-input"
+        className={`text-field-input ${props.error ? 'error' : props.value ? 'no-error' : ''}`}
         type={props.type}
         placeholder={props.placeholder}
         value={props.value}

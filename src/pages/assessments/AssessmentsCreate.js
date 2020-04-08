@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 
 import AssessmentCategory from './AssessmentsCategory';
 
-import { Button } from '../../components/common/Button';
+import { CustomButton } from '../../components/common/Button';
 
 const AssessmentCreate = props => {
   const history = useHistory();
@@ -43,7 +43,7 @@ const AssessmentCreate = props => {
           </div>
         )
       }
-      <Button
+      <CustomButton
         label={props.step !== 4 ? 'Next' : 'Submit'}
         handleClick={handleChangePage}
       />

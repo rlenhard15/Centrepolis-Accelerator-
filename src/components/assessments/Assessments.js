@@ -9,9 +9,9 @@ import useHttp from '../../hooks/useHttp.hook';
 import './Assessment.scss';
 
 const initialAssessments = [
-  { id: 1, risk_name: 'CRL', risk_type: 'Incomplete' },
-  { id: 2, risk_name: 'MRL', risk_type: 'Incomplete' },
-  { id: 3, risk_name: 'TRL', risk_type: 'Incomplete' }
+  { risk_name: 'CRL', risk_type: 'Incomplete' },
+  { risk_name: 'MRL', risk_type: 'Incomplete' },
+  { risk_name: 'TRL', risk_type: 'Incomplete' }
 ]
 
 const Assessments = props => {
@@ -29,8 +29,8 @@ const Assessments = props => {
       let index = initialAssessments.findIndex(initial => initial.risk_name === ass.name.split(' ')[0]);
       if (value) {
         if (value <= 33) {
-          type = 'Hight Risk';
-          risk = 'hight';
+          type = 'High Risk';
+          risk = 'high';
         } else if (value > 33 && value <= 66) {
           type = 'Medium Risk'
           risk = 'medium';
@@ -41,6 +41,7 @@ const Assessments = props => {
       } else {
         type = 'Incomplete'
       }
+      initialAssessments[index].id = ass.id;
       initialAssessments[index].risk_type = type;
       initialAssessments[index].risk_class = risk;
     })
@@ -52,6 +53,7 @@ const Assessments = props => {
 
   const getAssessmentsRequest = async () => {
     const assessments = await request(`/api/assessments/?customer_id=${props.user.id}`);
+    console.log(assessments)
     setAssessments(assessments);
   }
 
@@ -88,6 +90,7 @@ const Assessments = props => {
               key={i}
               {...item}
               userType={props.userType}
+              firstItemId={state.assessments[0].id}
             />)) :
             <Loader />
         }

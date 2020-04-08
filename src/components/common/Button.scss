@@ -1,4 +1,4 @@
-.button {
+.MuiButton-root.button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6,8 +6,13 @@
   height: 2.8889rem;
   border: none;
   border-radius: 60px;
-  background-color: #0F3D83;
+  background-color: #4971FF;
   color: #fff;
   font-size: 1rem;
+  text-transform: none;
   cursor: pointer;
+
+  &:hover {
+    background-color: #4971FF;
+  }
 }
