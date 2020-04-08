@@ -8,52 +8,44 @@ import useHttp from '../../hooks/useHttp.hook';
 
 import './Assessment.scss';
 
-const initialAssessments = [
-  { risk_name: 'CRL', risk_type: 'Incomplete' },
-  { risk_name: 'MRL', risk_type: 'Incomplete' },
-  { risk_name: 'TRL', risk_type: 'Incomplete' }
-]
-
 const Assessments = props => {
   const { request } = useHttp();
   const [state, setState] = useState({
     loading: true,
     assessments: null
-  })
+  });
 
   const setAssessments = data => {
-    data.forEach(ass => {
-      let value = ass.risk_value;
-      let risk = '';
-      let type = '';
-      let index = initialAssessments.findIndex(initial => initial.risk_name === ass.name.split(' ')[0]);
+    const updatedStages = data.map(ass => {
+      let value = ass.risk_value,
+          risk_name = ass.name.split(' ')[0],
+          risk_class = '',
+          risk_type = '';
       if (value) {
         if (value <= 33) {
-          type = 'High Risk';
-          risk = 'high';
+          risk_type = 'High Risk';
+          risk_class = 'high';
         } else if (value > 33 && value <= 66) {
-          type = 'Medium Risk'
-          risk = 'medium';
+          risk_type = 'Medium Risk'
+          risk_class = 'medium';
         } else if (value > 66) {
-          type = 'Low Risk';
-          risk = 'low';
+          risk_type = 'Low Risk';
+          risk_class = 'low';
         }
       } else {
-        type = 'Incomplete'
+        risk_type = 'Incomplete'
       }
-      initialAssessments[index].id = ass.id;
-      initialAssessments[index].risk_type = type;
-      initialAssessments[index].risk_class = risk;
+      return {...ass, risk_type, risk_class, risk_name}
     })
+
     setState({
       loading: false,
-      assessments: initialAssessments
+      assessments: updatedStages
     })
   }
 
   const getAssessmentsRequest = async () => {
-    const assessments = await request(`/api/assessments/?customer_id=${props.user.id}`);
-    console.log(assessments)
+    const assessments = await request(`/api/assessments/?customer_id=${props.customer.id}`);
     setAssessments(assessments);
   }
 
@@ -70,14 +62,14 @@ const Assessments = props => {
               <div className="assessment-breadcrumbs">
                 <span onClick={props.hideAssessments} className="active">Dashboard</span>
                 <img src={ArrowRightSmallImg} alt="" />
-                <span>{props.user.company_name}</span>
+                <span>{props.customer.company_name}</span>
               </div>
-              <h3 className="assessment-title">{props.assessmentType} Assessment</h3>
-              <p>The progress report for {props.user.company_name} is ready for your review.</p>
+              <h3 className="assessment-title">{props.customer.company_name}</h3>
+              <p>The progress report for {props.customer.company_name} is ready for your review.</p>
             </>
           ) : (
               <>
-                <h3 className="assessment-title">{props.user.company_name}</h3>
+                <h3 className="assessment-title">{props.customer.company_name}</h3>
                 <p>Are you ready to find out your CRL, TRL, MRL risks?</p>
               </>
             )
@@ -90,7 +82,7 @@ const Assessments = props => {
               key={i}
               {...item}
               userType={props.userType}
-              firstItemId={state.assessments[0].id}
+              customer_id={props.customer.id}
             />)) :
             <Loader />
         }

@@ -6,14 +6,14 @@ const AssessmentsSteps = props => {
   return (
     <div className="assessment-steps">
       {
-        props.settings.map((step, i) =>
+        props.categories.map((category, i) =>
           <div
-            key={step.id}
+            key={category.id}
             className="assessment-steps-item"
-            onClick={() => props.changePage(i + 1)}
+            onClick={() => props.changePage(category.id)}
           >
-            <span className={`step-number ${props.step === step.id ? 'active' : ''}`}>{i + 1}</span>
-            <span className="step-name">{step.title}</span>
+            <span className={`step-number ${props.activeCategory === category.id ? 'active' : ''}`}>{i + 1}</span>
+            <span className="step-name">{category.title}</span>
           </div>)
       }
     </div>

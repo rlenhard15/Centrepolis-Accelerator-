@@ -27,6 +27,9 @@
     & > ul {
       margin: 0;
       flex-direction: column;
+      max-height: 500px;
+      min-height: 500px;
+      overflow-y: scroll;
     }
   }
 }
@@ -84,7 +87,7 @@
             color: #FFD865;
           }
 
-          &.hight {
+          &.high {
             background-color: #FEECEB;
             color: #D32F2F;
           }
@@ -108,9 +111,14 @@
 
 @media screen and (max-width: 1440px) {
   .customers-table-head {
-    padding: 0 40px 15px;
+    padding: 0 0 15px 40px;
     color: #656565;
     font-size: 0.8889rem;
+  }
+
+  .customers-table-body > ul {
+    max-height: 430px;
+    min-height: 430px;
   }
 
   .customers-table-body-row ul li{

@@ -9,10 +9,10 @@ const CheckAuthorization = () => {
   const authData = JSON.parse(localStorage.getItem('userData'));
   const isAuthenticated = authData ? true : false;
   const allRoutes = useRoutes(isAuthenticated, authData);
-  const isResetPassword = path === '/users/password';
+  const isConfirmationPage = path === '/users/password';
 
   useEffect(() => {
-    if (!isAuthenticated) isResetPassword ? history.push(history.location) : history.push('/sign_in');
+    if (!isAuthenticated) isConfirmationPage ? history.push(history.location) : history.push('/sign_in');
   }, [])
 
   return (

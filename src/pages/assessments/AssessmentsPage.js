@@ -18,21 +18,38 @@ const AssessmentsPage = props => {
   const { user, user_type } = props.userData;
   const { request } = useHttp();
   const [state, setState] = useState({
-    step: 1,
-    assessment: {},
+    activeCategory: 1,
+    categories: [],
+    subCategories: [],
     loading: true
-  })
+  });
 
-  const changePage = page => {
-    setState({ ...state, step: page });
+  const subCategoriesUrl = categoryId => user_type === "Admin" ?
+  `${categoryId}?customer_id=${props.match.params.customer_id}` : 
+  `${categoryId}`;
+
+  const changeSubCategory = async activeCategory => {
+    const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(activeCategory)}`);
+    setState({
+      ...state,
+      subCategories,
+      activeCategory
+    });
     if (settingsBlockRef.current.offsetTop > 100) {
-      settingsBlockRef.current.scrollIntoView({ behavior: 'smooth' })
+      settingsBlockRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }
 
   const fetchAssessmentSettings = async () => {
-    const assessment = await request(`/api/assessments/${id}`);
-    setState({ ...state, assessment, loading: false });
+    const categories = await request(`/api/assessments/${id}/categories`);
+    const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(categories[0].id)}`);
+    setState({
+      ...state,
+      categories,
+      subCategories,
+      activeCategory: categories[0].id,
+      loading: false
+    });
   }
 
   useEffect(() => {
@@ -54,15 +71,14 @@ const AssessmentsPage = props => {
             <p className="assessment-subtitle">Hi {user.first_name}, you can review assessment below.</p> :
             <p className="assessment-subtitle">Hi {user.first_name}, please complete this assessment on behalf of {user.company_name}.</p>
         }
-
         {
           !state.loading ? (
             <div className="assessment-settings">
               <div className="assessment-settings-show">
                 <AssessmentsSteps
-                  step={state.step}
-                  changePage={changePage}
-                  settings={state.assessment.description_with_child_models}
+                  activeCategory={state.activeCategory}
+                  changePage={changeSubCategory}
+                  categories={state.categories}
                 />
               </div>
               <div className="assessment-settings-create">
@@ -70,9 +86,10 @@ const AssessmentsPage = props => {
                   settingsBlockRef={settingsBlockRef}
                   assessmentId={id}
                   userType={user_type}
-                  step={state.step}
-                  changePage={changePage}
-                  settings={state.assessment.description_with_child_models}
+                  activeCategory={state.activeCategory}
+                  changePage={changeSubCategory}
+                  categories={state.categories}
+                  subCategories={state.subCategories}
                 />
               </div>
             </div>

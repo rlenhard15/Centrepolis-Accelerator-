@@ -52,3 +52,18 @@
     color: #D85869;
   }
 }
+
+@media screen and (max-width: 1440px) {
+  .text-field {
+    margin-bottom: 20px;
+
+    &-label {
+      margin-bottom: 5px;
+    }
+
+    .error-text {
+      bottom: -15px;
+      font-size: 10px;
+    }
+  }
+}

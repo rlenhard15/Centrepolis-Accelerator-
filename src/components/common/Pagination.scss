@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 30px 20px 40px;
+  padding: 20px 20px 20px 45px;
 
   button:disabled {
     opacity: 0.5;
@@ -40,5 +40,11 @@
         fill: #4971FF
       }
     }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .pagination-wrapper {
+    padding: 15px 20px 15px 45px;
   }
 }

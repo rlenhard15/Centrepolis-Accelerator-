@@ -9,7 +9,7 @@ import LastPageRoundedIcon from '@material-ui/icons/LastPageRounded';
 import './Pagination.scss';
 
 const Pagination = props => {
-  const { rows, currentRows, page, rowsPerPage, handleChangePage, itemsName } = props;
+  const { rows, page, rowsPerPage, handleChangePage } = props;
   const count = rows.length;
 
   const handleFirstPageButtonClick = event => {
@@ -31,7 +31,7 @@ const Pagination = props => {
   return (
     <div className="pagination-wrapper">
       <div className="pagination-items-counter">
-        {rows.length} Customers
+        {rows.length} {rows.length > 1 ? 'Customers' : 'Customer'}
       </div>
       <div className="pagination-wrapper-common">
         <div className="pagination-pages-counter">

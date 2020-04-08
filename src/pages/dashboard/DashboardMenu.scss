@@ -49,9 +49,13 @@
   .dashboard-menu {
     width: 300px;
 
+    &-title {
+      margin-bottom: 60px;
+    }
+
     &-list {
-      li a {
-        padding: 10px 30px;
+      li a span {
+        padding: 15px 0;
       }
     }
   }

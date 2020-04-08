@@ -1,41 +1,37 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import AssessmentSlider from './AssessmentsSlider';
-import AssessmentsStage from './AssessmentsStages';
+import AssessmentsStage from './AssessmentsStage';
 
 import useHttp from '../../hooks/useHttp.hook';
 
 const AssessmentCategory = props => {
   const trackRef = useRef(null);
   const { request } = useHttp();
-  const setInitialStages = () => props.stages.map(stage => ({ ...stage, isActive: false }));
   const [state, setState] = useState({
-    stages: setInitialStages(),
+    stages: props.stages,
     loading: true,
-    saved: false
+    saved: false,
+    activeStageIndex: 0,
   });
 
   const handleChangeProgress = index => {
     let updatedStages = [...state.stages];
-    for (let i = 0; i <= updatedStages.length - 1; i++) {
-      if (i <= +index) {
-        updatedStages[i].isActive = true;
-      } else {
-        updatedStages[i].isActive = false;
-      }
-    }
-    setState({ ...state, stages: updatedStages });
+    updatedStages.forEach((stage, i) => i <= +index ? stage.isActive = true : stage.isActive = false);
+    setState({ ...state, stages: updatedStages, activeStageIndex: index });
   }
 
   const updateProgressRequest = async position => {
     const { assessmentId, categoryId, subCategoryId } = props;
-    const currentStage = state.stages.find(stage => stage.position === position + 1)
+    const currentStage = state.stages.find(stage => stage.position === position + 1);
     await request(`/api/assessments/${assessmentId}/categories/${categoryId}/sub_categories/${subCategoryId}/update_progress?current_stage_id=${currentStage.id}`, 'POST');
-    setState({...state, saved: true})
+    setState({ ...state, saved: true })
   }
 
   useEffect(() => {
-    setTimeout(() => setState({ ...state, loading: false }), 100);
+    const activeStageIndex = props.stages.findIndex(stage => props.current_stage_id === stage.id);
+    handleChangeProgress(activeStageIndex);
+    setTimeout(() => setState({ ...state, loading: false, activeStageIndex }), 100);
   }, [])
 
   return (
@@ -43,7 +39,7 @@ const AssessmentCategory = props => {
       key={props.category_id}
     >
       <div className="assessment-setting-subtitle-wrapper">
-        <p className="assessment-setting-subtitle">{props.index + 1}. {props.title}</p>
+        <p className="assessment-setting-subtitle">{props.index + 1}. {props.sub_category_title}</p>
         {
           state.saved ? <span className="saved">Changes saved</span> : null
         }
@@ -52,6 +48,7 @@ const AssessmentCategory = props => {
         props.userType === 'Customer' ?
           <AssessmentSlider
             steps={props.stages.length}
+            activeStageIndex={state.activeStageIndex}
             handleChangeProgress={handleChangeProgress}
             updateProgressRequest={updateProgressRequest}
           /> : null

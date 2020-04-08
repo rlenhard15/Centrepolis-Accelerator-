@@ -29,7 +29,7 @@
   &-breadcrumbs {
     display: flex;
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     color: #0A0E2E;
     font-size: 0.7778rem;
     font-weight: 400;
@@ -47,7 +47,7 @@
   &-link {
     display: block;
     width: 250px;
-    margin: 40px auto 0;
+    margin: 40px auto 10px;
     padding: 15px 0;
     background: #4971FF;
     border-radius: 60px;
@@ -140,20 +140,28 @@
 
   .risk-circle {
     position: absolute;
+    width: 30px;
+    height: 30px;
+    background: #FFFFFF;
+    border-radius: 50%;
+    border: 6px solid;
 
     &.low {
       top: 5px;
       left: 70px;
+      border-color: #3D821D;
     }
 
     &.medium {
       top: 5px;
       right: 70px;
+      border-color: #FFD865;
     }
 
-    &.hight {
+    &.high {
       bottom: 0;
       right: 27px;
+      border-color: #FF5D54;
     }
 
   }
@@ -208,5 +216,9 @@
     &-type {
       padding: 10px 20px;
     }
+  }
+  
+  .assessment-breadcrumbs {
+    margin-bottom: 20px;
   }
 }

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { InputField } from '../../components/common/InputField';
 import { CustomButton } from '../../components/common/Button';
+import Loader from '../../components/loader/Loader';
 
 import useHttp from '../../hooks/useHttp.hook';
 import useForm from '../../hooks/useForm.hook';
@@ -106,6 +107,9 @@ const SignUpPage = props => {
           </span>
         </p>
       </div>
+      {
+        !loading ? <Loader /> : null
+      }
     </div>
   )
 }

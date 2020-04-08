@@ -23,6 +23,19 @@
       cursor: grab;
     }
 
+    &::-moz-range-thumb {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background-color: #4971FF;
+      pointer-events: auto;
+      cursor: grab;
+    }
+
+    &::-moz-focus-outer {
+      border: 0;
+    }
+
     &:focus {
       outline: none;
     }

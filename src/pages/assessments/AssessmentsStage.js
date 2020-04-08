@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './AssessmentsStages.scss';
+import './AssessmentsStage.scss';
 
 const AssessmentsStage = props => {
   return (

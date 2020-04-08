@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import { InputField } from '../../components/common/InputField';
 import { CustomButton } from '../../components/common/Button';
+import Loader from '../../components/loader/Loader';
 
 import useHttp from '../../hooks/useHttp.hook';
 import useForm from '../../hooks/useForm.hook';
@@ -48,7 +49,7 @@ const SignInPage = props => {
             value={values.email}
             onChange={handleChange}
             error={errors.email || authorizationError}
-            errorText={errors.email_message || 'Invalid email/password'}
+            errorText={errors.email_message}
           />
           <InputField
             label="Password"
@@ -73,6 +74,9 @@ const SignInPage = props => {
           </span>
         </p>
       </div>
+      {
+        loading ? <Loader /> : null
+      }
     </div>
   )
 }

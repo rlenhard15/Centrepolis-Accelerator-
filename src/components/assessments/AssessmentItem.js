@@ -17,12 +17,12 @@ const AssessmentsItem = props => {
       <div className="assessment-item-bottom">
         <span className="assessment-item-risk low">Low</span>
         <span className="assessment-item-risk medium">Medium</span>
-        <span className="assessment-item-risk hight">Hight</span>
+        <span className="assessment-item-risk high">High</span>
       </div>
       {
         userType !== 'Admin' ?
-          <Link to={`/assessments/${id || props.firstItemId}/${risk_name}`} className="assessment-link">Take assessment</Link> :
-          <Link to={`/assessments/${id || props.firstItemId}/${risk_name}`} className="assessment-link">View</Link>
+          <Link to={`/assessments/${id}/${risk_name}`} className="assessment-link">Take assessment</Link> :
+          <Link to={`/assessments/${id}/${risk_name}/${props.customer_id}`} className="assessment-link">View</Link>
       }
     </div>
   )

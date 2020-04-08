@@ -1,8 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import ClipBoardIcon from '../../images/icons/clipboard.svg';
-
 import './DashboardMenu.scss';
 
 const DashboardMenu = () => {

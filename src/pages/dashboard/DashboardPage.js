@@ -73,13 +73,13 @@ const DashboardPage = props => {
                 <Assessments
                   isPage={false}
                   userType={props.userData.user_type}
-                  user={assessments.customer}
+                  customer={assessments.customer}
                   hideAssessments={hideAssessments}
                 />
             ) :
               <CustomerDashboard
                 userType={props.userData.user_type}
-                user={props.userData.user} />
+                customer={props.userData.user} />
           }
 
         </div>

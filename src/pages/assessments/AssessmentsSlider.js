@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import './AssessmentsSlider.scss';
 
 const AssessmentSlider = props => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(props.activeStageIndex);
 
   const handleChange = (e) => {
     setValue(e.target.value);
@@ -19,7 +19,7 @@ const AssessmentSlider = props => {
         min='0'
         max={props.steps - 1}
         step='1'
-        value={value}
+        value={props.activeStageIndex}
         onChange={handleChange}
         onMouseUp={handleMouseUp}
       />
