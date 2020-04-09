@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 import Loader from '../loader/Loader';
 import AssessmentsItem from './AssessmentItem';
@@ -10,17 +11,19 @@ import './Assessment.scss';
 
 const Assessments = props => {
   const { request } = useHttp();
+  const currentCustomerId = props.userType === 'Admin' ? +props.match.params.id : props.customer.id;
   const [state, setState] = useState({
+    customer: props.customer || null,
+    assessments: null,
     loading: true,
-    assessments: null
   });
 
-  const setAssessments = data => {
-    const updatedStages = data.map(ass => {
+  const setAssessments = (data, customer) => {
+    let assessments = data.map(ass => {
       let value = ass.risk_value,
-          risk_name = ass.name.split(' ')[0],
-          risk_class = '',
-          risk_type = '';
+        risk_name = ass.name.split(' ')[0],
+        risk_class = '',
+        risk_type = '';
       if (value) {
         if (value <= 33) {
           risk_type = 'High Risk';
@@ -33,60 +36,82 @@ const Assessments = props => {
           risk_class = 'low';
         }
       } else {
-        risk_type = 'Incomplete'
+        risk_type = 'Incomplete';
       }
-      return {...ass, risk_type, risk_class, risk_name}
+      return { ...ass, risk_type, risk_class, risk_name }
     })
+    
+    // until all assessments is not in the database
+    assessments = [...assessments, {risk_name: 'TRL', risk_type: 'Incomplete'}, {risk_name: 'MRL', risk_type: 'Incomplete'}];
 
-    setState({
-      loading: false,
-      assessments: updatedStages
-    })
+    props.userType === 'Admin' ?
+      setState({ assessments, customer, loading: false }) :
+      setState({ ...state, assessments, loading: false })
   }
 
-  const getAssessmentsRequest = async () => {
-    const assessments = await request(`/api/assessments/?customer_id=${props.customer.id}`);
-    setAssessments(assessments);
+  const getAssessmentsRequest = async (customer) => {
+    const assessments = await request(`/api/assessments/?customer_id=${currentCustomerId}`);
+    setAssessments(assessments, customer);
+  }
+
+  const getCustomersRequest = async () => {
+    try {
+      const customers = await request(`/api/customers`);
+      const customer = customers.find(c => c.id === currentCustomerId);
+      getAssessmentsRequest(customer);
+    } catch (err) {
+      if (err === 403) {
+        localStorage.removeItem('userData');
+        props.history.push('/sign_in');
+      }
+    }
   }
 
   useEffect(() => {
-    getAssessmentsRequest();
+    props.userType === 'Admin' ?
+      getCustomersRequest() :
+      getAssessmentsRequest()
   }, [])
+
 
   return (
     <div className={`assessment ${props.userType === "Admin" ? 'admin' : 'customer'}`}>
-      <div className="assessment-header">
-        {
-          props.userType === "Admin" ? (
-            <>
-              <div className="assessment-breadcrumbs">
-                <span onClick={props.hideAssessments} className="active">Dashboard</span>
-                <img src={ArrowRightSmallImg} alt="" />
-                <span>{props.customer.company_name}</span>
-              </div>
-              <h3 className="assessment-title">{props.customer.company_name}</h3>
-              <p>The progress report for {props.customer.company_name} is ready for your review.</p>
-            </>
-          ) : (
-              <>
-                <h3 className="assessment-title">{props.customer.company_name}</h3>
-                <p>Are you ready to find out your CRL, TRL, MRL risks?</p>
-              </>
-            )
-        }
-      </div>
-      <div className="assessment-risks">
-        {
-          !state.loading ?
-            (state.assessments.map((item, i) => <AssessmentsItem
-              key={i}
-              {...item}
-              userType={props.userType}
-              customer_id={props.customer.id}
-            />)) :
-            <Loader />
-        }
-      </div>
+      {
+        !state.loading ?
+          <>
+            <div className="assessment-header">
+              {
+                props.userType === "Admin" ? (
+                  <>
+                    <div className="assessment-breadcrumbs">
+                      <Link to="/" className="active">Dashboard</Link>
+                      <img src={ArrowRightSmallImg} alt="" />
+                      <span>{state.customer.company_name}</span>
+                    </div>
+                    <h3 className="assessment-title">{state.customer.company_name}</h3>
+                    <p>The progress report for {state.customer.company_name} is ready for your review.</p>
+                  </>
+                ) : (
+                    <>
+                      <h3 className="assessment-title">{state.customer.company_name}</h3>
+                      <p>Are you ready to find out your CRL, TRL, MRL risks?</p>
+                    </>
+                  )
+              }
+            </div>
+            <div className="assessment-risks">
+              {
+                state.assessments.map((item, i) =>
+                  <AssessmentsItem
+                    key={i}
+                    {...item}
+                    userType={props.userType}
+                    customerId={currentCustomerId}
+                  />)
+              }
+            </div>
+          </> : <Loader />
+      }
     </div>
   )
 }

@@ -25,13 +25,13 @@ const AssessmentCategory = props => {
     const { assessmentId, categoryId, subCategoryId } = props;
     const currentStage = state.stages.find(stage => stage.position === position + 1);
     await request(`/api/assessments/${assessmentId}/categories/${categoryId}/sub_categories/${subCategoryId}/update_progress?current_stage_id=${currentStage.id}`, 'POST');
-    setState({ ...state, saved: true })
+    setState(state => ({ ...state, saved: true }));
   }
 
   useEffect(() => {
     const activeStageIndex = props.stages.findIndex(stage => props.current_stage_id === stage.id);
     handleChangeProgress(activeStageIndex);
-    setTimeout(() => setState({ ...state, loading: false, activeStageIndex }), 100);
+    setTimeout(() => setState(state => ({ ...state, loading: false, activeStageIndex })), 100);
   }, [])
 
   return (
@@ -64,6 +64,10 @@ const AssessmentCategory = props => {
                 index={i}
                 trackWidth={trackRef.current}
                 stagesCount={state.stages.length}
+                userType={props.userType}
+                handleChangeProgress={handleChangeProgress}
+                updateProgressRequest={updateProgressRequest}
+                
               />
             )
           }

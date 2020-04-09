@@ -2,10 +2,12 @@
   display: flex;
   flex-direction: column;
   background-color: #fff;
+  max-height: calc(100vh - 317px);
   margin-bottom: 25px;
   padding: 25px;
   border-radius: 2px;
   cursor: pointer;
+  overflow-y: auto;
 
   &-item {
     display: flex;

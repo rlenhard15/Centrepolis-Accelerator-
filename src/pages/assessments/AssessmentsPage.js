@@ -25,8 +25,8 @@ const AssessmentsPage = props => {
   });
 
   const subCategoriesUrl = categoryId => user_type === "Admin" ?
-  `${categoryId}?customer_id=${props.match.params.customer_id}` : 
-  `${categoryId}`;
+    `${categoryId}?customer_id=${props.match.params.customer_id}` :
+    `${categoryId}`;
 
   const changeSubCategory = async activeCategory => {
     const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(activeCategory)}`);
@@ -60,21 +60,23 @@ const AssessmentsPage = props => {
     <div className={`assessment-page ${user_type === 'Admin' ? 'admin' : 'customer'}`}>
       <Header className='page' {...props} />
       <div className="assessment-page-container">
-        <div className="assessment-breadcrumbs">
-          <Link to="/" className="active">Dashboard</Link>
-          <img src={ArrowRightSmallImg} alt="" />
-          <span>{type} Risk</span>
-        </div>
-        <h3 className="assessment-title">{type} Risk</h3>
-        {
-          user_type === 'Admin' ?
-            <p className="assessment-subtitle">Hi {user.first_name}, you can review assessment below.</p> :
-            <p className="assessment-subtitle">Hi {user.first_name}, please complete this assessment on behalf of {user.company_name}.</p>
-        }
         {
           !state.loading ? (
             <div className="assessment-settings">
               <div className="assessment-settings-show">
+                <div className="assessment-settings-show-info">
+                  <div className="assessment-breadcrumbs">
+                    <Link to="/" className="active">Dashboard</Link>
+                    <img src={ArrowRightSmallImg} alt="" />
+                    <span>{type} Risk</span>
+                  </div>
+                  <h3 className="assessment-title">{type} Risk</h3>
+                  {
+                    user_type === 'Admin' ?
+                      <p className="assessment-subtitle">Hi {user.first_name}, you can review assessment below.</p> :
+                      <p className="assessment-subtitle">Hi {user.first_name}, please complete this assessment on behalf of {user.company_name}.</p>
+                  }
+                </div>
                 <AssessmentsSteps
                   activeCategory={state.activeCategory}
                   changePage={changeSubCategory}

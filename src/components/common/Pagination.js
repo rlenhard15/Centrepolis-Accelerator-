@@ -34,38 +34,44 @@ const Pagination = props => {
         {rows.length} {rows.length > 1 ? 'Customers' : 'Customer'}
       </div>
       <div className="pagination-wrapper-common">
-        <div className="pagination-pages-counter">
-          {`${rows.length === 0 ? 0 : page + 1} of ${Math.ceil(count / rowsPerPage)}`}
-        </div>
-        <div className="pagination-arrows">
-          <IconButton
-            onClick={handleFirstPageButtonClick}
-            disabled={page === 0}
-            aria-label="first page"
-          >
-            <FirstPageRoundedIcon />
-          </IconButton>
-          <IconButton
-            onClick={handleBackButtonClick}
-            disabled={page === 0}
-            aria-label="previous page">
-            <ChevronLeftRoundedIcon />
-          </IconButton>
-          <IconButton
-            onClick={handleNextButtonClick}
-            disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-            aria-label="next page"
-          >
-            <ChevronRightRoundedIcon />
-          </IconButton>
-          <IconButton
-            onClick={handleLastPageButtonClick}
-            disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-            aria-label="last page"
-          >
-            <LastPageRoundedIcon />
-          </IconButton>
-        </div>
+        {
+          rows.length > rowsPerPage ?
+            <>
+              <div className="pagination-pages-counter">
+                {`${rows.length === 0 ? 0 : page + 1} of ${Math.ceil(count / rowsPerPage)}`}
+              </div>
+              <div className="pagination-arrows">
+                <IconButton
+                  onClick={handleFirstPageButtonClick}
+                  disabled={page === 0}
+                  aria-label="first page"
+                >
+                  <FirstPageRoundedIcon />
+                </IconButton>
+                <IconButton
+                  onClick={handleBackButtonClick}
+                  disabled={page === 0}
+                  aria-label="previous page">
+                  <ChevronLeftRoundedIcon />
+                </IconButton>
+                <IconButton
+                  onClick={handleNextButtonClick}
+                  disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                  aria-label="next page"
+                >
+                  <ChevronRightRoundedIcon />
+                </IconButton>
+                <IconButton
+                  onClick={handleLastPageButtonClick}
+                  disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                  aria-label="last page"
+                >
+                  <LastPageRoundedIcon />
+                </IconButton>
+              </div>
+            </> : null
+        }
+
       </div>
     </div>
   );

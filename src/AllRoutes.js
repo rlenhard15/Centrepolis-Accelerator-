@@ -14,9 +14,13 @@ export const useRoutes = (isAuthenticated, authData) => {
       <Switch>
         <Route exact path="/" render={props => <DashBoardPage userData={authData} {...props} />} />
         {
-          authData.user_type === 'Admin' ?
-            <Route path="/assessments/:id/:type/:customer_id" render={props => <AssessmentsPage userData={authData} {...props} />} /> :
-            <Route path="/assessments/:id/:type" render={props => <AssessmentsPage userData={authData} {...props} />} />
+          authData.user_type === 'Admin' && [
+            <Route exact path="/assessments/:id" key={1} render={props => <DashBoardPage userData={authData} {...props} />} />,
+            <Route path="/assessments/:id/:type/:customer_id" key={2} render={props => <AssessmentsPage userData={authData} {...props} />} />
+          ]}
+        {
+          authData.user_type === 'Customer' &&
+          <Route path="/assessments/:id/:type" render={props => <AssessmentsPage userData={authData} {...props} />} />
         }
         <Redirect to="/" />
       </Switch>

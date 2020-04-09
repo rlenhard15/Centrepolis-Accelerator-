@@ -108,7 +108,7 @@ const SignUpPage = props => {
         </p>
       </div>
       {
-        !loading ? <Loader /> : null
+        loading ? <Loader /> : null
       }
     </div>
   )

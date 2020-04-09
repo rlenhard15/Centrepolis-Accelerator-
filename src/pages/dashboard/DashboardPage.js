@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Route } from 'react-router-dom';
 
 import Header from '../../components/header/Header';
 import DashboardMenu from './DashboardMenu';
@@ -14,24 +15,6 @@ const DashboardPage = props => {
   const { user } = props.userData;
   const { loading, request } = useHttp();
   const [customers, setCustomers] = useState([]);
-  const [assessments, setAssessments] = useState({
-    showAssessments: false,
-    customer: null
-  });
-
-  const showAssessments = customer => {
-    setAssessments({
-      showAssessments: true,
-      customer
-    })
-  }
-
-  const hideAssessments = () => {
-    setAssessments({
-      showAssessments: false,
-      customer: null
-    })
-  }
 
   const addCustomers = newCustomer => {
     setCustomers([...customers, newCustomer]);
@@ -62,26 +45,26 @@ const DashboardPage = props => {
         <div className="dashboard-content">
           {
             props.userData.user_type === 'Admin' ? (
-              !assessments.showAssessments ?
-                <AdminDashboard
-                  user={user}
-                  customers={customers}
-                  addCustomers={addCustomers}
-                  showAssessments={showAssessments}
-                  loading={loading}
-                /> :
-                <Assessments
-                  isPage={false}
-                  userType={props.userData.user_type}
-                  customer={assessments.customer}
-                  hideAssessments={hideAssessments}
-                />
+              <>
+                <Route exact path="/" render={() =>
+                  <AdminDashboard
+                    user={user}
+                    customers={customers}
+                    addCustomers={addCustomers}
+                    loading={loading}
+                  />} />
+                <Route exact path="/assessments/:id" render={() =>
+                  <Assessments
+                    {...props}
+                    isPage={false}
+                    userType={props.userData.user_type}
+                  />} />
+              </>
             ) :
               <CustomerDashboard
                 userType={props.userData.user_type}
                 customer={props.userData.user} />
           }
-
         </div>
       </div>
     </div>

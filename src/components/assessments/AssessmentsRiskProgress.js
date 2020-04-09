@@ -4,25 +4,31 @@ import RiscProgressImg from '../../images/risk-progress.svg';
 import IncompleteRiskImg from '../../images/risk-incomplete.png'
 
 const RiskProgress = props => {
-  const { type } = props;
-  const checkRisk = () => {
-    if (type === 'Low Risk') return <span className="risk-circle low"></span>
-    if (type === 'Medium Risk') return <span className="risk-circle medium"></span>
-    if (type === 'High Risk') return <span className="risk-circle high"></span>
+  const { riskType } = props;
+
+  const positionCounting = () => {
+    const initial = {};
+    const value = Math.floor(props.value);
+    if (!value) {
+      initial.transform = `rotate(${180 - value * 1.8}deg) translate(5px, 10px)`;
+    } else if (value < 25) {
+      initial.transform = `rotate(${180 - value * 1.8}deg) translateX(5px)`;
+    } else {
+      initial.transform = `rotate(${180 - value * 1.8}deg)`;
+    }
+    return initial
   }
 
   return (
     <div className="progress-block">
       {
-        type === 'Incomplete' ? (
+        riskType === 'Incomplete' ? (
           <img src={IncompleteRiskImg} alt="" />
         ) : (
-            <>
+            <div className="risk-block">
               <img src={RiscProgressImg} alt="" />
-              {
-                checkRisk()
-              }
-            </>
+              <span className={`risk-circle ${props.riskClass}`} style={positionCounting()}></span>
+            </div>
           )
       }
     </div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import Pagination from '../common/Pagination';
 
@@ -49,12 +50,12 @@ const CustomersTable = props => {
               <li key={customer.id} className="customers-table-body-row">
                 <ul>
                   <li>
-                    <button
+                    <Link 
+                      to={`/assessments/${customer.id}`}
                       className="customers-link"
-                      onClick={() => props.showAssessments(customer)}
                     >
                       {customer.company_name}
-                    </button>
+                    </Link>
                   </li>
                   <li>{setAssessmentRisk(customer, 'CRL')}</li>
                   <li>{setAssessmentRisk(customer, 'TRL')}</li>

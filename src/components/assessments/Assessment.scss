@@ -130,6 +130,11 @@
   }
 }
 
+.risk-block {
+  display: inline-block;
+  position: relative;
+}
+
 .assessment-risk-progress {
   text-align: center;
 }
@@ -145,22 +150,19 @@
     background: #FFFFFF;
     border-radius: 50%;
     border: 6px solid;
+    bottom: -7px;
+    left: -7px;
+    transform-origin: 110px 20px;
 
     &.low {
-      top: 5px;
-      left: 70px;
       border-color: #3D821D;
     }
 
     &.medium {
-      top: 5px;
-      right: 70px;
       border-color: #FFD865;
     }
 
     &.high {
-      bottom: 0;
-      right: 27px;
       border-color: #FF5D54;
     }
 

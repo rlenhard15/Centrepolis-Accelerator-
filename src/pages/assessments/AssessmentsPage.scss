@@ -9,7 +9,8 @@
   }
 
   .assessment-subtitle {
-    margin: 10px 0 40px;
+    height: 60px;
+    margin: 10px 0 10px;
     color: #555C66;
     font-size: 0.8889rem;
   }
@@ -26,14 +27,12 @@
   justify-content: space-between;
 
   &-show {
-    max-height: 680px;
     width: 320px;
-    overflow-y: auto;
   }
 
   &-create {
     width: 1015px;
-    max-height: 650px;
+    max-height: calc(100vh - 150px);
     padding: 25px 50px;
     background-color: #fff;
     border-radius: 2px;
@@ -101,18 +100,16 @@
   }
 
   .assessment-page .assessment-subtitle {
-    margin: 10px 0 30px;
+    height: 50px;
   }
 
   .assessment-settings {
     &-show {
       width: 290px;
-      max-height: 65vh;
     }
 
     &-create {
       width: 890px;
-      height: 65vh;
       background-color: #fff;
       border-radius: 2px;
     }
@@ -126,29 +123,5 @@
     &-stages {
       margin-bottom: 20px;
     }
-  }
-
-  .assessment-steps {
-    padding: 20px;
-  }
-
-  .step-number {
-    width: 50px;
-    height: 50px;
-    margin: 10px 15px 10px 0;
-
-    &.active:before {
-      width: 55px;
-      height: 55px;
-    }
-  }
-
-  .range {
-    margin: 20px 35px 40px;
-  }
-
-  .stages-item {
-    width: 110px;
-    height: 180px;
   }
 }
