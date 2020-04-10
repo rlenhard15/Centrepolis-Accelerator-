@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import RiscProgressImg from '../../images/risk-progress.svg';
-import IncompleteRiskImg from '../../images/risk-incomplete.png'
+import IncompleteRiskImg from '../../images/risk-incomplete.png';
+import Loader from '../loader/Loader';
 
 const RiskProgress = props => {
   const { riskType } = props;
+  const [imgLoading, setImgLoading] = useState(true);
 
   const positionCounting = () => {
     const initial = {};
@@ -19,6 +21,8 @@ const RiskProgress = props => {
     return initial
   }
 
+  const handleImgLoaded = () => setImgLoading(false);
+
   return (
     <div className="progress-block">
       {
@@ -26,8 +30,11 @@ const RiskProgress = props => {
           <img src={IncompleteRiskImg} alt="" />
         ) : (
             <div className="risk-block">
-              <img src={RiscProgressImg} alt="" />
-              <span className={`risk-circle ${props.riskClass}`} style={positionCounting()}></span>
+              <img src={RiscProgressImg} alt="" onLoad={handleImgLoaded} />
+              {
+                !imgLoading ?
+                  <span className={`risk-circle ${props.riskClass}`} style={positionCounting()}></span> : <Loader />
+              }
             </div>
           )
       }

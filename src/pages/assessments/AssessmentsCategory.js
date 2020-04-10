@@ -26,6 +26,7 @@ const AssessmentCategory = props => {
     const currentStage = state.stages.find(stage => stage.position === position + 1);
     await request(`/api/assessments/${assessmentId}/categories/${categoryId}/sub_categories/${subCategoryId}/update_progress?current_stage_id=${currentStage.id}`, 'POST');
     setState(state => ({ ...state, saved: true }));
+    setTimeout(() => setState(state => ({...state, saved: false})), 2000);
   }
 
   useEffect(() => {
