@@ -11,12 +11,13 @@ const RiskProgress = props => {
   const positionCounting = () => {
     const initial = {};
     const value = Math.floor(props.value);
+    const coeff = value >= 65 && value < 68 ? 1.9 : 1.8;
     if (!value) {
-      initial.transform = `rotate(${180 - value * 1.8}deg) translate(5px, 10px)`;
+      initial.transform = `rotate(${180 - value * coeff}deg) translate(5px, 10px)`;
     } else if (value < 25) {
-      initial.transform = `rotate(${180 - value * 1.8}deg) translateX(5px)`;
+      initial.transform = `rotate(${180 - value * coeff}deg) translateX(5px)`;
     } else {
-      initial.transform = `rotate(${180 - value * 1.8}deg)`;
+      initial.transform = `rotate(${180 - value * coeff}deg)`;
     }
     return initial
   }
