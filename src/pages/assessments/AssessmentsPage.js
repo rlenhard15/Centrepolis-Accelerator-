@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 import Header from '../../components/header/Header';
-import AssessmentCreate from './AssessmentsCreate';
+import AssessmentsSettings from './AssessmentsSettings';
 import AssessmentsSteps from './AssessmentsSteps';
 import Loader from '../../components/loader/Loader';
 
@@ -14,7 +14,7 @@ import './AssessmentsPage.scss';
 
 const AssessmentsPage = props => {
   const settingsBlockRef = useRef(null);
-  const { id, type } = props.match.params;
+  const { id, type, customer_id } = props.match.params;
   const { user, user_type } = props.userData;
   const { request } = useHttp();
   const [state, setState] = useState({
@@ -25,7 +25,7 @@ const AssessmentsPage = props => {
   });
 
   const subCategoriesUrl = categoryId => user_type === "Admin" ?
-    `${categoryId}?customer_id=${props.match.params.customer_id}` :
+    `${categoryId}?customer_id=${customer_id}` :
     `${categoryId}`;
 
   const changeSubCategory = async activeCategory => {
@@ -63,7 +63,7 @@ const AssessmentsPage = props => {
         {
           !state.loading ? (
             <div className="assessment-settings">
-              <div className="assessment-settings-show">
+              <div className="assessment-settings-steps">
                 <div className="assessment-settings-show-info">
                   <div className="assessment-breadcrumbs">
                     <Link to="/" className="active">Dashboard</Link>
@@ -83,10 +83,11 @@ const AssessmentsPage = props => {
                   categories={state.categories}
                 />
               </div>
-              <div className="assessment-settings-create">
-                <AssessmentCreate
+              <div className="assessment-settings-update">
+                <AssessmentsSettings
                   settingsBlockRef={settingsBlockRef}
                   assessmentId={id}
+                  customerId={customer_id}
                   userType={user_type}
                   activeCategory={state.activeCategory}
                   changePage={changeSubCategory}

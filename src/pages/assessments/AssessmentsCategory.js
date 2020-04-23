@@ -24,9 +24,9 @@ const AssessmentCategory = props => {
   const updateProgressRequest = async position => {
     const { assessmentId, categoryId, subCategoryId } = props;
     const currentStage = state.stages.find(stage => stage.position === position + 1);
-    await request(`/api/assessments/${assessmentId}/categories/${categoryId}/sub_categories/${subCategoryId}/update_progress?current_stage_id=${currentStage.id}`, 'POST');
+    await request(`/api/assessments/${assessmentId}/categories/${categoryId}/sub_categories/${subCategoryId}/update_progress?current_stage_id=${currentStage.id}&customer_id=${props.customerId}`, 'POST');
     setState(state => ({ ...state, saved: true }));
-    setTimeout(() => setState(state => ({...state, saved: false})), 2000);
+    setTimeout(() => setState(state => ({ ...state, saved: false })), 2000);
   }
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const AssessmentCategory = props => {
         }
       </div>
       {
-        props.userType === 'Customer' ?
+        props.userType === 'Admin' ?
           <AssessmentSlider
             steps={props.stages.length}
             activeStageIndex={state.activeStageIndex}
@@ -60,15 +60,14 @@ const AssessmentCategory = props => {
           {
             state.stages.map((stage, i) =>
               <AssessmentsStage
-                key={stage.id}
                 {...stage}
                 index={i}
+                key={stage.id}
                 trackWidth={trackRef.current}
                 stagesCount={state.stages.length}
                 userType={props.userType}
                 handleChangeProgress={handleChangeProgress}
                 updateProgressRequest={updateProgressRequest}
-                
               />
             )
           }

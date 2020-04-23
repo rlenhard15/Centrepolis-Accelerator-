@@ -52,13 +52,15 @@ const DashboardPage = props => {
                     customers={customers}
                     addCustomers={addCustomers}
                     loading={loading}
-                  />} />
+                  />}
+                />
                 <Route exact path="/assessments/:id" render={() =>
                   <Assessments
                     {...props}
                     isPage={false}
                     userType={props.userData.user_type}
-                  />} />
+                  />}
+                />
               </>
             ) :
               <CustomerDashboard

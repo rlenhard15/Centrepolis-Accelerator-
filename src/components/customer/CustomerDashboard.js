@@ -2,16 +2,6 @@ import React from 'react';
 
 import Assessments from '../assessments/Assessments';
 
-const CustomerDashboard = props => {
-
-  return (
-    <>
-      <div className="dashboard-content-header">
-        <Assessments
-          {...props} />
-      </div>
-    </>
-  )
-}
+const CustomerDashboard = props => <Assessments {...props} />
 
 export default CustomerDashboard

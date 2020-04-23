@@ -17,7 +17,7 @@
   }
 }
 
-.assessment-page.admin {
+.assessment-page.customer {
   .assessment-setting-stages {
     margin-top: 90px;
   }
@@ -27,11 +27,11 @@
   display: flex;
   justify-content: space-between;
 
-  &-show {
+  &-steps {
     width: 320px;
   }
 
-  &-create {
+  &-update {
     width: 1015px;
     max-height: calc(100vh - 150px);
     padding: 25px 50px;
@@ -105,11 +105,11 @@
   }
 
   .assessment-settings {
-    &-show {
+    &-steps {
       width: 290px;
     }
 
-    &-create {
+    &-update {
       width: 890px;
       background-color: #fff;
       border-radius: 2px;
