@@ -1,0 +1,49 @@
+.custom-select {
+  margin-bottom: 25px;
+
+  .css-yk16xz-control,
+  .css-1pahdxg-control,
+  .css-1fhf3k1-control {
+    min-height: 44px;
+    border-color: #D3D3D3;
+    box-shadow: none;
+    cursor: pointer;
+  }
+
+  .css-1pahdxg-control {
+    border-color: #4971FF;
+  }
+
+  .select {
+    font-size: 0.8889rem;
+
+    &.error {
+      .css-yk16xz-control,
+      .css-1pahdxg-control,
+      .css-1fhf3k1-control {
+        border-color: #FF5D54;
+      }
+    }
+
+    svg {
+      fill: #4971FF,
+    }
+  }
+
+  &-label {
+    margin: 0 0 10px;
+    color: #9E9E9E;
+    font-size: 0.7778rem;
+    line-height: 21px;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .custom-select {
+    margin-bottom: 15px;
+
+    &-label {
+      margin: 0 0 5px;
+    }
+  }
+}

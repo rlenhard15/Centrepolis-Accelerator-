@@ -1,0 +1,116 @@
+.task-popup {
+  max-height: 100vh;
+  position: relative;
+  padding: 60px 0;
+
+  @media screen and (max-height: 760px) {
+    overflow-y: auto;
+  }
+
+  .form-group {
+
+    &:not(.assessment-types) {
+      margin-bottom: 20px;
+    }
+
+    &.assessment-types {
+      margin-bottom: 15px;
+
+      .form-group-title {
+        margin: 0 0 5px;
+      }
+    }
+
+    &-title {
+      margin: 0 0 10px;
+      color: #9E9E9E;
+      font-size: 0.7778rem;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #D3D3D3;
+      border-radius: 4px;
+      font-family: 'Roboto', sans-serif;
+      font-size: 0.8889rem;
+      line-height: 1.3333rem;
+      resize: none;
+
+      &.error {
+        border-color: #FF5D54;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: #4971FF;
+      }
+    }
+  }
+
+  .form-row {
+    display: flex;
+    justify-content: space-between;
+
+    & > div {
+      width: 170px;
+    }
+
+    .form-group {
+      margin: 0;
+    }
+  }
+
+  .radio-field {
+    span {
+      color: rgba(10, 14, 46, 0.5);
+    }
+
+    &.active {
+      span {
+        color: #0A0E2E;
+      }
+    }
+
+    .MuiSvgIcon-root {
+      fill: #4971FF;
+    }
+
+    .Mui-checked {
+      .MuiIconButton-label>div svg:last-child {
+        transform: scale(1.3);
+      }
+    }
+
+    .Mui-disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  .button {
+    border: 1.5px solid #4971FF;
+
+    &:hover {
+      background-color: transparent;
+      color: #4971FF;
+    }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .task-popup {
+    padding: 40px 0;
+
+    .form-group.assessment-types {
+      margin-bottom: 5px;
+    }
+  }
+
+  .popup-content-title {
+    margin-bottom: 30px;
+  }
+
+  .popup-content .button {
+    margin: 30px auto 0;
+  }
+}

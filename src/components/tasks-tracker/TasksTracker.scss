@@ -1,0 +1,42 @@
+.tasks-tracker {
+  margin-top: 3.3333rem;
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.2222rem;
+
+    h3 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .button {
+      width: 280px;
+      background-color: transparent;
+      border: 1.5px solid #4971FF;
+      color: #4971FF;
+
+      &:hover {
+        background-color: #4971FF;
+        color: #fff;
+      }
+    }
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    background: #FFFFFF;
+    border-radius: 2px;
+  }
+
+  .pagination-wrapper {
+    padding-left: 35px;
+  }
+}
+
+.no-tasks {
+  margin: 20px auto;
+}

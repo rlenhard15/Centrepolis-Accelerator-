@@ -71,6 +71,7 @@ const CustomersTable = props => {
           page={page}
           rowsPerPage={rowsPerPage}
           handleChangePage={handleChangePage}
+          itemsName="Customer"
         />
       </div>
     </div>

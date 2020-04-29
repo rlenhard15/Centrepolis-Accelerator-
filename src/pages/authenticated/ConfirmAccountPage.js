@@ -93,10 +93,10 @@ const ConfirmAccountPage = props => {
             <Link to="/reset_password">Reset Password</Link>
           </span>
         </p>
+        {
+          loading ? <Loader /> : null
+        }
       </div>
-      {
-        loading ? <Loader /> : null
-      }
     </div>
   )
 }

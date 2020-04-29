@@ -1,43 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-import UserIcon from '../../images/icons/user-default.svg';
-import LogoutIcon from '../../images/icons/log-out.svg';
-import MoreIcon from '../../images/icons/more-vertical.svg';
+import HeaderNotification from './HeaderNotification';
+
+import useHttp from '../../hooks/useHttp.hook';
 
 import './Header.scss';
+import HeaderMenu from './HeaderMenu';
 
 const Header = props => {
-  const [open, setOpen] = useState(false);
+  const { request } = useHttp();
+  const user = props.userData;
+  const [state, setState] = useState({
+    notifications: []
+  })
 
-  const logOut = () => {
-    localStorage.removeItem('userData');
-    props.history.push('/sign_in');
+  const getNotificationRequest = async () => {
+    const notifications = await request('/api/notifications');
+    setState({ ...state, notifications: notifications.reverse() });
   }
+
+  const updateNotificationsList = updatedList => setState({ ...state, notifications: updatedList });
+
+  useEffect(() => {
+    if (user.user_type === 'Customer') {
+      getNotificationRequest();
+    }
+  }, [])
 
   return (
     <header className={`header ${props.className}`}>
       <div className="header-block">
         {
-          props.className === 'page' ? <p>Lean Rocket Lab</p> : null
+          props.className === 'page' ? <p className="header-block-logo">Lean Rocket Lab</p> : null
         }
-        <div className="header-menu">
-          <button
-            className="header-menu-open"
-            onClick={() => setOpen(!open)}
-          >
-            <img src={UserIcon} alt="" />
-            <span>{`Hi, ${props.userData.user.first_name}`}</span>
-            <img src={MoreIcon} alt="" className="more-btn" />
-          </button>
+        <div className="header-navigation">
           {
-            open &&
-            <ul className="header-menu-list">
-              <li onClick={logOut}>
-                <span>Log Out</span>
-                <img src={LogoutIcon} alt="" />
-              </li>
-            </ul>
+            user.user_type === 'Customer' ?
+              <HeaderNotification
+                notifications={state.notifications}
+                updateNotificationsList={updateNotificationsList}
+              /> : null
           }
+          <HeaderMenu
+            {...props}
+          />
         </div>
       </div>
     </header>

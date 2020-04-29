@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Loader from '../loader/Loader';
 import AssessmentsItem from './AssessmentItem';
+import TasksTracker from '../tasks-tracker/TasksTracker';
 import ArrowRightSmallImg from '../../images/icons/arrow-right-small.svg'
 
 import useHttp from '../../hooks/useHttp.hook';
@@ -40,9 +41,13 @@ const Assessments = props => {
       }
       return { ...ass, risk_type, risk_class, risk_name }
     })
-    
+
     // until all assessments is not in the database
-    assessments = [...assessments, {risk_name: 'TRL', risk_type: 'Incomplete'}, {risk_name: 'MRL', risk_type: 'Incomplete'}];
+    assessments = [
+      ...assessments,
+      { risk_name: 'TRL', risk_type: 'Incomplete' },
+      { risk_name: 'MRL', risk_type: 'Incomplete' }
+    ];
 
     props.userType === 'Admin' ?
       setState({ assessments, customer, loading: false }) :
@@ -110,6 +115,11 @@ const Assessments = props => {
                   />)
               }
             </div>
+            <TasksTracker
+              userType={props.userType}
+              assessments={state.assessments}
+              currentCustomerId={currentCustomerId}
+            />
           </> : <Loader />
       }
     </div>

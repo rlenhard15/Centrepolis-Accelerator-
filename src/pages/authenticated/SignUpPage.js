@@ -106,10 +106,10 @@ const SignUpPage = props => {
             <Link to="/sign_in">Sign in</Link>
           </span>
         </p>
+        {
+          loading ? <Loader /> : null
+        }
       </div>
-      {
-        loading ? <Loader /> : null
-      }
     </div>
   )
 }

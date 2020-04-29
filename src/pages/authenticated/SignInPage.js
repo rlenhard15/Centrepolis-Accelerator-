@@ -73,10 +73,10 @@ const SignInPage = props => {
             <Link to="/sign_up">Sign up</Link>
           </span>
         </p>
+        {
+          loading ? <Loader /> : null
+        }
       </div>
-      {
-        loading ? <Loader /> : null
-      }
     </div>
   )
 }

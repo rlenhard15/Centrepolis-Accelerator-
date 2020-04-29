@@ -31,7 +31,7 @@ const Pagination = props => {
   return (
     <div className="pagination-wrapper">
       <div className="pagination-items-counter">
-        {rows.length} {rows.length > 1 ? 'Customers' : 'Customer'}
+        {rows.length} {rows.length > 1 ? props.itemsName + 's' : props.itemsName}
       </div>
       <div className="pagination-wrapper-common">
         {

@@ -33,8 +33,11 @@ const DashboardPage = props => {
   }
 
   useEffect(() => {
-    props.userData.user_type === 'Admin' &&
-      getCustomersRequest();
+    // For prevent sending request on page with assessments because this page doesn't use info from customer request
+    if (props.history.location.pathname.indexOf('/assessments/') === -1) {
+      props.userData.user_type === 'Admin' &&
+        getCustomersRequest();
+    }
   }, [])
 
   return (
@@ -65,7 +68,8 @@ const DashboardPage = props => {
             ) :
               <CustomerDashboard
                 userType={props.userData.user_type}
-                customer={props.userData.user} />
+                customer={props.userData.user} 
+              />
           }
         </div>
       </div>
