@@ -19,6 +19,7 @@
       width: 45px;
       height: 45px;
       border-radius: 50%;
+      border: none;
       background-color: #4971FF;
       pointer-events: auto;
       cursor: grab;
@@ -27,6 +28,7 @@
     &::-moz-range-thumb {
       width: 45px;
       height: 45px;
+      border: none;
       border-radius: 50%;
       background-color: #4971FF;
       pointer-events: auto;
@@ -57,8 +59,21 @@
   }
 }
 
+@-moz-document url-prefix() {
+  .range {
+    margin: 20px 45px 65px;
+  }
+}
+
 @media screen and (max-width: 1440px) {
   .range {
     margin: 20px 35px 65px;
   }
+
+  @-moz-document url-prefix() {
+    .range {
+      margin: 20px 35px 63px;
+    }
+  }
 }
+

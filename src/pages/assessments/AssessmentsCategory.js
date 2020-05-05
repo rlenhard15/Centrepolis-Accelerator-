@@ -4,15 +4,18 @@ import AssessmentSlider from './AssessmentsSlider';
 import AssessmentsStage from './AssessmentsStage';
 
 import useHttp from '../../hooks/useHttp.hook';
+import TaskPopup from '../../components/tasks-tracker/TaskPopup';
 
 const AssessmentCategory = props => {
   const trackRef = useRef(null);
   const { request } = useHttp();
   const [state, setState] = useState({
     stages: props.stages,
+    infoForCreateTaskFromStage: null,
     loading: true,
     saved: false,
     activeStageIndex: 0,
+    showPopup: false
   });
 
   const handleChangeProgress = index => {
@@ -27,6 +30,10 @@ const AssessmentCategory = props => {
     await request(`/api/assessments/${assessmentId}/categories/${categoryId}/sub_categories/${subCategoryId}/update_progress?current_stage_id=${currentStage.id}&customer_id=${props.customerId}`, 'POST');
     setState(state => ({ ...state, saved: true }));
     setTimeout(() => setState(state => ({ ...state, saved: false })), 2000);
+  }
+
+  const handleShowAddTaskPopup = stage => {
+    setState({...state, showPopup: true, infoForCreateTaskFromStage: stage })
   }
 
   useEffect(() => {
@@ -66,13 +73,26 @@ const AssessmentCategory = props => {
                 trackWidth={trackRef.current}
                 stagesCount={state.stages.length}
                 userType={props.userType}
+                categoryName={props.categoryName}
+                subCategoryName={props.sub_category_title}
                 handleChangeProgress={handleChangeProgress}
                 updateProgressRequest={updateProgressRequest}
+                handleShowAddTaskPopup={handleShowAddTaskPopup}
               />
             )
           }
         </div>
       </div>
+      {
+        state.showPopup &&
+        <TaskPopup
+          assessments={props.assessments}
+          assessmentName={props.assessmentName}
+          currentCustomerId={props.customerId}
+          handleClosePopup={() => setState({ ...state, showPopup: false })}
+          infoForCreateTaskFromStage={state.infoForCreateTaskFromStage}
+        />
+      }
     </React.Fragment>
   )
 }

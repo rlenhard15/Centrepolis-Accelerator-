@@ -19,6 +19,7 @@ const AssessmentsPage = props => {
   const { request } = useHttp();
   const [state, setState] = useState({
     activeCategory: 1,
+    assessments: [],
     categories: [],
     subCategories: [],
     loading: true
@@ -42,9 +43,20 @@ const AssessmentsPage = props => {
 
   const fetchAssessmentSettings = async () => {
     const categories = await request(`/api/assessments/${id}/categories`);
+    const getAssessmentsResponse = await request(`/api/assessments/?customer_id=${customer_id}`);
+    let assessments = getAssessmentsResponse.map(ass => ({ ...ass, risk_name: ass.name.split(' ')[0] }));
+
+    // until all assessments is not in the database
+    assessments = [
+      ...assessments,
+      { risk_name: 'TRL', risk_type: 'Incomplete' },
+      { risk_name: 'MRL', risk_type: 'Incomplete' }
+    ];
+
     const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(categories[0].id)}`);
     setState({
       ...state,
+      assessments,
       categories,
       subCategories,
       activeCategory: categories[0].id,
@@ -79,7 +91,7 @@ const AssessmentsPage = props => {
                 </div>
                 <AssessmentsSteps
                   activeCategory={state.activeCategory}
-                  changePage={changeSubCategory}
+                  changeSubCategory={changeSubCategory}
                   categories={state.categories}
                 />
               </div>
@@ -87,10 +99,11 @@ const AssessmentsPage = props => {
                 <AssessmentsSettings
                   settingsBlockRef={settingsBlockRef}
                   assessmentId={id}
+                  assessmentName={type}
                   customerId={customer_id}
                   userType={user_type}
                   activeCategory={state.activeCategory}
-                  changePage={changeSubCategory}
+                  assessments={state.assessments}
                   categories={state.categories}
                   subCategories={state.subCategories}
                 />

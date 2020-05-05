@@ -10,7 +10,7 @@ const AssessmentsSteps = props => {
           <div
             key={category.id}
             className="assessment-steps-item"
-            onClick={() => props.changePage(category.id)}
+            onClick={() => props.changeSubCategory(category.id)}
           >
             <span className={`step-number ${props.activeCategory === category.id ? 'active' : ''}`}>{i + 1}</span>
             <span className="step-name">{category.title}</span>

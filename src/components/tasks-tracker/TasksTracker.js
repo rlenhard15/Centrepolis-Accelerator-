@@ -12,7 +12,7 @@ import './TasksTracker.scss';
 const rowsPerPage = 4;
 
 const TasksTracker = props => {
-  const { loading, request } = useHttp();
+  const { request } = useHttp();
   const [state, setState] = useState({
     tasks: [],
     taskForUpdate: null,

@@ -16,10 +16,13 @@ const AssessmentsSettings = props => {
             index={i}
             key={category.sub_category_id}
             assessmentId={props.assessmentId}
+            assessmentName={props.assessmentName}
             customerId={props.customerId}
             categoryId={props.subCategories.id}
+            categoryName={props.subCategories.title}
             subCategoryId={category.sub_category_id}
             userType={props.userType}
+            assessments={props.assessments}
           />
         )
       }

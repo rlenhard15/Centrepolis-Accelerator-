@@ -13,13 +13,13 @@ const TaskSelectGroup = props => {
     const currentCategory = props.currentAssessmentInfo.description_with_child_models.find(category => category.title === selectedCategory);
     const riskSubcategories = currentCategory.sub_categories.map(subCategory => ({ value: subCategory.id, label: subCategory.title }));
 
-    // Set subcategory and stage for edit task
+    // Set subcategory and stage for edit task or create task from update assessment page
     if (selectedSubCategory) {
       const riskStages = getSubCategories(currentCategory, selectedSubCategory);
-      const subCategoryForEditTask = riskSubcategories.find(category => category.label === selectedSubCategory);
-      const stageForEditTask = riskStages.find(stage => stage.label === props.taskForEdit.stage_title);
+      const subCategoryForTask = riskSubcategories.find(category => category.label === selectedSubCategory);
+      const stageForTask = riskStages.find(stage => stage.label === props.infoForTask.stage_title);
       setState(state => ({ ...state, currentCategory, riskSubcategories, riskStages }));
-      props.setSubCategoryAndStage(subCategoryForEditTask, stageForEditTask);
+      props.setSubCategoryAndStage(subCategoryForTask, stageForTask);
       return
     }
     setState({ ...state, currentCategory, riskSubcategories, riskStages: [] });
@@ -57,8 +57,8 @@ const TaskSelectGroup = props => {
       })
     }
 
-    if (props.taskForEdit && props.currentAssessmentInfo) {
-      setCategory(props.taskForEdit.category, props.taskForEdit.sub_category);
+    if (props.infoForTask && props.currentAssessmentInfo) {
+      setCategory(props.infoForTask.category, props.infoForTask.sub_category);
     }
   }, [props.riskCategories, props.currentAssessmentInfo])
 

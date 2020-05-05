@@ -69,6 +69,12 @@ const TaskPopup = props => {
         selectedSubcategory: '',
         selectedStage: ''
       })
+    } else if (name === 'selectedSubcategory') {
+      setState({
+        ...state,
+        [name]: e,
+        selectedStage: ''
+      })
     } else {
       setState({ ...state, [name]: e })
     }
@@ -127,20 +133,33 @@ const TaskPopup = props => {
         stage_title: state.selectedStage.label
       }
 
-      props.taskForEdit ?
-        props.handleChangeTask(taskForAdd) :
-        props.handleAddTask(taskForAdd);
+      if (props.infoForCreateTaskFromStage) {
+        props.handleClosePopup();
+      } else {
+        props.taskForEdit ?
+          props.handleChangeTask(taskForAdd) :
+          props.handleAddTask(taskForAdd);
+      }
     }
   }
 
-  const setOptionsForEditTask = async () => {
-    const task = props.taskForEdit;
-    const assessmentNameForEditTask = task.master_assessment.split(' ')[0];
-    const currentAssessmentForEditTask  = props.assessments.find(assessment => assessment.risk_name === assessmentNameForEditTask);
-    const assessment = await request(`/api/assessments/${currentAssessmentForEditTask.id}`);
+  const getAssessments = name => {
+    const currentAssessmentForTask = props.assessments.find(assessment => assessment.risk_name === name);
+    return request(`/api/assessments/${currentAssessmentForTask.id}`);
+  }
+
+  const getCategoriesAndSelectedCategory = (assessment, categoryName) => {
     const riskCategories = assessment.description_with_child_models.map(category => ({ value: category.id, label: category.title }));
-    const selectedCategory = riskCategories.find(category => category.label === task.category);
-    const taskPriority = priority.find(p => p.value === task.priority);
+    const selectedCategory = riskCategories.find(category => category.label === categoryName);
+    return { riskCategories, selectedCategory }
+  }
+
+  const setOptionsForEditTask = async () => {
+    const taskInfo = props.taskForEdit;
+    const assessmentNameForTask = taskInfo.master_assessment.split(' ')[0];
+    const assessment = await getAssessments(assessmentNameForTask);
+    const { riskCategories, selectedCategory } = getCategoriesAndSelectedCategory(assessment, taskInfo.category);
+    const taskPriority = priority.find(p => p.value === taskInfo.priority);
 
     setState({
       ...state,
@@ -151,9 +170,25 @@ const TaskPopup = props => {
     })
   }
 
+  const setOptionsForCreateTaskFromStage = async () => {
+    const taskInfo = props.infoForCreateTaskFromStage;
+    const assessmentNameForTask = props.assessmentName;
+    const assessment = await getAssessments(assessmentNameForTask);
+    const { riskCategories, selectedCategory } = getCategoriesAndSelectedCategory(assessment, taskInfo.category);
+
+    setState({
+      ...state,
+      currentAssessmentInfo: assessment,
+      riskCategories,
+      selectedCategory
+    })
+  }
+
   useEffect(() => {
     if (props.taskForEdit) {
-      setOptionsForEditTask()
+      setOptionsForEditTask();
+    } else if (props.infoForCreateTaskFromStage) {
+      setOptionsForCreateTaskFromStage();
     } else {
       getAssessmentCategoriesInfo(props.assessments[0].id);
     }
@@ -200,9 +235,9 @@ const TaskPopup = props => {
               selectedSubcategory={state.selectedSubcategory}
               selectedStage={state.selectedStage}
               handleChangeSelect={handleChangeSelect}
-              error={state.error}
-              taskForEdit={props.taskForEdit}
+              infoForTask={props.taskForEdit || props.infoForCreateTaskFromStage}
               setSubCategoryAndStage={setSubCategoryAndStage}
+              error={state.error}
             />
             <div className="form-row">
               <div className="form-group">
