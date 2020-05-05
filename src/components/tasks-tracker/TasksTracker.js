@@ -25,7 +25,7 @@ const TasksTracker = props => {
   const currentTasksPage = state.tasks.slice(state.page * rowsPerPage, state.page * rowsPerPage + rowsPerPage);
 
   const addTask = (newTask) => {
-    const updatedTasks = [...state.tasks, newTask];
+    const updatedTasks = [newTask, ...state.tasks];
     setState({ ...state, tasks: updatedTasks, showPopup: false });
   }
 
