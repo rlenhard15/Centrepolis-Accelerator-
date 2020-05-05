@@ -1,7 +1,6 @@
 import React from 'react';
 
 import IconButton from '@material-ui/core/IconButton';
-import AddRoundedIcon from '@material-ui/icons/AddRounded';
 
 import './AssessmentsStage.scss';
 
@@ -43,6 +42,7 @@ const AssessmentsStage = props => {
               props.userType === 'Admin' ?
                 <IconButton
                   className="stages-item-btn"
+                  disabled={props.isActive}
                   onClick={() => props.handleShowAddTaskPopup(stageInfo)}
                 >
                   <span className="add-icon"></span>
