@@ -45,13 +45,19 @@
   }
 }
 
+.stages:not(.full-width) {
+  .range {
+    margin: 20px 50px 67px;
+  }
+}
+
 .range-track {
   position: absolute;
-  width: 85%;
-  left: 7%;
-  height: 9px;
-  background: url('../../images/progress-line.svg');
-  top: -53px;
+  width: 88%;
+  left: 6%;
+  height: 10px;
+  background-image: linear-gradient(to right, #ff5d54, #FFD865, #68B643);
+  top: 33px;
   z-index: 1;
 
   &.disable {
@@ -59,9 +65,13 @@
   }
 }
 
+.customer .range-track {
+  top: -54px;
+}
+
 @-moz-document url-prefix() {
   .range {
-    margin: 20px 45px 65px;
+    margin: 20px 45px 67px;
   }
 }
 
@@ -70,9 +80,29 @@
     margin: 20px 35px 65px;
   }
 
+  .stages:not(.full-width) {
+    .range {
+      margin: 20px 45px 65px;
+    }
+  }
+
+  .range-track {
+    top: 31px;
+  }
+
   @-moz-document url-prefix() {
     .range {
       margin: 20px 35px 63px;
+    }
+
+    .range-track {
+      top: 30px;
+    }
+
+    .stages:not(.full-width) {
+      .range {
+        margin: 20px 45px 63px;
+      }
     }
   }
 }

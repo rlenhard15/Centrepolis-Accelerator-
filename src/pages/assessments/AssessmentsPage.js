@@ -30,12 +30,14 @@ const AssessmentsPage = props => {
     `${categoryId}`;
 
   const changeSubCategory = async activeCategory => {
-    const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(activeCategory)}`);
-    setState({
-      ...state,
-      subCategories,
-      activeCategory
-    });
+    if (activeCategory !== state.activeCategory) {
+      const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(activeCategory)}`);
+      setState({
+        ...state,
+        subCategories,
+        activeCategory
+      });
+    }
     if (settingsBlockRef.current.offsetTop > 100) {
       settingsBlockRef.current.scrollIntoView({ behavior: 'smooth' });
     }
@@ -45,13 +47,6 @@ const AssessmentsPage = props => {
     const categories = await request(`/api/assessments/${id}/categories`);
     const getAssessmentsResponse = await request(`/api/assessments/?customer_id=${customer_id}`);
     let assessments = getAssessmentsResponse.map(ass => ({ ...ass, risk_name: ass.name.split(' ')[0] }));
-
-    // until all assessments is not in the database
-    assessments = [
-      ...assessments,
-      { risk_name: 'TRL', risk_type: 'Incomplete' },
-      { risk_name: 'MRL', risk_type: 'Incomplete' }
-    ];
 
     const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(categories[0].id)}`);
     setState({

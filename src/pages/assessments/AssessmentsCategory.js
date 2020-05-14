@@ -17,6 +17,9 @@ const AssessmentCategory = props => {
     activeStageIndex: 0,
     showPopup: false
   });
+  const stagesCountForFullWidth = 6;
+
+  const checkStagesCountForFullWidth = () => props.stages.length <= stagesCountForFullWidth ? 'full-width' : '';
 
   const handleChangeProgress = index => {
     let updatedStages = [...state.stages];
@@ -33,7 +36,7 @@ const AssessmentCategory = props => {
   }
 
   const handleShowAddTaskPopup = stage => {
-    setState({...state, showPopup: true, infoForCreateTaskFromStage: stage })
+    setState({ ...state, showPopup: true, infoForCreateTaskFromStage: stage })
   }
 
   useEffect(() => {
@@ -52,35 +55,41 @@ const AssessmentCategory = props => {
           state.saved ? <span className="saved">Changes saved</span> : null
         }
       </div>
-      {
-        props.userType === 'Admin' ?
-          <AssessmentSlider
-            steps={props.stages.length}
-            activeStageIndex={state.activeStageIndex}
-            handleChangeProgress={handleChangeProgress}
-            updateProgressRequest={updateProgressRequest}
-          /> : null
-      }
-      <div className="assessment-setting-stages">
-        <div className={`range-track ${state.loading ? 'disable' : ''}`} ref={trackRef}></div>
-        <div className="stages">
-          {
-            state.stages.map((stage, i) =>
-              <AssessmentsStage
-                {...stage}
-                index={i}
-                key={stage.id}
-                trackWidth={trackRef.current}
-                stagesCount={state.stages.length}
-                userType={props.userType}
-                categoryName={props.categoryName}
-                subCategoryName={props.sub_category_title}
-                handleChangeProgress={handleChangeProgress}
-                updateProgressRequest={updateProgressRequest}
-                handleShowAddTaskPopup={handleShowAddTaskPopup}
-              />
-            )
-          }
+      <div className="assessment-stage-scroll-container">
+        <div className="assessment-setting-stages">
+          <div className={`stages ${checkStagesCountForFullWidth()}`}>
+            <div className="stages-slider">
+              <div className={`range-track ${state.loading ? 'disable' : ''}`} ref={trackRef}></div>
+              {
+                props.userType === 'Admin' ?
+                  <AssessmentSlider
+                    steps={props.stages.length}
+                    activeStageIndex={state.activeStageIndex}
+                    handleChangeProgress={handleChangeProgress}
+                    updateProgressRequest={updateProgressRequest}
+                  /> : null
+              }
+            </div>
+            <div className="stages-list">
+              {
+                state.stages.map((stage, i) =>
+                  <AssessmentsStage
+                    {...stage}
+                    index={i}
+                    key={stage.id}
+                    trackWidth={trackRef.current}
+                    stagesCount={state.stages.length}
+                    userType={props.userType}
+                    categoryName={props.categoryName}
+                    subCategoryName={props.sub_category_title}
+                    handleChangeProgress={handleChangeProgress}
+                    updateProgressRequest={updateProgressRequest}
+                    handleShowAddTaskPopup={handleShowAddTaskPopup}
+                  />
+                )
+              }
+            </div>
+          </div>
         </div>
       </div>
       {

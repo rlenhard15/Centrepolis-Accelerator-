@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Loader from '../loader/Loader';
 import AssessmentsItem from './AssessmentItem';
 import TasksTracker from '../tasks-tracker/TasksTracker';
+import AssessmentInfoPopup from './AssessmentInfoPopup';
 import ArrowRightSmallImg from '../../images/icons/arrow-right-small.svg'
 
 import useHttp from '../../hooks/useHttp.hook';
@@ -17,6 +18,8 @@ const Assessments = props => {
     customer: props.customer || null,
     assessments: null,
     loading: true,
+    showInfoPopup: false,
+    assessmentForInfoPopup: ''
   });
 
   const setAssessments = (data, customer) => {
@@ -42,13 +45,6 @@ const Assessments = props => {
       return { ...ass, risk_type, risk_class, risk_name }
     })
 
-    // until all assessments is not in the database
-    assessments = [
-      ...assessments,
-      { risk_name: 'TRL', risk_type: 'Incomplete' },
-      { risk_name: 'MRL', risk_type: 'Incomplete' }
-    ];
-
     props.userType === 'Admin' ?
       setState({ assessments, customer, loading: false }) :
       setState({ ...state, assessments, loading: false })
@@ -72,12 +68,19 @@ const Assessments = props => {
     }
   }
 
+  const handleOpenInfoPopup = assessment => {
+    setState({
+      ...state,
+      showInfoPopup: true,
+      assessmentForInfoPopup: assessment
+    })
+  }
+
   useEffect(() => {
     props.userType === 'Admin' ?
       getCustomersRequest() :
       getAssessmentsRequest()
   }, [])
-
 
   return (
     <div className={`assessment ${props.userType === "Admin" ? 'admin' : 'customer'}`}>
@@ -112,6 +115,7 @@ const Assessments = props => {
                     {...item}
                     userType={props.userType}
                     customerId={currentCustomerId}
+                    handleOpenInfoPopup={handleOpenInfoPopup}
                   />)
               }
             </div>
@@ -121,6 +125,15 @@ const Assessments = props => {
               currentCustomerId={currentCustomerId}
             />
           </> : <Loader />
+      }
+      {
+        state.showInfoPopup ?
+          <AssessmentInfoPopup
+            userType={props.userType}
+            customerId={currentCustomerId}
+            currentAssessment={state.assessmentForInfoPopup}
+            handleCloseInfoPopup={() => setState({ ...state, showInfoPopup: false })}
+          /> : null
       }
     </div>
   )

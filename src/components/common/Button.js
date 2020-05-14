@@ -7,7 +7,7 @@ import './Button.scss';
 export const CustomButton = props => {
   return (
     <Button
-      className={`button`}
+      className={`button ${props.className}`}
       type={props.type}
       disabled={props.disabled}
       onClick={props.handleClick}

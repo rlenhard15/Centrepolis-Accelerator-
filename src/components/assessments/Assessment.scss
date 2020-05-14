@@ -128,6 +128,23 @@
       background-color: #F5FAFF;
     }
   }
+
+  .learn-more-btn {
+    width: 200px;
+    height: 40px;
+    margin: 10px auto 0;
+    background-color: transparent;
+    color: #4971FF;
+    font-size: 1rem;
+    font-weight: 400;
+    text-decoration: underline;
+
+    &:hover {
+      background-color: transparent;
+      text-decoration: underline;
+      color: #143cca;
+    }
+  }
 }
 
 .risk-block {
@@ -211,6 +228,30 @@
   }
 }
 
+.info-popup {
+  max-height: 90vh;
+  align-items: flex-start;
+  padding: 80px 100px;
+  overflow-y: auto;
+
+  .popup-content-title {
+    margin-bottom: 25px;
+  }
+
+  &-description {
+    p {
+      margin: 0 0 15px;
+      color: #555C66;
+      font-size: 0.8889rem;
+      line-height: 1.3333rem;
+    }
+  }
+
+  .assessment-link {
+    margin: 25px 0 0;
+  }
+}
+
 @media screen and (max-width: 1440px) {
   .assessment-item {
     width: 300px;
@@ -220,8 +261,20 @@
       padding: 10px 20px;
     }
   }
-  
+
   .assessment-breadcrumbs {
     margin-bottom: 20px;
+  }
+
+  .info-popup {
+    padding: 60px 80px;
+
+    .popup-content-title {
+      margin-bottom: 20px;
+    }
+
+    .assessment-link {
+      margin: 15px 0 0;
+    }
   }
 }

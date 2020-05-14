@@ -57,7 +57,7 @@ const TaskSelectGroup = props => {
       })
     }
 
-    if (props.infoForTask && props.currentAssessmentInfo) {
+    if (props.infoForTask && props.currentAssessmentInfo && !props.isChangeAssessment) {
       setCategory(props.infoForTask.category, props.infoForTask.sub_category);
     }
   }, [props.riskCategories, props.currentAssessmentInfo])

@@ -28,6 +28,7 @@ const TaskPopup = props => {
   const [state, setState] = useState({
     currentAssessment: props.assessments[0],
     currentAssessmentInfo: null,
+    isChangeAssessment: false,
     riskCategories: [],
     selectedCategory: '',
     selectedSubcategory: '',
@@ -56,6 +57,7 @@ const TaskPopup = props => {
         selectedCategory: '',
         selectedSubcategory: '',
         selectedStage: '',
+        isChangeAssessment: true
       })
     }
     getAssessmentCategoriesInfo(currentAssessment.id);
@@ -88,10 +90,10 @@ const TaskPopup = props => {
   // Field will have error if some of form fields is empty and this field will not have a value
   const checkFields = () => {
     if (
-        !state.selectedStage ||
-        !state.taskPriority ||
-        !state.dueDate ||
-        !state.taskText) {
+      !state.selectedStage ||
+      !state.taskPriority ||
+      !state.dueDate ||
+      !state.taskText) {
       setState({ ...state, error: true })
       return false
     }
@@ -163,6 +165,10 @@ const TaskPopup = props => {
 
     setState({
       ...state,
+      currentAssessment: {
+        name: taskInfo.master_assessment,
+        risk_name: assessmentNameForTask
+      },
       currentAssessmentInfo: assessment,
       riskCategories,
       selectedCategory,
@@ -178,6 +184,9 @@ const TaskPopup = props => {
 
     setState({
       ...state,
+      currentAssessment: {
+        risk_name: assessmentNameForTask
+      },
       currentAssessmentInfo: assessment,
       riskCategories,
       selectedCategory
@@ -237,6 +246,7 @@ const TaskPopup = props => {
               handleChangeSelect={handleChangeSelect}
               infoForTask={props.taskForEdit || props.infoForCreateTaskFromStage}
               setSubCategoryAndStage={setSubCategoryAndStage}
+              isChangeAssessment={state.isChangeAssessment}
               error={state.error}
             />
             <div className="form-row">
