@@ -9,6 +9,8 @@ import useHttp from '../../hooks/useHttp.hook';
 import useForm from '../../hooks/useForm.hook';
 import validate from '../../validationRules/signIn';
 
+import MainLogo from '../../images/main-logo.svg';
+
 import './AuthorizationPage.scss';
 
 const SignInPage = props => {
@@ -36,7 +38,9 @@ const SignInPage = props => {
 
   return (
     <div className="auth-page">
-      <div className="auth-page-logo"></div>
+      <div className="auth-page-logo">
+        <img src={MainLogo} alt="Centrepolis Accelerator" />
+      </div>
       <div className="auth-page-form">
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <h3 className="auth-page-form-title">Sign In</h3>
