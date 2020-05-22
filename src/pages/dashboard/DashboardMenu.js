@@ -1,12 +1,16 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
+import LogoWhite from '../../images/logo-white.svg';
+
 import './DashboardMenu.scss';
 
 const DashboardMenu = () => {
   return (
     <div className="dashboard-menu">
-      <p className="dashboard-menu-title">Lean Rocket Lab</p>
+      <p className="dashboard-menu-title">
+        <img src={LogoWhite} alt="Centrepolis Accelerator" />
+      </p>
       <ul className="dashboard-menu-list">
         <li>
           <NavLink to="/" activeClassName="active">

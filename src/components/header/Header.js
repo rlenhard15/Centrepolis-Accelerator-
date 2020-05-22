@@ -4,8 +4,11 @@ import HeaderNotification from './HeaderNotification';
 
 import useHttp from '../../hooks/useHttp.hook';
 
-import './Header.scss';
 import HeaderMenu from './HeaderMenu';
+
+import LogoBlack from '../../images/logo-black.svg';
+
+import './Header.scss'
 
 const Header = props => {
   const { request } = useHttp();
@@ -31,7 +34,7 @@ const Header = props => {
     <header className={`header ${props.className}`}>
       <div className="header-block">
         {
-          props.className === 'page' ? <p className="header-block-logo">Lean Rocket Lab</p> : null
+          props.className === 'page' ? <img src={LogoBlack} alt="Centrepolis Accelerator" /> : null
         }
         <div className="header-navigation">
           {
