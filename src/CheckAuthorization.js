@@ -13,6 +13,8 @@ const CheckAuthorization = () => {
 
   useEffect(() => {
     if (!isAuthenticated) isConfirmationPage ? history.push(history.location) : history.push('/sign_in');
+
+    if (history.action === 'POP' && path === '/') history.push('/');
   }, [])
 
   return (
