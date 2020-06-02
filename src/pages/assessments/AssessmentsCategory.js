@@ -60,15 +60,12 @@ const AssessmentCategory = props => {
           <div className={`stages ${checkStagesCountForFullWidth()}`}>
             <div className="stages-slider">
               <div className={`range-track ${state.loading ? 'disable' : ''}`} ref={trackRef}></div>
-              {
-                props.userType === 'Admin' ?
-                  <AssessmentSlider
-                    steps={props.stages.length}
-                    activeStageIndex={state.activeStageIndex}
-                    handleChangeProgress={handleChangeProgress}
-                    updateProgressRequest={updateProgressRequest}
-                  /> : null
-              }
+              <AssessmentSlider
+                steps={props.stages.length}
+                activeStageIndex={state.activeStageIndex}
+                handleChangeProgress={handleChangeProgress}
+                updateProgressRequest={updateProgressRequest}
+              /> 
             </div>
             <div className="stages-list">
               {
