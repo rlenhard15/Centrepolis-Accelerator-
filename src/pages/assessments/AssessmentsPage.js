@@ -44,19 +44,25 @@ const AssessmentsPage = props => {
   }
 
   const fetchAssessmentSettings = async () => {
-    const categories = await request(`/api/assessments/${id}/categories`);
-    const getAssessmentsResponse = await request(`/api/assessments/?customer_id=${customer_id}`);
-    let assessments = getAssessmentsResponse.map(ass => ({ ...ass, risk_name: ass.name.split(' ')[0] }));
-
-    const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(categories[0].id)}`);
-    setState({
-      ...state,
-      assessments,
-      categories,
-      subCategories,
-      activeCategory: categories[0].id,
-      loading: false
-    });
+    try {
+      const categories = await request(`/api/assessments/${id}/categories`);
+      const getAssessmentsResponse = await request(`/api/assessments/?customer_id=${customer_id}`);
+      let assessments = getAssessmentsResponse.map(ass => ({ ...ass, risk_name: ass.name.split(' ')[0] }));
+      const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(categories[0].id)}`);
+      setState({
+        ...state,
+        assessments,
+        categories,
+        subCategories,
+        activeCategory: categories[0].id,
+        loading: false
+      });
+    } catch (err) {
+      if (err === 403 || err == 401) {
+        localStorage.removeItem('userData');
+        props.history.push('/sign_in');
+      }
+    }
   }
 
   useEffect(() => {
