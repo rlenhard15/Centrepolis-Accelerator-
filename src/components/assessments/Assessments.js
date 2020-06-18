@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import { Link } from 'react-router-dom';
 
 import Loader from '../loader/Loader';
@@ -13,6 +14,7 @@ import './Assessment.scss';
 
 const Assessments = props => {
   const { request } = useHttp();
+  const history = useHistory();
   const currentCustomerId = props.userType === 'Admin' ? +props.match.params.id : props.customer.id;
   const [state, setState] = useState({
     customer: props.customer || null,
@@ -50,9 +52,18 @@ const Assessments = props => {
       setState({ ...state, assessments, loading: false })
   }
 
+
   const getAssessmentsRequest = async (customer) => {
-    const assessments = await request(`/api/assessments/?customer_id=${currentCustomerId}`);
-    setAssessments(assessments, customer);
+    try {
+      const assessments = await request(`/api/assessments/?customer_id=${currentCustomerId}`);
+      setAssessments(assessments, customer);
+    
+    } catch (err) {
+      if (err === 403 || err == 401) {
+        localStorage.removeItem('userData');
+        history.push('/sign_in')
+      }
+    }
   }
 
   const getCustomersRequest = async () => {
@@ -63,7 +74,7 @@ const Assessments = props => {
     } catch (err) {
       if (err === 403 || err == 401) {
         localStorage.removeItem('userData');
-        props.history.push('/sign_in');
+        history.push('/sign_in');
       }
     }
   }
