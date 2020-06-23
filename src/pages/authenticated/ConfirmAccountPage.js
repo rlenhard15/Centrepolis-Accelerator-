@@ -91,12 +91,12 @@ const ConfirmAccountPage = props => {
             disabled={loading}
           />
         </form>
-        <p className="auth-page-alternative">
+        {/* <p className="auth-page-alternative">
           <span>
             Don’t remember your password?
-            <Link to="/reset_password">Reset Password</Link>
+            <Link to="/reset_password" disabled>Reset Password</Link>
           </span>
-        </p>
+        </p> */}
         {
           loading ? <Loader /> : null
         }
