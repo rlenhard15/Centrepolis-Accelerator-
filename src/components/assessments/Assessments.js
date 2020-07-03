@@ -59,7 +59,7 @@ const Assessments = props => {
       setAssessments(assessments, customer);
     
     } catch (err) {
-      if (err === 403 || err == 401) {
+      if (err === 403 || err === 401) {
         localStorage.removeItem('userData');
         history.push('/sign_in')
       }
@@ -72,7 +72,7 @@ const Assessments = props => {
       const customer = customers.find(c => c.id === currentCustomerId);
       getAssessmentsRequest(customer);
     } catch (err) {
-      if (err === 403 || err == 401) {
+      if (err === 403 || err === 401) {
         localStorage.removeItem('userData');
         history.push('/sign_in');
       }

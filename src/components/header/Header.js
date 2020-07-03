@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
-
-import HeaderNotification from './HeaderNotification';
+import React, { useState, useEffect, memo } from 'react';
 
 import useHttp from '../../hooks/useHttp.hook';
 
+import HeaderNotification from './HeaderNotification';
 import HeaderMenu from './HeaderMenu';
-
-import LogoBlack from '../../images/logo-black.svg';
+import { PageLogo } from '../logos/PageLogos';
 
 import './Header.scss'
 
-const Header = props => {
+const Header = memo(props => {
   const { request } = useHttp();
   const user = props.userData;
   const [state, setState] = useState({
@@ -33,9 +31,11 @@ const Header = props => {
   return (
     <header className={`header ${props.className}`}>
       <div className="header-block">
-        {
-          props.className === 'page' ? <img src={LogoBlack} alt="Centrepolis Accelerator" /> : null
-        }
+        <div className="header-block-logo">
+          {
+            props.className === 'page' ? <PageLogo type='page' /> : null
+          }
+        </div>
         <div className="header-navigation">
           {
             user.user_type === 'Customer' ?
@@ -51,6 +51,6 @@ const Header = props => {
       </div>
     </header>
   )
-}
+})
 
 export default Header

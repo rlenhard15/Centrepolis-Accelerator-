@@ -1,16 +1,16 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import LogoWhite from '../../images/logo-white.svg';
+import { PageLogo } from '../../components/logos/PageLogos';
 
 import './DashboardMenu.scss';
 
 const DashboardMenu = () => {
   return (
     <div className="dashboard-menu">
-      <p className="dashboard-menu-title">
-        <img src={LogoWhite} alt="Centrepolis Accelerator" />
-      </p>
+      <div className="dashboard-menu-logo">
+        <PageLogo type="dashboard" />
+      </div>
       <ul className="dashboard-menu-list">
         <li>
           <NavLink to="/" activeClassName="active">

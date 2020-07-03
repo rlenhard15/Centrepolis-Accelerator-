@@ -5,15 +5,23 @@
   background: linear-gradient(180deg, #154EA5 13.06%, #0D83FE 161.2%);
   text-align: center;
 
-  &-title {
-    margin: 35px 0 80px;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: 700;
+  &-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90px;
+    margin: 0 auto;
+    padding: 10px 0;
+
+    img {
+      max-width: 200px;
+      height: 100%;
+      object-fit: contain;
+    }
   }
 
   &-list {
-    margin: 0;
+    margin: 70px 0 0;
 
     li a {
       span {
@@ -49,11 +57,13 @@
   .dashboard-menu {
     width: 300px;
 
-    &-title {
-      margin: 25px 0 60px;
+    &-logo {
+      height: 70px;
     }
 
     &-list {
+      margin-top: 60px;
+
       li a span {
         padding: 15px 0;
       }

@@ -16,7 +16,8 @@ import './InviteTeamPopup.scss';
 const InviteTeamPopup = props => {
   const inviteFields = {
     email: '',
-    company_name: ''
+    company_name: '',
+    accelerator_id: Number(process.env.REACT_APP_ACCELERATOR_ID)
   };
   const { loading, request } = useHttp();
   const { values, errors, handleChange, handleSubmit } = useForm(inviteTeam, validate, inviteFields);
