@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { AuthLogo } from '../../components/logos/AuthLogo';
 import { InputField } from '../../components/common/InputField';
 import { CustomButton } from '../../components/common/Button';
 import Loader from '../../components/loader/Loader';
@@ -9,14 +10,13 @@ import useHttp from '../../hooks/useHttp.hook';
 import useForm from '../../hooks/useForm.hook';
 import validate from '../../validationRules/signIn';
 
-import MainLogo from '../../images/main-logo.svg';
-
 import './AuthorizationPage.scss';
 
 const SignInPage = props => {
   const signInFields = {
     email: '',
-    password: ''
+    password: '',
+    accelerator_id: Number(process.env.REACT_APP_ACCELERATOR_ID)
   };
   const { loading, request } = useHttp();
   const { values, errors, handleChange, handleSubmit } = useForm(singIn, validate, signInFields);
@@ -38,9 +38,7 @@ const SignInPage = props => {
 
   return (
     <div className="auth-page">
-      <div className="auth-page-logo">
-        <img src={MainLogo} alt="Centrepolis Accelerator" />
-      </div>
+      <AuthLogo />
       <div className="auth-page-form">
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <h3 className="auth-page-form-title">Sign In</h3>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { AuthLogo } from '../../components/logos/AuthLogo';
 import { InputField } from '../../components/common/InputField';
 import { CustomButton } from '../../components/common/Button';
 import Loader from '../../components/loader/Loader';
@@ -8,8 +9,6 @@ import Loader from '../../components/loader/Loader';
 import useHttp from '../../hooks/useHttp.hook';
 import useForm from '../../hooks/useForm.hook';
 import validate from '../../validationRules/signUp';
-
-import MainLogo from '../../images/main-logo.svg';
 
 import './AuthorizationPage.scss';
 
@@ -19,7 +18,8 @@ const SignUpPage = props => {
     last_name: '',
     email: '',
     password: '',
-    password_confirmation: ''
+    password_confirmation: '',
+    accelerator_id: Number(process.env.REACT_APP_ACCELERATOR_ID)
   };
   const { loading, request } = useHttp();
   const { values, errors, handleChange, handleSubmit } = useForm(singUp, validate, signUpFields);
@@ -41,9 +41,7 @@ const SignUpPage = props => {
 
   return (
     <div className="auth-page">
-      <div className="auth-page-logo">
-        <img src={MainLogo} alt="Centrepolis Accelerator" />
-      </div>
+      <AuthLogo />
       <div className="auth-page-form">
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <h3 className="auth-page-form-title">Sign Up</h3>

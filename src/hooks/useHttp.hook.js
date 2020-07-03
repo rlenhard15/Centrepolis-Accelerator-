@@ -4,11 +4,15 @@ const useHttp = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   
+  const acceleratorId = process.env.REACT_APP_ACCELERATOR_ID;
   const request = useCallback(async (endpoint, method = 'GET', body = null, headers = {}) => {
     setLoading(true);
     const authData =  JSON.parse(localStorage.getItem('userData'));
 
     try {
+
+      headers['Accelerator-Id'] = acceleratorId;
+
       if (body) {
         body = JSON.stringify(body);
         headers['Content-Type'] = 'application/json';

@@ -5,7 +5,7 @@ import CheckAuthorization from './CheckAuthorization';
 
 function App() {
   return (
-    <Router basename="/centrepolis">
+    <Router>
       <div className="App">
         <CheckAuthorization />
       </div>

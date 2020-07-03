@@ -7,12 +7,18 @@
   &-block {
     display: flex;
     align-items: center;
-    width: 1000px;
     margin: 0 auto;
+    height: 100%;
 
     &-logo {
-      font-size: 1rem;
-      font-weight: 700;
+      height: 90px;
+
+      img {
+        max-width: 250px;
+        height: 100%;
+        padding: 10px 0;
+        object-fit: contain;
+      }
     }
   }
 
@@ -165,6 +171,10 @@
 @media screen and (max-width: 1440px) {
   .header {
     height: 70px;
+
+    &-block-logo {
+      height: 70px;
+    }
   }
 
   .header.board .header-block {
@@ -173,5 +183,11 @@
 
   .header.page .header-block {
     width: 1200px;
+
+    &-logo {
+      img {
+        padding: 10px 0;
+      }
+    }
   }
 }
