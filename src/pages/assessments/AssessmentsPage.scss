@@ -65,7 +65,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+
+  &.with-title {
+    margin-bottom: 15px;
+  }
 
   .saved {
     display: flex;

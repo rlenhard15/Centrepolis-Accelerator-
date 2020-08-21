@@ -9,17 +9,32 @@ import TaskPopup from '../../components/tasks-tracker/TaskPopup';
 const AssessmentCategory = props => {
   const trackRef = useRef(null);
   const { request } = useHttp();
+
+  const {
+    userType,
+    customerId,
+    index,
+    stages,
+    category_id,
+    current_stage_id,
+    categoryName,
+    sub_category_title,
+    assessments,
+    assessmentName,
+  } = props;
+
   const [state, setState] = useState({
-    stages: props.stages,
+    stages: stages,
     infoForCreateTaskFromStage: null,
     loading: true,
     saved: false,
     activeStageIndex: 0,
     showPopup: false
   });
+
   const stagesCountForFullWidth = 6;
 
-  const checkStagesCountForFullWidth = () => props.stages.length <= stagesCountForFullWidth ? 'full-width' : '';
+  const checkStagesCountForFullWidth = () => stages.length <= stagesCountForFullWidth ? 'full-width' : '';
 
   const handleChangeProgress = index => {
     let updatedStages = [...state.stages];
@@ -30,7 +45,7 @@ const AssessmentCategory = props => {
   const updateProgressRequest = async position => {
     const { assessmentId, categoryId, subCategoryId } = props;
     const currentStage = state.stages.find(stage => stage.position === position + 1);
-    await request(`/api/assessments/${assessmentId}/categories/${categoryId}/sub_categories/${subCategoryId}/update_progress?current_stage_id=${currentStage.id}&customer_id=${props.customerId}`, 'POST');
+    await request(`/api/assessments/${assessmentId}/categories/${categoryId}/sub_categories/${subCategoryId}/update_progress?current_stage_id=${currentStage.id}&customer_id=${customerId}`, 'POST');
     setState(state => ({ ...state, saved: true }));
     setTimeout(() => setState(state => ({ ...state, saved: false })), 2000);
   }
@@ -39,18 +54,24 @@ const AssessmentCategory = props => {
     setState({ ...state, showPopup: true, infoForCreateTaskFromStage: stage })
   }
 
+  const getTitle = (title) => {
+    return title ? `${index + 1}. ${title}` : null
+  }
+
   useEffect(() => {
-    const activeStageIndex = props.stages.findIndex(stage => props.current_stage_id === stage.id);
+    const activeStageIndex = stages.findIndex(stage => current_stage_id === stage.id);
     handleChangeProgress(activeStageIndex);
     setTimeout(() => setState(state => ({ ...state, loading: false, activeStageIndex })), 100);
   }, [])
 
   return (
     <React.Fragment
-      key={props.category_id}
+      key={category_id}
     >
-      <div className="assessment-setting-subtitle-wrapper">
-        <p className="assessment-setting-subtitle">{props.index + 1}. {props.sub_category_title}</p>
+      <div className={`assessment-setting-subtitle-wrapper ${sub_category_title ? 'with-title' : ''}`}>
+        <p className="assessment-setting-subtitle">
+            {getTitle(sub_category_title)}
+        </p>
         {
           state.saved ? <span className="saved">Changes saved</span> : null
         }
@@ -61,7 +82,7 @@ const AssessmentCategory = props => {
             <div className="stages-slider">
               <div className={`range-track ${state.loading ? 'disable' : ''}`} ref={trackRef}></div>
               <AssessmentSlider
-                steps={props.stages.length}
+                steps={stages.length}
                 activeStageIndex={state.activeStageIndex}
                 handleChangeProgress={handleChangeProgress}
                 updateProgressRequest={updateProgressRequest}
@@ -76,9 +97,9 @@ const AssessmentCategory = props => {
                     key={stage.id}
                     trackWidth={trackRef.current}
                     stagesCount={state.stages.length}
-                    userType={props.userType}
-                    categoryName={props.categoryName}
-                    subCategoryName={props.sub_category_title}
+                    userType={userType}
+                    categoryName={categoryName}
+                    subCategoryName={sub_category_title}
                     handleChangeProgress={handleChangeProgress}
                     updateProgressRequest={updateProgressRequest}
                     handleShowAddTaskPopup={handleShowAddTaskPopup}
@@ -92,9 +113,9 @@ const AssessmentCategory = props => {
       {
         state.showPopup &&
         <TaskPopup
-          assessments={props.assessments}
-          assessmentName={props.assessmentName}
-          currentCustomerId={props.customerId}
+          assessments={assessments}
+          assessmentName={assessmentName}
+          currentCustomerId={customerId}
           handleClosePopup={() => setState({ ...state, showPopup: false })}
           infoForCreateTaskFromStage={state.infoForCreateTaskFromStage}
         />
