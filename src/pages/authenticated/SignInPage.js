@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { AuthLogo } from '../../components/logos/AuthLogo';
+import DashboardMenu from '../dashboard/DashboardMenu';
 import { InputField } from '../../components/common/InputField';
 import { CustomButton } from '../../components/common/Button';
 import Loader from '../../components/loader/Loader';
@@ -38,7 +38,7 @@ const SignInPage = props => {
 
   return (
     <div className="auth-page">
-      <AuthLogo />
+      <DashboardMenu />
       <div className="auth-page-form">
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <h3 className="auth-page-form-title">Sign In</h3>
@@ -63,16 +63,33 @@ const SignInPage = props => {
             error={errors.password || authorizationError}
             errorText={errors.password_message || 'Invalid email/password'}
           />
+          <div className="auth-page-form-keep-me-signed-in">
+            <InputField
+              onChange={handleChange}
+              value={values.keepSignedIn}
+              name="keepSignedIn"
+              type="checkbox"
+            />
+            <label className="auth-page-form-keep-me-signed-in-label">
+              Keep me signed in
+            </label>
+          </div>
           <CustomButton
             type="submit"
             label="Sign In"
             disabled={loading}
           />
         </form>
-        <p className="auth-page-alternative">
+        {/* <p className="auth-page-alternative">
           <span>
             Don’t have an account yet?
             <Link to="/sign_up">Sign up</Link>
+          </span>
+        </p> */}
+        <p className="auth-page-alternative">
+          <span>
+          Don’t remember your password?
+            <Link to="/sign_up">Reset Password</Link>
           </span>
         </p>
         {

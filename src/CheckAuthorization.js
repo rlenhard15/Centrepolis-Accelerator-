@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext, createContext } from 'react';
 import { useHistory } from "react-router-dom";
-
 import { useRoutes } from './AllRoutes';
+
+export const AuthContext = createContext()
+
+export const useAuthContext = () => useContext(AuthContext)
 
 const CheckAuthorization = () => {
   const history = useHistory();
@@ -16,9 +19,9 @@ const CheckAuthorization = () => {
   }, [])
 
   return (
-    <>
+    <AuthContext.Provider value={{authData, isAuthenticated}}>
       {allRoutes}
-    </>
+    </AuthContext.Provider>
   )
 }
 

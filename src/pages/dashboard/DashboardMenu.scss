@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   width: 375px;
-  background: linear-gradient(180deg, #154EA5 13.06%, #0D83FE 161.2%);
+  background: #242E41;
   text-align: center;
 
   &-logo {
@@ -51,12 +51,36 @@
       margin-right: 10px;
     }
   }
+
+  &-faq {
+    height: 100%;
+    padding: 0 57px 60px 57px;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    display: flex;
+  }
+
+  &-question-mark {
+    width: 60px;
+    height: 60px;
+    background: #CED0D9;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+  }
+
+  &-faq-text {
+    font-size: 16px;
+    line-height: 150%;
+    color: #E7FEFE;
+  }
 }
 
 @media screen and (max-width: 1440px) {
   .dashboard-menu {
-    width: 300px;
-
     &-logo {
       height: 70px;
     }

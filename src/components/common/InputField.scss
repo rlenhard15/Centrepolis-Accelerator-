@@ -1,12 +1,13 @@
 .text-field {
   position: relative;
-  margin-bottom: 25px;
+  margin-bottom: 26px;
   color: #9E9E9E;
 
   &-label {
     display: inline-block;
     margin-bottom: 10px;
-    font-size: 0.7778rem;
+    font-size: 14px;
+    color: #495368;
   }
 
   &-input {
@@ -55,12 +56,6 @@
 
 @media screen and (max-width: 1440px) {
   .text-field {
-    margin-bottom: 20px;
-
-    &-label {
-      margin-bottom: 5px;
-    }
-
     .error-text {
       bottom: -15px;
       font-size: 10px;
