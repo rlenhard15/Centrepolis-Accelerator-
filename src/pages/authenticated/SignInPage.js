@@ -77,24 +77,17 @@ const SignInPage = props => {
           <CustomButton
             type="submit"
             label="Sign In"
+            className="auth-page-form-submit-btn"
             disabled={loading}
           />
         </form>
-        {/* <p className="auth-page-alternative">
-          <span>
-            Don’t have an account yet?
-            <Link to="/sign_up">Sign up</Link>
-          </span>
-        </p> */}
         <p className="auth-page-alternative">
           <span>
-          Don’t remember your password?
-            <Link to="/sign_up">Reset Password</Link>
+            Don’t remember your password?
+            <Link to="/forgot-password">Reset Password</Link>
           </span>
         </p>
-        {
-          loading ? <Loader /> : null
-        }
+        {loading ? <Loader /> : null}
       </div>
     </div>
   )

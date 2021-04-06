@@ -1,0 +1,22 @@
+.person-settings {
+  background: #FFF;
+  border-radius: 2px;
+
+  &-header {
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 24px;
+    color: #0A0E2E;
+  }
+
+  &-form-row {
+    display: flex;
+  }
+
+  &-settings-submit {
+    width: 251px;
+    height: 55px;
+    background: #70C497;
+    border-radius: 60px;
+  }
+}

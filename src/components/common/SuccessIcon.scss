@@ -1,0 +1,19 @@
+.success-icon {
+  width: 160px;
+  height: 160px;
+  background: #f6f6f6;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-inner-cnt {
+    width: 60px;
+    height: 60px;
+    background: #495368;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+  }
+}

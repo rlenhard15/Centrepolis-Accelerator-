@@ -85,6 +85,7 @@ const ConfirmAccountPage = props => {
           <CustomButton
             type="submit"
             label="Sign Up"
+            className="auth-page-form-submit-btn"
             disabled={loading}
           />
         </form>
