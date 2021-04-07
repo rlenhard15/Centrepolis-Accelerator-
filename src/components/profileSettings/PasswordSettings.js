@@ -3,59 +3,35 @@ import React from 'react';
 import { CustomButton } from '../common/Button';
 import { InputField } from '../../components/common/InputField';
 
-import './PasswordSettings';
+import './PasswordSettings.scss';
 
 const PasswordSettings = () => {
   return (
     <div className="password-settings">
-      <h3 className="password-settings-header">Personal information</h3>
-
-      <div className="password-settings-form-row">
-        <InputField
-          label="First Name"
-          name="firstName"
-          // value={values.firstName}
-          // onChange={handleChange}
-          // error={errors.firstName}
-          // errorText={errors.password_message}
-        />
-        <InputField
-          label="Last Name"
-          name="lastName"
-          // value={values.lastName}
-          // onChange={handleChange}
-          // error={errors.lastName}
-          // errorText={errors.password_message}
-        />
-      </div>
-
-      <div className="password-settings-form-row">
-        <InputField
-          label="Email"
-          type="email"
-          name="email"
-          // value={values.email}
-          // onChange={handleChange}
-          // error={errors.email}
-          // errorText={errors.password_message}
-        />
-        <InputField
-          label="Phone Number"
-          name="phoneNumber"
-          // value={values.phoneNumber}
-          // onChange={handleChange}
-          // error={errors.phoneNumber}
-          // errorText={errors.password_message}
-        />
-      </div>
-
+      <h3 className="password-settings-header">Change password</h3>
+      <InputField
+        label="Current password"
+        name="currentPassword"
+        // value={values.firstName}
+        // onChange={handleChange}
+        // error={errors.firstName}
+        // errorText={errors.password_message}
+      />
+      <InputField
+        label="New password"
+        name="newPassword"
+        // value={values.lastName}
+        // onChange={handleChange}
+        // error={errors.lastName}
+        // errorText={errors.password_message}
+      />
       <CustomButton
         className="password-settings-submit"
         type="submit"
-        label="Sign Up"
+        label="Change Password"
       />
     </div>
   );
 }
 
-export default PasswordSettings
+export default PasswordSettings;

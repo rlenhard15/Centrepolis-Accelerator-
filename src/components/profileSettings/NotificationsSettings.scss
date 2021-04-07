@@ -1,4 +1,4 @@
-.person-settings {
+.notifications-settings {
   background: #FFF;
   border-radius: 2px;
   padding: 40px;
@@ -12,16 +12,8 @@
     margin-top: 0;
   }
 
-  &-form-row {
-    display: flex;
-  }
-
   .text-field {
     width: 370px;
-  }
-
-  .text-field:first-child {
-    margin-right: 40px;
   }
 
   & &-submit {

@@ -24,7 +24,7 @@ export const useRoutes = (isAuthenticated, authData) => {
           authData.user_type === 'Customer' &&
           <Route path="/assessments/:id/:type" render={props => <AssessmentsPage userData={authData} {...props} />} />
         }
-        <Route path="/settings" render={ProfileSettings} />
+        <Route path="/settings" render={() => <ProfileSettings />} />
         <Redirect to="/" />
       </Switch>
     )

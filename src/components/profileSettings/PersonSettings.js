@@ -3,7 +3,7 @@ import React from 'react';
 import { CustomButton } from '../common/Button';
 import { InputField } from '../../components/common/InputField';
 
-import './PersonSettings';
+import './PersonSettings.scss';
 
 const PersonSettings = () => {
   return (
@@ -52,7 +52,7 @@ const PersonSettings = () => {
       <CustomButton
         className="person-settings-submit"
         type="submit"
-        label="Sign Up"
+        label="Save Changes"
       />
     </div>
   );
