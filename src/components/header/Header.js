@@ -32,21 +32,16 @@ const Header = memo(props => {
     <header className={`header ${props.className}`}>
       <div className="header-block">
         <div className="header-block-logo">
-          {
-            props.className === 'page' ? <PageLogo type='page' /> : null
-          }
+          {props.className === 'page' ? <PageLogo type='page' /> : null}
         </div>
         <div className="header-navigation">
-          {
-            user.user_type === 'Customer' ?
-              <HeaderNotification
-                notifications={state.notifications}
-                updateNotificationsList={updateNotificationsList}
-              /> : null
+          {user.user_type === 'Customer' ?
+            <HeaderNotification
+              notifications={state.notifications}
+              updateNotificationsList={updateNotificationsList}
+            /> : null
           }
-          <HeaderMenu
-            {...props}
-          />
+          <HeaderMenu {...props} />
         </div>
       </div>
     </header>

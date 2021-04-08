@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import IconButton from '@material-ui/core/IconButton';
-import NotificationIcon from '../../images/icons/notification-icon.svg';
+import { ReactComponent as NotificationIcon } from '../../images/icons/notification-icon.svg';
 
 import useHttp from '../../hooks/useHttp.hook';
 
@@ -51,7 +51,7 @@ const HeaderNotification = props => {
           className={`header-notification-icon ${findUnReadedNotification() ? 'have-message' : ''}`}
           onClick={handleOpenNotificationList}
         >
-          <img src={NotificationIcon} alt="" />
+          <NotificationIcon />
         </IconButton>
         {
           isOpen ?
