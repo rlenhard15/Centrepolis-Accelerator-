@@ -7,6 +7,8 @@
   flex: 1;
   position: relative;
   background: #F9F9F9;
+  height: 100vh;
+  overflow: auto;
 
   &-title {
     margin: 0;

@@ -4,6 +4,7 @@
   width: 375px;
   background: #242E41;
   text-align: center;
+  height: 100vh;
 
   &-logo {
     display: flex;
@@ -24,31 +25,42 @@
     margin: 70px 0 0;
 
     li a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      height: 66px;
+
       span {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: left;
+        width: 140px;
         margin-left: -15px;
         padding: 20px 0;
         color: #fff;
         font-size: 1rem;
-        text-align: center;
       }
 
       &.active {
-        span {
-          background-color: #3A6BB5;
-          color: #FFA842;
-        }
+        background-color: #1A2233;
+        font-weight: bold;
 
-        svg path {
-          stroke: #FFA842;
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          background: #70C497;
+          height: 66px;
+          width: 8px;
+          border-radius: 0 3px 3px 0;
         }
       }
     }
 
-    svg {
-      margin-right: 10px;
+    &-item-icon {
+      margin-right: 16px;
     }
   }
 
