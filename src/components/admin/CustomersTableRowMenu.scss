@@ -1,0 +1,34 @@
+.menu-actions {
+  position: relative;
+  cursor: pointer;
+
+  &-icon path  {
+    stroke: #0A0E2E;
+  }
+
+  &-popup {
+    position: absolute;
+    width: 131px;
+    top: 100%;
+    left: -120%;
+    background: #FFFFFF;
+    border-radius: 4px;
+    border: 1px solid #D3D3D3;
+  }
+
+  .menu-action {
+    padding: 10px 16px;
+    display: block;
+    color: 495368;
+    cursor: pointer;
+    color: #495368;
+
+    &:hover {
+      background-color: #F4F7FF;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #D3D3D3;
+    }
+  }
+}
