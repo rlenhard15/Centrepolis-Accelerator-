@@ -16,3 +16,16 @@
     background-color: #70C497;
   }
 }
+
+.MuiButton-root.MuiButton-outlined.button {
+  background: transparent;
+  border: 1.5px solid #70C497;
+  box-sizing: border-box;
+  color: #70C497;
+
+  &:hover {
+    background-color: #70C497;
+    color: #fff;
+  }
+
+}

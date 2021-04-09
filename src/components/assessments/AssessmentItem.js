@@ -1,11 +1,11 @@
 import React from 'react';
-import { CustomButton } from '../common/Button';
 
 import AssessmentLink from './AssessmentLink';
 import RiskProgress from './AssessmentsRiskProgress';
 
 const AssessmentsItem = props => {
   const { id, risk_type, risk_name, risk_class, risk_value } = props;
+
   return (
     <div className={`assessment-item ${risk_type !== 'Incomplete' ? 'have-assessment' : ''}`}>
       <div className="assessment-item-top">
@@ -20,12 +20,7 @@ const AssessmentsItem = props => {
         <span className="assessment-item-risk medium">Medium</span>
         <span className="assessment-item-risk high">High</span>
       </div>
-      <AssessmentLink {...props} />
-      <CustomButton
-        label="Learn more"
-        className="learn-more-btn"
-        handleClick={() => props.handleOpenInfoPopup({ id, risk_name })}
-      />
+      <AssessmentLink className="assessment-item-button" {...props} />
     </div>
   )
 }

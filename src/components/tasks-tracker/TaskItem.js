@@ -1,6 +1,7 @@
 import React, { useState, memo } from 'react';
 
-import EditIcon from '../../images/icons/edit-icon.svg';
+import { ReactComponent as EditIcon } from '../../images/icons/edit-icon.svg';
+
 import DeleteIcon from '../../images/icons/delete-icon.svg';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardArrowDownRoundedIcon from '@material-ui/icons/KeyboardArrowDownRounded';
@@ -30,6 +31,10 @@ const TaskItem = memo(props => {
       <div className="task-main">
         <p className={`task-main-title ${props.priority}-priority`}>{props.title}</p>
         <div className="task-main-info">
+          <p>
+            <span className="task-main-info-title">Assigned to</span>
+            <span className="task-main-info-text">Bessie Cooper</span>
+          </p>
           <p>
             <span className="task-main-info-title">Assessment</span>
             <span className="task-main-info-text">{props.master_assessment.split(' ')[0]}</span>
@@ -63,8 +68,9 @@ const TaskItem = memo(props => {
                   {
                     state.open ?
                       <div className="complete-options">
-                        <span className="disable">Incomplete</span>
+                        <span className="complete-option disable">Incomplete</span>
                         <IconButton
+                          className="complete-option"
                           onClick={handleCompleteTask}
                         >
                           Complete
@@ -84,8 +90,9 @@ const TaskItem = memo(props => {
             <div className="actions">
               <IconButton
                 onClick={() => props.handleShowPopup(props.id)}
+                className="actions-edit"
               >
-                <img src={EditIcon} alt="Edit" />
+                <EditIcon />
               </IconButton>
               <IconButton
                 onClick={() => props.handleDeleteTask(props.id)}

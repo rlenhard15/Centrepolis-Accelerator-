@@ -4,6 +4,7 @@ import TaskItem from './TaskItem';
 import TaskPopup from './TaskPopup';
 import { CustomButton } from '../common/Button';
 import Pagination from '../common/Pagination';
+import Loader from '../loader/Loader';
 
 import useHttp from '../../hooks/useHttp.hook';
 
@@ -17,10 +18,11 @@ const TasksTracker = props => {
     tasks: [],
     taskForUpdate: null,
     showPopup: false,
-    page: 0
+    loading: true,
+    page: 0,
   });
 
-  const handleChangePage = (event, newPage) => setState({ ...state, page: newPage });
+  const handleChangePage = (_event, newPage) => setState({ ...state, page: newPage });
 
   const currentTasksPage = state.tasks.slice(state.page * rowsPerPage, state.page * rowsPerPage + rowsPerPage);
 
@@ -44,7 +46,7 @@ const TasksTracker = props => {
 
   const getAllTasksRequest = async () => {
     const tasks = await request(`/api/tasks?customer_id=${props.currentCustomerId}`);
-    setState({ ...state, tasks });
+    setState({ ...state, tasks, loading: false });
   }
 
   const handleShowPopupForEdit = (taskId) => {
@@ -65,6 +67,8 @@ const TasksTracker = props => {
   useEffect(() => {
     getAllTasksRequest();
   }, [])
+
+  if (state.loading) return <Loader />
 
   return (
     <div className="tasks-tracker">
@@ -100,6 +104,7 @@ const TasksTracker = props => {
               rowsPerPage={rowsPerPage}
               handleChangePage={handleChangePage}
               itemsName='Task'
+              outlined={true}
             /> : null
         }
 

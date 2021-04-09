@@ -9,6 +9,7 @@ export const CustomButton = props => {
     <Button
       className={`button ${props.className}`}
       type={props.type}
+      variant={props.variant}
       disabled={props.disabled}
       onClick={props.handleClick}
     >

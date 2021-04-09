@@ -57,7 +57,7 @@ const DashboardPage = props => {
                     loading={loading}
                   />}
                 />
-                <Route exact path="/assessments/:id" render={() =>
+                <Route path="/assessments/:id/" render={() =>
                   <Assessments
                     {...props}
                     isPage={false}

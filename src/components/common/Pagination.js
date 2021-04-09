@@ -9,7 +9,7 @@ import LastPageRoundedIcon from '@material-ui/icons/LastPageRounded';
 import './Pagination.scss';
 
 const Pagination = props => {
-  const { rows, page, rowsPerPage, handleChangePage } = props;
+  const { rows, page, rowsPerPage, handleChangePage, outlined } = props;
   const count = rows.length;
 
   const handleFirstPageButtonClick = event => {
@@ -29,7 +29,7 @@ const Pagination = props => {
   };
 
   return (
-    <div className="pagination-wrapper">
+    <div className={`pagination-wrapper ${outlined  ? 'outlined' : ''}`}>
       <div className="pagination-items-counter">
         {rows.length} {rows.length > 1 ? props.itemsName + 's' : props.itemsName}
       </div>

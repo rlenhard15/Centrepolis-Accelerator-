@@ -17,15 +17,16 @@ export const useRoutes = (isAuthenticated, authData) => {
         <Route exact path="/" render={props => <DashBoardPage userData={authData} {...props} />} />
         {
           authData.user_type === 'Admin' && [
-            <Route exact path="/assessments/:id" key={1} render={props => <DashBoardPage userData={authData} {...props} />} />,
-            <Route path="/assessments/:id/:type/:customer_id" key={2} render={props => <AssessmentsPage userData={authData} {...props} />} />
+            <Route exact path="/assessments/:id" key={3} render={({ match }) => <Redirect to={`/assessments/${match.params.id}/assessments`} />} />,
+            <Route exact path="/assessments/:id/:type" key={3} render={props => <DashBoardPage userData={authData} {...props} />} />,
+            <Route exact path="/assessments/:id/:type/:customer_id" key={4} render={props => <AssessmentsPage userData={authData} {...props} />} />,
           ]}
         {
           authData.user_type === 'Customer' &&
           <Route path="/assessments/:id/:type" render={props => <AssessmentsPage userData={authData} {...props} />} />
         }
         <Route path="/settings" render={() => <ProfileSettings />} />
-        <Redirect to="/" />
+        {/* <Redirect to="/" /> */}
       </Switch>
     )
   }
