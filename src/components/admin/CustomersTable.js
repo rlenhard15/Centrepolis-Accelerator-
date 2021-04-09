@@ -66,7 +66,7 @@ const CustomersTable = props => {
           }
         </ul>
         <Pagination
-          rows={props.customers}
+          rowsCount={props.customers.length}
           currentRows={currentCustomersPage}
           page={page}
           rowsPerPage={rowsPerPage}

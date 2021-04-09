@@ -1,7 +1,6 @@
 import React, { useState, memo } from 'react';
 
 import { ReactComponent as EditIcon } from '../../images/icons/edit-icon.svg';
-
 import DeleteIcon from '../../images/icons/delete-icon.svg';
 import IconButton from '@material-ui/core/IconButton';
 import KeyboardArrowDownRoundedIcon from '@material-ui/icons/KeyboardArrowDownRounded';

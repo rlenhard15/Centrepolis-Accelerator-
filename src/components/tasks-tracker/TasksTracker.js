@@ -98,7 +98,7 @@ const TasksTracker = props => {
         {
           state.tasks.length ?
             <Pagination
-              rows={state.tasks}
+              rowsCount={state.tasks.length}
               currentRows={currentTasksPage}
               page={state.page}
               rowsPerPage={rowsPerPage}

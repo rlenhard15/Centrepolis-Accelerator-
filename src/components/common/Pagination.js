@@ -9,8 +9,7 @@ import LastPageRoundedIcon from '@material-ui/icons/LastPageRounded';
 import './Pagination.scss';
 
 const Pagination = props => {
-  const { rows, page, rowsPerPage, handleChangePage, outlined } = props;
-  const count = rows.length;
+  const { rowsCount, page, rowsPerPage, handleChangePage, outlined } = props;
 
   const handleFirstPageButtonClick = event => {
     handleChangePage(event, 0);
@@ -25,20 +24,20 @@ const Pagination = props => {
   };
 
   const handleLastPageButtonClick = event => {
-    handleChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    handleChangePage(event, Math.max(0, Math.ceil(rowsCount / rowsPerPage) - 1));
   };
 
   return (
     <div className={`pagination-wrapper ${outlined  ? 'outlined' : ''}`}>
       <div className="pagination-items-counter">
-        {rows.length} {rows.length > 1 ? props.itemsName + 's' : props.itemsName}
+        {rowsCount} {rowsCount > 1 ? props.itemsName + 's' : props.itemsName}
       </div>
       <div className="pagination-wrapper-common">
         {
-          rows.length > rowsPerPage ?
+          rowsCount > rowsPerPage ?
             <>
               <div className="pagination-pages-counter">
-                {`${rows.length === 0 ? 0 : page + 1} of ${Math.ceil(count / rowsPerPage)}`}
+                {`${rowsCount === 0 ? 0 : page + 1} of ${Math.ceil(rowsCount / rowsPerPage)}`}
               </div>
               <div className="pagination-arrows">
                 <IconButton
@@ -56,14 +55,14 @@ const Pagination = props => {
                 </IconButton>
                 <IconButton
                   onClick={handleNextButtonClick}
-                  disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                  disabled={page >= Math.ceil(rowsCount / rowsPerPage) - 1}
                   aria-label="next page"
                 >
                   <ChevronRightRoundedIcon />
                 </IconButton>
                 <IconButton
                   onClick={handleLastPageButtonClick}
-                  disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                  disabled={page >= Math.ceil(rowsCount / rowsPerPage) - 1}
                   aria-label="last page"
                 >
                   <LastPageRoundedIcon />
@@ -71,7 +70,6 @@ const Pagination = props => {
               </div>
             </> : null
         }
-
       </div>
     </div>
   );

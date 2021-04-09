@@ -10,6 +10,7 @@ import ArrowRightSmallImg from '../../images/icons/arrow-right-small.svg'
 import { AssessmentTabs, AssessmentTab } from './AssessmentTabs';
 import { CustomButton } from '../common/Button';
 import InviteTeamPopup from '../admin/InviteTeamPopup';
+import AssessmentUsers from './AssessmentUsers';
 
 import useHttp from '../../hooks/useHttp.hook';
 
@@ -169,7 +170,7 @@ const Assessments = props => {
           />
         </AssessmentTab>
         <AssessmentTab tab="users" label="Users">
-          Users
+          <AssessmentUsers />
         </AssessmentTab>
       </AssessmentTabs>
 
