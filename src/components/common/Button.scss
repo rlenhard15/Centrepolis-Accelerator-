@@ -13,7 +13,9 @@
   cursor: pointer;
 
   &:hover {
-    background-color: #70C497;
+    color: #70C497;
+    border: 1.5px solid #70C497;
+    background-color: transparent;
   }
 }
 
