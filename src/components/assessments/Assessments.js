@@ -17,13 +17,16 @@ import useHttp from '../../hooks/useHttp.hook';
 import './Assessment.scss';
 
 const Assessments = props => {
+
   const { request } = useHttp();
   const { id } = useParams()
   const history = useHistory();
 
   const pageBaseUrl = `/assessments/${id}`
 
-  const currentCustomerId = props.userType === 'Admin' ? +props.match.params.id : props.customer.id;
+  const isAdmin = props.userType === 'Admin';
+
+  const currentCustomerId = isAdmin ? +props.match.params.id : props.customer.id;
   const [state, setState] = useState({
     customer: props.customer || null,
     assessments: null,
@@ -34,7 +37,7 @@ const Assessments = props => {
   });
 
   const setAssessments = (data, customer) => {
-    let assessments = data.map(ass => {
+    const assessments = data.map(ass => {
       let value = ass.risk_value,
         risk_name = ass.name.split(' ')[0],
         risk_class = '',
@@ -56,7 +59,7 @@ const Assessments = props => {
       return { ...ass, risk_type, risk_class, risk_name }
     })
 
-    props.userType === 'Admin' ?
+    isAdmin ?
       setState({ assessments, customer, loading: false }) :
       setState({ ...state, assessments, loading: false })
   }
@@ -65,7 +68,6 @@ const Assessments = props => {
     try {
       const assessments = await request(`/api/assessments/?customer_id=${currentCustomerId}`);
       setAssessments(assessments, customer);
-
     } catch (err) {
       if (err === 403 || err === 401) {
         localStorage.removeItem('userData');
@@ -96,7 +98,7 @@ const Assessments = props => {
   }
 
   useEffect(() => {
-    props.userType === 'Admin' ?
+    isAdmin ?
       getCustomersRequest() :
       getAssessmentsRequest()
   }, []);
@@ -118,61 +120,79 @@ const Assessments = props => {
   if (state.loading) return <Loader />
 
   return (
-    <div className={`assessment ${props.userType === "Admin" ? 'admin' : 'customer'}`}>
+    <div className={`assessment ${!isAdmin ? 'admin' : 'customer'}`}>
       <div className="assessment-header">
-        {
-          props.userType === "Admin" ? (
-            <>
-              <div className="assessment-breadcrumbs">
-                <Link to="/" className="active">Dashboard</Link>
-                <img src={ArrowRightSmallImg} alt="" />
-                <span>{state.customer.company_name}</span>
-              </div>
-              <h3 className="assessment-title">
-                <span>{state.customer.company_name}</span>
-                <CustomButton
-                  variant="outlined"
-                  label="Add New Member"
-                  handleClick={handleOpenInviteMemberPopup}
-                />
-              </h3>
-              <p>The progress report for {state.customer.company_name} is ready for your review.</p>
-            </>
-          ) : (
-              <>
-                <h3 className="assessment-title">{state.customer.company_name}</h3>
-                <p>Are you ready to find out your CRL, TRL, MRL risks?</p>
-              </>
-            )
-        }
+        {isAdmin ? (
+          <>
+            <div className="assessment-breadcrumbs">
+              <Link to="/" className="active">Dashboard</Link>
+              <img src={ArrowRightSmallImg} alt="" />
+              <span>{state.customer.company_name}</span>
+            </div>
+            <h3 className="assessment-title">
+              <span>{state.customer.company_name}</span>
+              <CustomButton
+                variant="outlined"
+                label="Add New Member"
+                handleClick={handleOpenInviteMemberPopup}
+              />
+            </h3>
+            <p>The progress report for {state.customer.company_name} is ready for your review.</p>
+          </>
+        ) : (
+          <>
+            <h3 className="assessment-title">{state.customer.company_name}</h3>
+            <p>Are you ready to find out your CRL, TRL, MRL risks?</p>
+          </>
+        )}
       </div>
 
-      <AssessmentTabs baseUrl={pageBaseUrl}>
-        <AssessmentTab tab="assignments" label="Assignments">
-          <div className="assessment-risks">
-            {
-              state.assessments.map((item, i) =>
+      {isAdmin ? (
+        <AssessmentTabs baseUrl={pageBaseUrl}>
+          <AssessmentTab tab="" label="Assignments">
+            <div className="assessment-risks">
+              {state.assessments.map((item, i) =>
                 <AssessmentsItem
                   key={i}
                   {...item}
                   userType={props.userType}
                   customerId={currentCustomerId}
                   handleOpenInfoPopup={handleOpenInfoPopup}
-                />)
-            }
+                />
+              )}
+            </div>
+          </AssessmentTab>
+          <AssessmentTab tab="tasks" label="Tasks">
+            <TasksTracker
+              userType={props.userType}
+              assessments={state.assessments}
+              currentCustomerId={currentCustomerId}
+            />
+          </AssessmentTab>
+          <AssessmentTab tab="users" label="Users">
+            <AssessmentUsers />
+          </AssessmentTab>
+        </AssessmentTabs>
+      ) : (
+        <>
+          <div className="assessment-risks">
+            {state.assessments.map((item, i) =>
+              <AssessmentsItem
+                key={i}
+                {...item}
+                userType={props.userType}
+                customerId={currentCustomerId}
+                handleOpenInfoPopup={handleOpenInfoPopup}
+              />
+            )}
           </div>
-        </AssessmentTab>
-        <AssessmentTab tab="tasks" label="Tasks">
           <TasksTracker
             userType={props.userType}
             assessments={state.assessments}
             currentCustomerId={currentCustomerId}
           />
-        </AssessmentTab>
-        <AssessmentTab tab="users" label="Users">
-          <AssessmentUsers />
-        </AssessmentTab>
-      </AssessmentTabs>
+        </>
+      )}
 
       {state.showInvitePopup && <InviteTeamPopup handleClosePopup={handleCloseInviteMemberPopup} />}
 

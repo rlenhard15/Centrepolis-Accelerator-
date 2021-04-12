@@ -9,8 +9,12 @@ export const useAuthContext = () => useContext(AuthContext)
 const CheckAuthorization = () => {
   const history = useHistory();
   const path = history.location.pathname;
+
   const authData = JSON.parse(localStorage.getItem('userData'));
-  const isAuthenticated = authData ? true : false;
+  const isAuthenticated = Boolean(authData);
+  const userType = authData?.user_type;
+  const isAdmin = userType === 'Admin';
+
   const allRoutes = useRoutes(isAuthenticated, authData);
   const isConfirmationPage = path === '/users/password';
 
@@ -19,7 +23,7 @@ const CheckAuthorization = () => {
   }, [])
 
   return (
-    <AuthContext.Provider value={{authData, isAuthenticated}}>
+    <AuthContext.Provider value={{authData, isAdmin, isAuthenticated}}>
       {allRoutes}
     </AuthContext.Provider>
   )

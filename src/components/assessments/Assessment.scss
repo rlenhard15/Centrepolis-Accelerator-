@@ -103,6 +103,10 @@
       pointer-events: none;
     }
   }
+
+  &.customer &-risks {
+    margin-bottom: 60px;
+  }
 }
 
 .assessment-risks {
