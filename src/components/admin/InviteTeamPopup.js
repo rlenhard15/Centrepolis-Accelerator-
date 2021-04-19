@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
 import { InputField } from '../common/InputField';
+import CustomSelect from '../common/Select';
+
 import { CustomButton } from '../common/Button';
 
 import useHttp from '../../hooks/useHttp.hook';
@@ -9,7 +11,8 @@ import validate from '../../validationRules/inviteTeam';
 
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
-import CloseIcon from '../../images/icons/close-icon.svg';
+import {ReactComponent as CloseIcon} from '../../images/icons/close-icon.svg';
+
 
 import './InviteTeamPopup.scss';
 
@@ -49,7 +52,7 @@ const InviteTeamPopup = props => {
           <button
             className="popup-close-btn"
             onClick={props.handleClosePopup}>
-            <img src={CloseIcon} alt="" />
+            <CloseIcon />
           </button>
           <form noValidate autoComplete="off" onSubmit={handleSubmit}>
             <InputField
@@ -62,19 +65,12 @@ const InviteTeamPopup = props => {
               error={errors.email || inviteErrors.inviteEmailError}
               errorText={errors.email_message || '* this email has already been taken'}
             />
-            <InputField
-              label="Company"
-              placeholder="Enter team name"
-              type="text"
-              name="company_name"
-              value={values.company_name}
-              onChange={handleChange}
-              error={errors.company_name || inviteErrors.inviteCompanyError}
-              errorText={errors.company_name_message || '* this company name has already exists'}
+            <CustomSelect
+              placeholder="Select company name"
             />
             <CustomButton
               type='submit'
-              label="Invite Team Manager"
+              label="Send Invite"
               disabled={loading}
             />
           </form>

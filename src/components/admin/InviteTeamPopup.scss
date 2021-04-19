@@ -43,6 +43,15 @@
     right: 40px;
     background-color: transparent;
     border: 0;
+
+    svg {
+      width: 25px;
+      height: 25px;
+    }
+
+    svg path {
+      stroke: #0A0E2E;
+    }
   }
 }
 

@@ -8,10 +8,10 @@
     border-color: #D3D3D3;
     box-shadow: none;
     cursor: pointer;
-  }
 
-  .css-1pahdxg-control {
-    border-color: #4971FF;
+    &:hover {
+      border-color: #D3D3D3;
+    }
   }
 
   .select {
@@ -26,7 +26,7 @@
     }
 
     svg {
-      fill: #4971FF,
+      fill: #0A0E2E,
     }
   }
 
