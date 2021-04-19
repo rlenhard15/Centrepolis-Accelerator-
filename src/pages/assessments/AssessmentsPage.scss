@@ -18,11 +18,9 @@
 }
 
 .assessment-settings {
-  display: flex;
-  justify-content: space-between;
-
-  &-steps {
-    width: 320px;
+  &-container {
+    display: flex;
+    justify-content: space-between;
   }
 
   &-update {
@@ -102,10 +100,6 @@
   }
 
   .assessment-settings {
-    &-steps {
-      width: 290px;
-    }
-
     &-update {
       width: 890px;
       background-color: #fff;

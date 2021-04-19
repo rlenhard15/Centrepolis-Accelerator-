@@ -16,13 +16,15 @@
     &::-webkit-slider-thumb {
       -webkit-appearance: none;
       -moz-apperance: none;
-      width: 45px;
-      height: 45px;
+      width: 35px;
+      height: 35px;
       border-radius: 50%;
       border: none;
-      background-color: #4971FF;
+      background-color: #005AA0;
+      border: 3px #fff solid;
       pointer-events: auto;
       cursor: grab;
+      box-shadow: 0 0 0 2px #005AA0;
     }
 
     &::-moz-range-thumb {
@@ -30,7 +32,7 @@
       height: 45px;
       border: none;
       border-radius: 50%;
-      background-color: #4971FF;
+      background-color: #005AA0;
       pointer-events: auto;
       cursor: grab;
     }

@@ -49,14 +49,17 @@ const AssessmentsStage = props => {
 
   const setCircleStyle = () => {
     const style = {};
+
+    if (props.isCurrentStage) style.display = 'none';
+
     if (props.index < typesOfStageCount) {
-      props.isActive ? style.background = setCircleBackground(1) : style.borderColor = colorScheme[0]
+      props.isActive ? style.background = setCircleBackground(1) : style.borderColor = colorScheme[0];
     } else if (props.index < typesOfStageCount * 2) {
-      props.isActive ? style.background = setCircleBackground(2) : style.borderColor = colorScheme[1]
+      props.isActive ? style.background = setCircleBackground(2) : style.borderColor = colorScheme[1];
     } else {
-      props.isActive ? style.background = setCircleBackground(3) : style.borderColor = colorScheme[2]
+      props.isActive ? style.background = setCircleBackground(3) : style.borderColor = colorScheme[2];
     }
-    return style
+    return style;
   }
 
   return (

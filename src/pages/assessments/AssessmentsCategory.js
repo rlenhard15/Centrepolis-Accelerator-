@@ -94,6 +94,7 @@ const AssessmentCategory = props => {
                   <AssessmentsStage
                     {...stage}
                     index={i}
+                    isCurrentStage={state.activeStageIndex === i}
                     key={stage.id}
                     trackWidth={trackRef.current}
                     stagesCount={state.stages.length}

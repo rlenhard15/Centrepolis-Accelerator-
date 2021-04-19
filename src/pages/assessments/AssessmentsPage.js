@@ -90,24 +90,26 @@ const AssessmentsPage = props => {
                       <p className="assessment-subtitle">Hi {user.first_name}, please complete this assessment on behalf of {user.company_name}.</p>
                   }
                 </div>
-                <AssessmentsSteps
-                  activeCategory={state.activeCategory}
-                  changeSubCategory={changeSubCategory}
-                  categories={state.categories}
-                />
-              </div>
-              <div className="assessment-settings-update">
-                <AssessmentsSettings
-                  settingsBlockRef={settingsBlockRef}
-                  assessmentId={id}
-                  assessmentName={type}
-                  customerId={customer_id}
-                  userType={user_type}
-                  activeCategory={state.activeCategory}
-                  assessments={state.assessments}
-                  categories={state.categories}
-                  subCategories={state.subCategories}
-                />
+                <div className="assessment-settings-container">
+                  <AssessmentsSteps
+                    activeCategory={state.activeCategory}
+                    changeSubCategory={changeSubCategory}
+                    categories={state.categories}
+                  />
+                  <div className="assessment-settings-update">
+                    <AssessmentsSettings
+                      settingsBlockRef={settingsBlockRef}
+                      assessmentId={id}
+                      assessmentName={type}
+                      customerId={customer_id}
+                      userType={user_type}
+                      activeCategory={state.activeCategory}
+                      assessments={state.assessments}
+                      categories={state.categories}
+                      subCategories={state.subCategories}
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           ) :
