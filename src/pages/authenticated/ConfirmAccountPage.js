@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import { AuthLogo } from '../../components/logos/AuthLogo';
+import DashboardMenu from '../dashboard/DashboardMenu';
 import { InputField } from '../../components/common/InputField';
 import { CustomButton } from '../../components/common/Button';
 import Loader from '../../components/loader/Loader';
@@ -15,7 +16,6 @@ import './AuthorizationPage.scss';
 const ConfirmAccountPage = props => {
   const confirmFields = {
     password: '',
-    password_confirmation: '',
     first_name: '',
     last_name: '',
   };
@@ -37,7 +37,7 @@ const ConfirmAccountPage = props => {
 
   return (
     <div className="auth-page">
-      <AuthLogo />
+      <DashboardMenu />
       <div className="auth-page-form">
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <h3 className="auth-page-form-title">Confirm Account</h3>
@@ -72,29 +72,24 @@ const ConfirmAccountPage = props => {
             error={errors.password}
             errorText={errors.password_message}
           />
-          <InputField
-            label="Repeat Password"
-            placeholder="Repeat your password"
-            type="password"
-            name="password_confirmation"
-            value={values.password_confirmation}
-            onChange={handleChange}
-            error={errors.password_confirmation}
-            errorText={errors.password_confirmation_message}
-          />
+          <div className="auth-page-form-keep-me-signed-in">
+            <InputField
+              onChange={handleChange}
+              value={values.keepSignedIn}
+              name="keepSignedIn"
+              type="checkbox"
+            />
+            <label className="auth-page-form-keep-me-signed-in-label">
+              Keep me signed in
+            </label>
+          </div>
           <CustomButton
             type="submit"
-            label="Sign Up"
+            label="Sign In"
             className="auth-page-form-submit-btn"
             disabled={loading}
           />
         </form>
-        {/* <p className="auth-page-alternative">
-          <span>
-            Don’t remember your password?
-            <Link to="/reset_password" disabled>Reset Password</Link>
-          </span>
-        </p> */}
         {
           loading ? <Loader /> : null
         }
