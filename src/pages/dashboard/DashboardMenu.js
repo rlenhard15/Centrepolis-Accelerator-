@@ -33,7 +33,7 @@ const DashboardMenu = () => {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/settings" exact>
+            <NavLink to="/settings">
               <span>
                 <img className="dashboard-menu-list-item-icon" src={settingsIcon} alt="settings"/>
                 Settings

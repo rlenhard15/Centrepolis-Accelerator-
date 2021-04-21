@@ -7,7 +7,7 @@ import AssessmentsItem from './AssessmentItem';
 import TasksTracker from '../tasks-tracker/TasksTracker';
 import AssessmentInfoPopup from './AssessmentInfoPopup';
 import ArrowRightSmallImg from '../../images/icons/arrow-right-small.svg'
-import { AssessmentTabs, AssessmentTab } from './AssessmentTabs';
+import { Tab, Tabs } from '../common/Tabs';
 import { CustomButton } from '../common/Button';
 import InviteTeamPopup from '../admin/InviteTeamPopup';
 import AssessmentUsers from './AssessmentUsers';
@@ -148,8 +148,8 @@ const Assessments = props => {
       </div>
 
       {isAdmin ? (
-        <AssessmentTabs baseUrl={pageBaseUrl}>
-          <AssessmentTab tab="" label="Assignments">
+        <Tabs baseUrl={pageBaseUrl}>
+          <Tab tab="" label="Assignments">
             <div className="assessment-risks">
               {state.assessments.map((item, i) =>
                 <AssessmentsItem
@@ -161,18 +161,18 @@ const Assessments = props => {
                 />
               )}
             </div>
-          </AssessmentTab>
-          <AssessmentTab tab="tasks" label="Tasks">
+          </Tab>
+          <Tab tab="tasks" label="Tasks">
             <TasksTracker
               userType={props.userType}
               assessments={state.assessments}
               currentCustomerId={currentCustomerId}
             />
-          </AssessmentTab>
-          <AssessmentTab tab="users" label="Users">
+          </Tab>
+          <Tab tab="users" label="Users">
             <AssessmentUsers />
-          </AssessmentTab>
-        </AssessmentTabs>
+          </Tab>
+        </Tabs>
       ) : (
         <>
           <div className="assessment-risks">

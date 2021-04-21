@@ -27,41 +27,6 @@
     }
   }
 
-  &-tabs {
-    display: flex;
-    width: 100%;
-    border-width: 0 0 1px;
-    border-color: #9E9E9E;
-    border-style: solid;
-
-    a {
-      display: block;
-      margin-right: 40px;
-      font-size: 18px;
-      line-height: 24px;
-      color: #495368;
-      height: 40px;
-    }
-
-    a.active {
-      font-weight: bold;
-      color: #0A0E2E;
-      position: relative;
-
-      &::before {
-        content: '';
-        position: absolute;
-        display: block;
-        background: #70C497;
-        border-radius: 3px 3px 0px 0px;
-        height: 3px;
-        width: 100%;
-        bottom: -1.3px;
-        left: 0;
-      }
-    }
-  }
-
   .back-btn {
     margin-left: -10px;
     background-color: transparent;

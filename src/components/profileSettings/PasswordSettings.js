@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { CustomButton } from '../common/Button';
 import { InputField } from '../../components/common/InputField';
@@ -30,6 +31,12 @@ const PasswordSettings = () => {
         type="submit"
         label="Change Password"
       />
+      <p className="password-settings-alternative">
+        <span>
+          Don’t remember your password?
+          <Link to="/forgot-password">Reset Password</Link>
+        </span>
+      </p>
     </div>
   );
 }
