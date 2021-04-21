@@ -65,6 +65,16 @@ const TaskSelectGroup = props => {
   return (
     <>
       <CustomSelect
+        // isDisable={true}
+        label="Assign to"
+        placeholder='Assign to'
+        // options={props.riskCategories}
+        // onChange={handleCategoryChange}
+        // value={props.selectedCategory}
+        // isDisabled={!props.riskCategories.length}
+        // error={props.error && !props.selectedCategory}
+      />
+      <CustomSelect
         isDisable={true}
         label="Risk Category"
         placeholder='Select risk category'

@@ -11,7 +11,7 @@ import Loader from '../loader/Loader';
 
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
-import CloseIcon from '../../images/icons/close-icon.svg';
+import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg';
 
 import useHttp from '../../hooks/useHttp.hook';
 
@@ -211,7 +211,7 @@ const TaskPopup = props => {
           <button
             className="popup-close-btn"
             onClick={props.handleClosePopup}>
-            <img src={CloseIcon} alt="Close" />
+            <CloseIcon />
           </button>
           <form onSubmit={formSubmit}>
             <div className="form-group assessment-types">
@@ -280,7 +280,7 @@ const TaskPopup = props => {
             </div>
             <CustomButton
               type='submit'
-              label={`${props.taskForEdit ? 'Update Task' : 'Assign New Task'}`}
+              label={`${props.taskForEdit ? 'Update Task' : 'Submit Task'}`}
             />
           </form>
           {

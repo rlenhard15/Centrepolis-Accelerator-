@@ -19,11 +19,11 @@ import './InviteTeamPopup.scss';
 const InviteTeamPopup = props => {
   const inviteFields = {
     email: '',
-    company_name: '',
+    company_name: null,
     accelerator_id: Number(process.env.REACT_APP_ACCELERATOR_ID)
   };
   const { loading, request } = useHttp();
-  const { values, errors, handleChange, handleSubmit } = useForm(inviteTeam, validate, inviteFields);
+  const { values, errors, handleChange, setValues, handleSubmit } = useForm(inviteTeam, validate, inviteFields);
   const [inviteErrors, setInviteErrors] = useState({
     inviteEmailError: false,
     inviteCompanyError: false
@@ -35,14 +35,23 @@ const InviteTeamPopup = props => {
 
   const inviteTeamRequest = async () => {
     try {
-      const newCustomer = await request(`/api/customers`, 'POST', { customer: { ...values } });
-      props.addCustomers(newCustomer)
+      const customer = { email: values.email, company_name: values.company_name.value };
+      const newCustomer = await request(`api/customers`, 'POST', { customer });
+      props.addCustomers(newCustomer);
       props.handleClosePopup();
     } catch (err) {
       if (err === 422) return setInviteErrors({inviteCompanyError: false, inviteEmailError:true});
       if (err === 500) return setInviteErrors({inviteEmailError:false, inviteCompanyError:true});
     }
   }
+
+  const handleCompanyChange = option => {
+    setValues(v => ({ ...v, 'company_name': option }))
+  }
+
+  const companiesOptions = [
+    { label: 'Test', value: 'Test' },
+  ]
 
   return (
     <div className="popup">
@@ -67,6 +76,10 @@ const InviteTeamPopup = props => {
             />
             <CustomSelect
               placeholder="Select company name"
+              value={values.company_name}
+              options={companiesOptions}
+              onChange={handleCompanyChange}
+              error={errors.company_name || inviteErrors.inviteCompanyError}
             />
             <CustomButton
               type='submit'
