@@ -104,5 +104,14 @@
         padding: 15px 0;
       }
     }
+
+    &-question-mark {
+      width: 45px;
+      height: 45px;
+    }
+  
+    &-faq-text {
+      font-size: 15px;
+    }
   }
 }
