@@ -1,39 +1,50 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
-import DashboardMenu from '../dashboard/DashboardMenu';
-import { InputField } from '../../components/common/InputField';
-import { CustomButton } from '../../components/common/Button';
-import Loader from '../../components/loader/Loader';
+import DashboardMenu from '../dashboard/DashboardMenu'
+import { InputField } from '../../components/common/InputField'
+import { CustomButton } from '../../components/common/Button'
+import Loader from '../../components/loader/Loader'
 
-import useHttp from '../../hooks/useHttp.hook';
-import useForm from '../../hooks/useForm.hook';
-import validate from '../../validationRules/signIn';
+import useHttp from '../../hooks/useHttp.hook'
+import useForm from '../../hooks/useForm.hook'
+import validate from '../../validationRules/signIn'
 
-import './AuthorizationPage.scss';
+import './AuthorizationPage.scss'
 
 const SignInPage = props => {
   const signInFields = {
     email: '',
     password: '',
     accelerator_id: Number(process.env.REACT_APP_ACCELERATOR_ID)
-  };
-  const { loading, request } = useHttp();
-  const { values, errors, handleChange, handleSubmit } = useForm(singIn, validate, signInFields);
-  const [authorizationError, setAuthorizationError] = useState(false);
+  }
+  const { loading, request } = useHttp()
+  const { values, errors, handleChange, handleSubmit, setValues } = useForm(singIn, validate, signInFields)
+  const [authorizationError, setAuthorizationError] = useState(false)
 
   function singIn() {
-    signInRequest();
+    signInRequest()
   };
 
   const signInRequest = async () => {
     try {
-      const userData = await request(`/users/sign_in`, 'POST', { user: { ...values } });
-      localStorage.setItem('userData', JSON.stringify(userData));
+      const userData = await request(`/users/sign_in`, 'POST', { user: { ...values } })
+
+      if (values.keepSignedIn) {
+        localStorage.setItem('userData', JSON.stringify(userData))
+      } else {
+        sessionStorage.setItem('userData', JSON.stringify(userData))
+      }
+
       props.history.push('/')
     } catch (err) {
-      if (+err === 401) setAuthorizationError(true);
+      if (err.status === 401) setAuthorizationError(true)
     }
+  }
+
+  const handleToggle = event => {
+    const { name, checked } = event.target
+    setValues(values => ({ ...values, [name]: checked }))
   }
 
   return (
@@ -65,8 +76,8 @@ const SignInPage = props => {
           />
           <div className="auth-page-form-keep-me-signed-in">
             <InputField
-              onChange={handleChange}
-              value={values.keepSignedIn}
+              onChange={handleToggle}
+              checked={values.keepSignedIn}
               name="keepSignedIn"
               type="checkbox"
             />

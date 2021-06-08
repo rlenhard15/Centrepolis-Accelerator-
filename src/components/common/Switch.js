@@ -1,8 +1,8 @@
-import React from 'react';
+import React from 'react'
 
-import Switch from '@material-ui/core/Switch';
+import Switch from '@material-ui/core/Switch'
 
-import './Switch.scss';
+import './Switch.scss'
 
 export const CustomSwitch = props => {
   const {
@@ -11,7 +11,7 @@ export const CustomSwitch = props => {
     disabled = false,
     handleClick,
     label,
-  } = props;
+  } = props
 
   return (
     <>
@@ -19,7 +19,7 @@ export const CustomSwitch = props => {
         className={`switch ${className}`}
         checked={checked}
         disabled={disabled}
-        onClick={handleClick}
+        onChange={handleClick}
         color="default"
       />
       {label && <label className="switch-label">{label}</label>}

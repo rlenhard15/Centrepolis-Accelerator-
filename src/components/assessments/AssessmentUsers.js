@@ -1,18 +1,20 @@
-import React from 'react';
+import React from 'react'
 
-import { ReactComponent as DeleteIcon } from '../../images/icons/delete-icon.svg';
-import Table from '../common/Table';
+import { ReactComponent as DeleteIcon } from '../../images/icons/delete-icon.svg'
+import Table from '../common/Table'
+import { useAuthContext } from '../../CheckAuthorization'
+// import useHttp from '../../hooks/useHttp.hook'
 
 import './AssessmentUsers.scss'
 
 const headers = [
   {
     title: 'User Name',
-    width: '200px',
+    width: '150px',
   },
   {
     title: 'Email',
-    width: '24%',
+    width: '34%',
   },
   {
     title: 'Member Status',
@@ -20,106 +22,80 @@ const headers = [
   },
   {
     title: 'Last Visit',
-    width: '20%',
+    width: '15%',
   },
   {
     title: 'Tasks',
-    width: '16%',
+    width: '10%',
   },
   {
-    width: '2%'
+    width: '3%'
   }
-];
+]
 
-export const AssessmentUsers = () => {
+export const AssessmentUsers = ({ members, startupAdmins }) => {
+  const { isSuperAdmin } = useAuthContext()
+  // const { request } = useHttp()
 
-  // @TODO: Test data
-  const rows = [
-    { id: 1,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 2,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 3,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 4,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 5,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 6,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 7,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 8,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 9,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 10,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 11,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 12,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 13,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 14,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 15,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 16,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 17,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 18,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 19,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 20,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 21,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 22,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 23,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 24,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 25,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-    { id: 26,
-      row: [<b>Bessie Cooper</b>, 'Carmen0@gmail.com', 'Startup Admin', '06/04/20', '06/04/20', <DeleteIcon />],
-    },
-  ];
+  const mapDataToRow = () => {
+    return mapMembersData()
+      .concat(mapAdminsData())
+      .sort((userA, userB) => new Date(userA.createdAt) - new Date(userB.createdAt))
+  }
+
+  const mapMembersData = () => {
+    return members.map(member => ({
+      id: member.id,
+      createdAt: member.created_at,
+      row: [
+        getUserName(member),
+        member.email,
+        'Member',
+        member.last_visit ? formatDate(member.last_visit) : '--',
+        member.tasks_number,
+      ]
+    }))
+  }
+
+  const mapAdminsData = () => {
+    return startupAdmins.map(admin => ({
+      id: admin.id,
+      createdAt: admin.created_at,
+      row: [
+        getUserName(admin),
+        admin.email,
+        'Startup Admin',
+        admin.last_visit ? formatDate(admin.last_visit) : '--',
+        admin.tasks_number,
+        isSuperAdmin && <DeleteIcon />,
+      ]
+    }))
+  }
+
+  const getUserName = (user) => {
+    if (!user.first_name) return '--'
+    return `${user.first_name} ${user.last_name}`
+  }
+
+  const handleDeleteAdmin = async (id) => {
+    // TODO
+    // await request(`/api/admins/${id}`)
+  }
+
+  const formatDate = timestamp => {
+    const date = new Date(timestamp)
+    const day = date.getUTCDay()
+    const month = date.getUTCMonth() + 1
+    const year = date.getUTCFullYear().toString().slice(2)
+
+    return `${month < 10 ? `0${month}` : month}/${day < 10 ? `0${day}` : day}/${year}`
+  }
 
   return (
     <div className="assessment-users">
-      <Table headers={headers} rows={rows} itemsName="member" />
+      <Table headers={headers} rows={mapDataToRow()} itemsName="member" />
     </div>
-  );
-};
+  )
+}
 
-export default AssessmentUsers;
+export default AssessmentUsers

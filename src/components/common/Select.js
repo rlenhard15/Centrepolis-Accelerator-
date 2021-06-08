@@ -58,6 +58,9 @@ const CustomSelect = props => {
         onChange={props.onChange}
         isDisabled={props.isDisabled}
       />
+      {props.errorText && <p className="error-text">
+        {props.errorText}
+      </p>}
     </div>
   )
 }

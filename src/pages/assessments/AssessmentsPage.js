@@ -1,54 +1,57 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 
-import Header from '../../components/header/Header';
-import AssessmentsSettings from './AssessmentsSettings';
-import AssessmentsSteps from './AssessmentsSteps';
-import Loader from '../../components/loader/Loader';
+import Header from '../../components/header/Header'
+import AssessmentsSettings from './AssessmentsSettings'
+import AssessmentsSteps from './AssessmentsSteps'
+import Loader from '../../components/loader/Loader'
+import { useAuthContext } from '../../CheckAuthorization'
 
-import ArrowRightSmallImg from '../../images/icons/arrow-right-small.svg';
+import ArrowRightSmallImg from '../../images/icons/arrow-right-small.svg'
 
-import useHttp from '../../hooks/useHttp.hook';
+import useHttp from '../../hooks/useHttp.hook'
 
-import './AssessmentsPage.scss';
+import './AssessmentsPage.scss'
 
 const AssessmentsPage = props => {
-  const settingsBlockRef = useRef(null);
-  const { id, type, customer_id } = props.match.params;
-  const { user, user_type } = props.userData;
-  const { request } = useHttp();
+  const settingsBlockRef = useRef(null)
+  const { id, type, startupid: startupId } = props.match.params
+  const { authData: { user }, isMember } = useAuthContext()
+
+  const { request } = useHttp()
   const [state, setState] = useState({
     activeCategory: 1,
     assessments: [],
     categories: [],
     subCategories: [],
     loading: true
-  });
+  })
 
-  const subCategoriesUrl = categoryId => user_type === "Admin" ?
-    `${categoryId}?customer_id=${customer_id}` :
-    `${categoryId}`;
+  const subCategoriesUrl = categoryId => isMember ?
+    `${categoryId}` :
+    `${categoryId}?startup_id=${startupId}`
 
   const changeSubCategory = async activeCategory => {
     if (activeCategory !== state.activeCategory) {
-      const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(activeCategory)}`);
-      setState({
+      const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(activeCategory)}`)
+      setState(state => ({
         ...state,
         subCategories,
         activeCategory
-      });
+      }))
     }
     if (settingsBlockRef.current.offsetTop > 100) {
-      settingsBlockRef.current.scrollIntoView({ behavior: 'smooth' });
+      settingsBlockRef.current.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
   const fetchAssessmentSettings = async () => {
     try {
-      const categories = await request(`/api/assessments/${id}/categories`);
-      const getAssessmentsResponse = await request(`/api/assessments/?customer_id=${customer_id}`);
-      let assessments = getAssessmentsResponse.map(ass => ({ ...ass, risk_name: ass.name.split(' ')[0] }));
-      const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(categories[0].id)}`);
+      const categories = await request(`/api/assessments/${id}/categories`)
+      const getAssessmentsResponse = await request(`/api/assessments/?startup_id=${startupId}`)
+      const assessments = getAssessmentsResponse.map(ass => ({ ...ass, risk_name: ass.name.split(' ')[0] }))
+      const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(categories[0].id)}`)
+
       setState({
         ...state,
         assessments,
@@ -56,21 +59,22 @@ const AssessmentsPage = props => {
         subCategories,
         activeCategory: categories[0].id,
         loading: false
-      });
+      })
     } catch (err) {
-      if (err === 403 || err === 401) {
-        localStorage.removeItem('userData');
-        props.history.push('/sign_in');
-      }
+      // if (err.status === 403 || err.status === 401) {
+      //   localStorage.removeItem('userData')
+      //   sessionStorage.removeItem('userData')
+      //   props.history.push('/sign_in')
+      // }
     }
   }
 
   useEffect(() => {
-    fetchAssessmentSettings();
+    fetchAssessmentSettings()
   }, [])
 
   return (
-    <div className={`assessment-page ${user_type === 'Admin' ? 'admin' : 'customer'}`}>
+    <div className={`assessment-page ${isMember ? 'customer' : 'admin'}`}>
       <Header className='page' {...props} />
       <div className="assessment-page-container">
         {
@@ -85,9 +89,9 @@ const AssessmentsPage = props => {
                   </div>
                   <h3 className="assessment-title">{type} Risk</h3>
                   {
-                    user_type === 'Admin' ?
-                      <p className="assessment-subtitle">Hi {user.first_name}, you can review assessment below.</p> :
-                      <p className="assessment-subtitle">Hi {user.first_name}, please complete this assessment on behalf of {user.company_name}.</p>
+                    isMember
+                      ? <p className="assessment-subtitle">Hi {user.first_name}, please complete this assessment on behalf of {user.company_name}.</p>
+                      : <p className="assessment-subtitle">Hi {user.first_name}, you can review assessment below.</p>
                   }
                 </div>
                 <div className="assessment-settings-container">
@@ -101,8 +105,7 @@ const AssessmentsPage = props => {
                       settingsBlockRef={settingsBlockRef}
                       assessmentId={id}
                       assessmentName={type}
-                      customerId={customer_id}
-                      userType={user_type}
+                      startupId={startupId}
                       activeCategory={state.activeCategory}
                       assessments={state.assessments}
                       categories={state.categories}

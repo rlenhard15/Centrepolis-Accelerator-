@@ -12,6 +12,7 @@ const HeaderMenu = props => {
 
   const logOut = () => {
     localStorage.removeItem('userData');
+    sessionStorage.removeItem('userData');
     props.history.push('/sign_in');
   }
 

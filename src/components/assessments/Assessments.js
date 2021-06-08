@@ -1,147 +1,148 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory, useParams } from "react-router-dom";
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { useHistory, useParams } from "react-router-dom"
+import { Link } from 'react-router-dom'
 
-import Loader from '../loader/Loader';
-import AssessmentsItem from './AssessmentItem';
-import TasksTracker from '../tasks-tracker/TasksTracker';
-import AssessmentInfoPopup from './AssessmentInfoPopup';
+import Loader from '../loader/Loader'
+import AssessmentsItem from './AssessmentItem'
+import TasksTracker from '../tasks-tracker/TasksTracker'
+import AssessmentInfoPopup from './AssessmentInfoPopup'
 import ArrowRightSmallImg from '../../images/icons/arrow-right-small.svg'
-import { Tab, Tabs } from '../common/Tabs';
-import { CustomButton } from '../common/Button';
-import InviteTeamPopup from '../admin/InviteTeamPopup';
-import AssessmentUsers from './AssessmentUsers';
+import { Tab, Tabs } from '../common/Tabs'
+import { CustomButton } from '../common/Button'
+import InviteTeamPopup from '../admin/InviteTeamPopup'
+import AssessmentUsers from './AssessmentUsers'
 
-import useHttp from '../../hooks/useHttp.hook';
+import useHttp from '../../hooks/useHttp.hook'
 
-import './Assessment.scss';
+import './Assessment.scss'
 
 const Assessments = props => {
-
-  const { request } = useHttp();
+  const { request } = useHttp()
   const { id } = useParams()
-  const history = useHistory();
+  const history = useHistory()
 
   const pageBaseUrl = `/assessments/${id}`
 
-  const isAdmin = props.userType === 'Admin';
+  const isAdmin = props.userType === 'Admin'
 
-  const currentCustomerId = isAdmin ? +props.match.params.id : props.customer.id;
   const [state, setState] = useState({
     customer: props.customer || null,
+    startup: null,
     assessments: null,
     loading: true,
     assessmentForInfoPopup: '',
     showInfoPopup: false,
     showInvitePopup: false,
-  });
+  })
 
-  const setAssessments = (data, customer) => {
-    const assessments = data.map(ass => {
-      let value = ass.risk_value,
-        risk_name = ass.name.split(' ')[0],
-        risk_class = '',
-        risk_type = '';
+  const setAssessments = (assessmentsData, startup) => {
+
+    const assessments = assessmentsData.map(assessment => {
+      const value = assessment.risk_value
+      const risk_name = assessment.name.split(' ')[0]
+      let risk_class = ''
+      let risk_type = ''
       if (value) {
         if (value <= 33) {
-          risk_type = 'High Risk';
-          risk_class = 'high';
+          risk_type = 'High Risk'
+          risk_class = 'high'
         } else if (value > 33 && value <= 66) {
           risk_type = 'Medium Risk'
-          risk_class = 'medium';
+          risk_class = 'medium'
         } else if (value > 66) {
-          risk_type = 'Low Risk';
-          risk_class = 'low';
+          risk_type = 'Low Risk'
+          risk_class = 'low'
         }
       } else {
-        risk_type = 'Incomplete';
+        risk_type = 'Incomplete'
       }
-      return { ...ass, risk_type, risk_class, risk_name }
+
+      return { ...assessment, risk_type, risk_class, risk_name }
     })
 
-    isAdmin ?
-      setState({ assessments, customer, loading: false }) :
-      setState({ ...state, assessments, loading: false })
+    setState(state => ({ ...state, assessments, startup, loading: false }))
   }
 
-  const getAssessmentsRequest = async (customer) => {
+  const getAssessmentsRequest = async () => {
     try {
-      const assessments = await request(`/api/assessments/?customer_id=${currentCustomerId}`);
-      setAssessments(assessments, customer);
-    } catch (err) {
-      if (err === 403 || err === 401) {
-        localStorage.removeItem('userData');
-        history.push('/sign_in')
-      }
-    }
-  }
+      const startup = await request(`api/startups/${id}`)
+      const assessments = await request(`api/assessments?startup_id=${id}`)
 
-  const getCustomersRequest = async () => {
-    try {
-      const customers = await request(`/api/customers`);
-      const customer = customers.find(c => c.id === currentCustomerId);
-      getAssessmentsRequest(customer);
+      setAssessments(assessments, startup)
     } catch (err) {
-      if (err === 403 || err === 401) {
-        localStorage.removeItem('userData');
-        history.push('/sign_in');
-      }
+      // if (err.status === 403 || err.status === 401) {
+      //   localStorage.removeItem('userData')
+      //   sessionStorage.removeItem('userData')
+      //   history.push('/sign_in')
+      // }
     }
   }
 
   const handleOpenInfoPopup = assessment => {
-    setState({
+    setState(state => ({
       ...state,
       showInfoPopup: true,
       assessmentForInfoPopup: assessment
-    });
+    }))
   }
 
   useEffect(() => {
-    isAdmin ?
-      getCustomersRequest() :
-      getAssessmentsRequest()
-  }, []);
+    getAssessmentsRequest()
+  }, [])
 
   const handleOpenInviteMemberPopup = () => {
-    setState({
+    setState(state => ({
       ...state,
       showInvitePopup: true,
-    });
+    }))
   }
 
   const handleCloseInviteMemberPopup = () => {
-    setState({
+    setState(state => ({
       ...state,
       showInvitePopup: false,
-    });
+    }))
+  }
+
+  const handleAddUser = (user, type) => {
+    setState(state => ({
+      ...state,
+      startup: {
+        ...state.startup,
+        ...type === 'StartupAdmin'
+          ? { startup_admins: [user, ...state.startup.startup_admins] }
+          : { members: [user, ...state.startup.members] }
+      }
+    }))
   }
 
   if (state.loading) return <Loader />
 
+  const { name: companyName, members, startup_admins: startupAdmins } = state.startup
+
   return (
     <div className={`assessment ${!isAdmin ? 'admin' : 'customer'}`}>
       <div className="assessment-header">
+        <div className="assessment-breadcrumbs">
+          <Link to="/" className="active">Dashboard</Link>
+          <img src={ArrowRightSmallImg} alt="" />
+          <span>{companyName}</span>
+        </div>
         {isAdmin ? (
           <>
-            <div className="assessment-breadcrumbs">
-              <Link to="/" className="active">Dashboard</Link>
-              <img src={ArrowRightSmallImg} alt="" />
-              <span>{state.customer.company_name}</span>
-            </div>
             <h3 className="assessment-title">
-              <span>{state.customer.company_name}</span>
+              <span>{companyName}</span>
               <CustomButton
                 variant="outlined"
                 label="Add New Member"
                 handleClick={handleOpenInviteMemberPopup}
               />
             </h3>
-            <p>The progress report for {state.customer.company_name} is ready for your review.</p>
+            <p>The progress report for {companyName} is ready for your review.</p>
           </>
         ) : (
           <>
-            <h3 className="assessment-title">{state.customer.company_name}</h3>
+            <h3 className="assessment-title">{companyName}</h3>
             <p>Are you ready to find out your CRL, TRL, MRL risks?</p>
           </>
         )}
@@ -151,12 +152,11 @@ const Assessments = props => {
         <Tabs baseUrl={pageBaseUrl}>
           <Tab tab="" label="Assignments">
             <div className="assessment-risks">
-              {state.assessments.map((item, i) =>
+              {state.assessments.map(assessment =>
                 <AssessmentsItem
-                  key={i}
-                  {...item}
-                  userType={props.userType}
-                  customerId={currentCustomerId}
+                  key={assessment.id}
+                  assessment={assessment}
+                  startupId={id}
                   handleOpenInfoPopup={handleOpenInfoPopup}
                 />
               )}
@@ -166,22 +166,21 @@ const Assessments = props => {
             <TasksTracker
               userType={props.userType}
               assessments={state.assessments}
-              currentCustomerId={currentCustomerId}
+              startupId={id}
             />
           </Tab>
           <Tab tab="users" label="Users">
-            <AssessmentUsers />
+            <AssessmentUsers members={members} startupAdmins={startupAdmins} />
           </Tab>
         </Tabs>
       ) : (
         <>
           <div className="assessment-risks">
-            {state.assessments.map((item, i) =>
+            {state.assessments.map(assessment =>
               <AssessmentsItem
-                key={i}
-                {...item}
-                userType={props.userType}
-                customerId={currentCustomerId}
+                key={assessment.id}
+                assessment={assessment}
+                startupId={id}
                 handleOpenInfoPopup={handleOpenInfoPopup}
               />
             )}
@@ -189,23 +188,28 @@ const Assessments = props => {
           <TasksTracker
             userType={props.userType}
             assessments={state.assessments}
-            currentCustomerId={currentCustomerId}
+            startupId={id}
           />
         </>
       )}
 
-      {state.showInvitePopup && <InviteTeamPopup handleClosePopup={handleCloseInviteMemberPopup} />}
+      {state.showInvitePopup &&
+        <InviteTeamPopup
+          handleClosePopup={handleCloseInviteMemberPopup}
+          startupId={id}
+          addCustomers={handleAddUser}
+        />
+      }
 
       {state.showInfoPopup ?
         <AssessmentInfoPopup
-          userType={props.userType}
-          customerId={currentCustomerId}
+          startupId={id}
           currentAssessment={state.assessmentForInfoPopup}
-          handleCloseInfoPopup={() => setState({ ...state, showInfoPopup: false })}
+          handleCloseInfoPopup={() => setState(state => ({ ...state, showInfoPopup: false }))}
         /> : null
       }
     </div>
-  );
-};
+  )
+}
 
-export default Assessments;
+export default Assessments

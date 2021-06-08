@@ -1,9 +1,9 @@
-import React from 'react';
+import React from 'react'
 
-import AssessmentLink from './AssessmentLink';
+import AssessmentLink from './AssessmentLink'
 
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import CloseIcon from '../../images/icons/close-icon.svg';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import CloseIcon from '../../images/icons/close-icon.svg'
 
 const AssessmentInfo = props => {
   if (props.currentAssessment === 'MRL') {
@@ -19,15 +19,17 @@ const AssessmentInfo = props => {
   } else {
     return (
       <React.Fragment>
-        <p>Technology readiness levels are a method for estimating the maturity of technologies during the acquisition phase of a program, developed at NASA during the 1970s. The use of TRLs enables consistent, uniform discussions of technical maturity across different types of technology. </p>
-        <p>A technology's TRL is determined during  a Technology Readiness Assessment (TRA) that examines program concepts, technology requirements, and demonstrated technology capabilities. TRLs are based on a scale from 1 to 9 with 9 being the most mature technology.</p>
+        <p>Technology readiness levels are a method for estimating the maturity of technologies during the acquisition phase of a program, developed at NASA during the 1970s. The use of TRLs enables consistent, uniform discussions of technical maturity across different types of technology.</p>
+        <p>A technology's TRL is determined during a Technology Readiness Assessment (TRA) that examines program concepts, technology requirements, and demonstrated technology capabilities. TRLs are based on a scale from 1 to 9 with 9 being the most mature technology.</p>
       </React.Fragment>
     )
   }
 }
 
 const AssessmentInfoPopup = props => {
-  const {risk_name} = props.currentAssessment;
+  const { currentAssessment, startupId } = props
+  const { risk_name } = currentAssessment
+
   return (
     <div className="popup">
       <ClickAwayListener onClickAway={props.handleCloseInfoPopup}>
@@ -39,14 +41,11 @@ const AssessmentInfoPopup = props => {
             <img src={CloseIcon} alt="" />
           </button>
           <div className="info-popup-description">
-            <AssessmentInfo
-              currentAssessment={risk_name}
-            />
+            <AssessmentInfo currentAssessment={risk_name} />
           </div>
           <AssessmentLink
-            {...props.currentAssessment}
-            customerId={props.customerId}
-            userType={props.userType}
+            assessment={currentAssessment}
+            startupId={startupId}
           />
         </div>
       </ClickAwayListener>

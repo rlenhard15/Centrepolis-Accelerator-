@@ -27,7 +27,7 @@ const Table = props => {
       </div>
       <div className="custom-table-body">
         <ul>
-          {rowsToDisplay.map(({id, row}, rowIndex) =>
+          {rowsToDisplay.map(({id, row}) =>
             <li key={id} className="custom-table-body-row">
               <ul>
                 {row.map((content, contentIndex) =>

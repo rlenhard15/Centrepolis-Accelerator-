@@ -26,9 +26,16 @@
     align-items: center;
     justify-content: space-between;
     margin: 40px 0;
+  }
 
+  &-buttons {
+    display: flex;
     .button {
-      width: 280px;
+      width: 200px;
+
+      &:last-child {
+        margin-left: 15px;
+      }
     }
   }
 }
@@ -64,8 +71,16 @@
       font-weight: 400;
     }
 
-    .button {
-      width: 280px;
+    &-buttons {
+      display: flex;
+
+      .button {
+        width: 200px;
+
+        &:last-child {
+          margin-left: 15px;
+        }
+      }
     }
   }
 }
@@ -79,7 +94,7 @@
 
 @media screen and (max-width: 1440px) {
   .dashboard-content {
-    width: 850px;
+    width: 825px;
     margin: 25px auto 40px;
 
     &-header {

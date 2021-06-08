@@ -1,18 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react'
 
-import AssessmentSlider from './AssessmentsSlider';
-import AssessmentsStage from './AssessmentsStage';
+import AssessmentSlider from './AssessmentsSlider'
+import AssessmentsStage from './AssessmentsStage'
 
-import useHttp from '../../hooks/useHttp.hook';
-import TaskPopup from '../../components/tasks-tracker/TaskPopup';
+import useHttp from '../../hooks/useHttp.hook'
+import TaskPopup from '../../components/tasks-tracker/TaskPopup'
+import { useAuthContext } from '../../CheckAuthorization'
 
 const AssessmentCategory = props => {
-  const trackRef = useRef(null);
-  const { request } = useHttp();
+  const trackRef = useRef(null)
+  const { request } = useHttp()
+  const { authData: { user } } = useAuthContext()
+
+  const customerId = user.id
+  const { startupId } = props
 
   const {
-    userType,
-    customerId,
     index,
     stages,
     category_id,
@@ -21,7 +24,7 @@ const AssessmentCategory = props => {
     sub_category_title,
     assessments,
     assessmentName,
-  } = props;
+  } = props
 
   const [state, setState] = useState({
     stages: stages,
@@ -30,24 +33,24 @@ const AssessmentCategory = props => {
     saved: false,
     activeStageIndex: 0,
     showPopup: false
-  });
+  })
 
-  const stagesCountForFullWidth = 6;
+  const stagesCountForFullWidth = 6
 
-  const checkStagesCountForFullWidth = () => stages.length <= stagesCountForFullWidth ? 'full-width' : '';
+  const checkStagesCountForFullWidth = () => stages.length <= stagesCountForFullWidth ? 'full-width' : ''
 
   const handleChangeProgress = index => {
-    let updatedStages = [...state.stages];
-    updatedStages.forEach((stage, i) => i <= +index ? stage.isActive = true : stage.isActive = false);
-    setState({ ...state, stages: updatedStages, activeStageIndex: index });
+    let updatedStages = [...state.stages]
+    updatedStages.forEach((stage, i) => i <= +index ? stage.isActive = true : stage.isActive = false)
+    setState({ ...state, stages: updatedStages, activeStageIndex: index })
   }
 
   const updateProgressRequest = async position => {
-    const { assessmentId, categoryId, subCategoryId } = props;
-    const currentStage = state.stages.find(stage => stage.position === position + 1);
-    await request(`/api/assessments/${assessmentId}/categories/${categoryId}/sub_categories/${subCategoryId}/update_progress?current_stage_id=${currentStage.id}&customer_id=${customerId}`, 'POST');
-    setState(state => ({ ...state, saved: true }));
-    setTimeout(() => setState(state => ({ ...state, saved: false })), 2000);
+    const { assessmentId, categoryId, subCategoryId } = props
+    const currentStage = state.stages.find(stage => stage.position === position + 1)
+    await request(`/api/assessments/${assessmentId}/categories/${categoryId}/sub_categories/${subCategoryId}/update_progress?current_stage_id=${currentStage.id}&startup_id=${startupId}`, 'POST')
+    setState(state => ({ ...state, saved: true }))
+    setTimeout(() => setState(state => ({ ...state, saved: false })), 2000)
   }
 
   const handleShowAddTaskPopup = stage => {
@@ -59,9 +62,9 @@ const AssessmentCategory = props => {
   }
 
   useEffect(() => {
-    const activeStageIndex = stages.findIndex(stage => current_stage_id === stage.id);
-    handleChangeProgress(activeStageIndex);
-    setTimeout(() => setState(state => ({ ...state, loading: false, activeStageIndex })), 100);
+    const activeStageIndex = stages.findIndex(stage => current_stage_id === stage.id)
+    handleChangeProgress(activeStageIndex)
+    setTimeout(() => setState(state => ({ ...state, loading: false, activeStageIndex })), 100)
   }, [])
 
   return (
@@ -70,7 +73,7 @@ const AssessmentCategory = props => {
     >
       <div className={`assessment-setting-subtitle-wrapper ${sub_category_title ? 'with-title' : ''}`}>
         <p className="assessment-setting-subtitle">
-            {getTitle(sub_category_title)}
+          {getTitle(sub_category_title)}
         </p>
         {
           state.saved ? <span className="saved">Changes saved</span> : null
@@ -86,7 +89,7 @@ const AssessmentCategory = props => {
                 activeStageIndex={state.activeStageIndex}
                 handleChangeProgress={handleChangeProgress}
                 updateProgressRequest={updateProgressRequest}
-              /> 
+              />
             </div>
             <div className="stages-list">
               {
@@ -98,7 +101,6 @@ const AssessmentCategory = props => {
                     key={stage.id}
                     trackWidth={trackRef.current}
                     stagesCount={state.stages.length}
-                    userType={userType}
                     categoryName={categoryName}
                     subCategoryName={sub_category_title}
                     handleChangeProgress={handleChangeProgress}
@@ -119,6 +121,7 @@ const AssessmentCategory = props => {
           currentCustomerId={customerId}
           handleClosePopup={() => setState({ ...state, showPopup: false })}
           infoForCreateTaskFromStage={state.infoForCreateTaskFromStage}
+          startupId={startupId}
         />
       }
     </React.Fragment>

@@ -93,6 +93,8 @@
 
 @media screen and (max-width: 1440px) {
   .dashboard-menu {
+    width: 320px;
+
     &-logo {
       height: 70px;
     }
@@ -108,8 +110,13 @@
     &-question-mark {
       width: 45px;
       height: 45px;
+
+      img {
+        width: 18px;
+        height: 30px;
+      }
     }
-  
+
     &-faq-text {
       font-size: 15px;
     }

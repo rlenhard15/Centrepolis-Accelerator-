@@ -1,42 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { Route } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { Route } from 'react-router-dom'
 
-import Header from '../../components/header/Header';
-import DashboardMenu from './DashboardMenu';
-import AdminDashboard from '../../components/admin/AdminDashboard';
-import CustomerDashboard from '../../components/customer/CustomerDashboard';
-import Assessments from '../../components/assessments/Assessments';
+import Header from '../../components/header/Header'
+import DashboardMenu from './DashboardMenu'
+import AdminDashboard from '../../components/admin/AdminDashboard'
+import MemberDashboard from '../../components/member/MemberDashboard'
+import Assessments from '../../components/assessments/Assessments'
 
-import useHttp from '../../hooks/useHttp.hook';
+import useHttp from '../../hooks/useHttp.hook'
 
-import './DashboardPage.scss';
+import './DashboardPage.scss'
 
 const DashboardPage = props => {
-  const { user } = props.userData;
-  const { loading, request } = useHttp();
-  const [customers, setCustomers] = useState([]);
+  const { user } = props.userData
+  const { loading, request } = useHttp()
+  const [members, setMembers] = useState([])
 
-  const addCustomers = newCustomer => {
-    setCustomers([...customers, newCustomer]);
+  const addMembers = newMember => {
+    setMembers([...members, newMember])
   }
 
-  const getCustomersRequest = async () => {
+  const getMembersRequest = async () => {
     try {
-      const customers = await request(`/api/customers`);
-      setCustomers(customers);
+      const members = await request(`/api/members`)
+      setMembers(members)
     } catch (err) {
-      if (err === 403 || err === 401) {
-        localStorage.removeItem('userData');
-        props.history.push('/sign_in');
-      }
+      // if (err.status === 403 || err.status === 401) {
+      //   localStorage.removeItem('userData');
+      //   sessionStorage.removeItem('userData');
+      //   props.history.push('/sign_in');
+      // }
     }
   }
 
   useEffect(() => {
-    // For prevent sending request on page with assessments because this page doesn't use info from customer request
+    // For prevent sending request on page with assessments because this page doesn't use info from member request
     if (props.history.location.pathname.indexOf('/assessments/') === -1) {
       props.userData.user_type === 'Admin' &&
-        getCustomersRequest();
+        getMembersRequest()
     }
   }, [])
 
@@ -47,13 +48,13 @@ const DashboardPage = props => {
         <Header className="board" {...props} />
         <div className="dashboard-content">
           {
-            props.userData.user_type === 'Admin' ? (
+            props.userData.user_type !== 'Member' ? (
               <>
                 <Route exact path="/" render={() =>
                   <AdminDashboard
                     user={user}
-                    customers={customers}
-                    addCustomers={addCustomers}
+                    customers={members}
+                    addMembers={addMembers}
                     loading={loading}
                   />}
                 />
@@ -66,9 +67,10 @@ const DashboardPage = props => {
                 />
               </>
             ) :
-              <CustomerDashboard
+              <MemberDashboard
                 userType={props.userData.user_type}
-                customer={props.userData.user} 
+                userData={props.userData}
+                customer={props.userData.user}
               />
           }
         </div>

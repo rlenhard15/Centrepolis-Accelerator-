@@ -30,7 +30,13 @@ const ConfirmAccountPage = props => {
     const resetToken = props.location.search.split('=')[1];
     try {
       const userData = await request(`/users/password`, 'PUT', { reset_password_token: resetToken, ...values });
-      localStorage.setItem('userData', JSON.stringify(userData));
+
+      if (values.keepSignedIn) {
+        localStorage.setItem('userData', JSON.stringify(userData));
+      } else {
+        sessionStorage.setItem('userData', JSON.stringify(userData));
+      }
+
       props.history.push('/');
     } catch (err) { }
   }

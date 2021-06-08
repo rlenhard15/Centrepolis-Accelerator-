@@ -47,7 +47,16 @@
 @media screen and (max-width: 1440px) {
   .profile-settings {
     &-content {
-      width: 850px;
+      width: 800px;
+    }
+  }
+}
+
+
+@media screen and (max-width: 1200px) {
+  .profile-settings {
+    &-content {
+      width: 650px;
     }
   }
 }

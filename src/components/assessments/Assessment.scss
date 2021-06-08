@@ -92,6 +92,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 15px;
 
   &-top {
     display: flex;
@@ -114,7 +115,14 @@
 
   & &-button {
     margin-top: 40px;
-    width: 161px;
+    min-width: 161px;
+  }
+
+  &-learn-more {
+    color: #70C497;
+    text-decoration: underline;
+    margin-top: 15px;
+    cursor: pointer;
   }
 
   &-type {
@@ -163,6 +171,20 @@
       background-color: #F5FAFF;
     }
   }
+
+  &.have-assessment &-risk {
+    &.low::before {
+      background-color: #68B643;
+    }
+
+    &.medium::before {
+      background-color: #FFD865;
+    }
+
+    &.high::before {
+      background-color: #FF5D54;
+    }
+  }
 }
 
 .risk-block {
@@ -205,8 +227,6 @@
   }
 }
 
-
-
 .info-popup {
   max-height: 90vh;
   align-items: flex-start;
@@ -229,8 +249,14 @@
 
 @media screen and (max-width: 1440px) {
   .assessment-item {
-    width: 280px;
+    width: 255px;
     padding: 15px;
+    margin-bottom: 10px;
+
+    &-name,
+    &-type {
+      font-size: 14px;
+    }
   }
 
   .assessment-breadcrumbs {

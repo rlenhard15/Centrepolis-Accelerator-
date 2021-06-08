@@ -1,16 +1,21 @@
-import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { CustomButton } from '../common/Button';
+import React from 'react'
+import { useHistory } from 'react-router-dom'
+
+import { CustomButton } from '../common/Button'
+import { useAuthContext } from '../../CheckAuthorization'
 
 const AssessmentLink = props => {
-  const {id, risk_name, customerId, userType, className} = props
+  const { startupId, assessment, className } = props
+  const { id, risk_name } = assessment
+
+  const { isMember } = useAuthContext()
   const history = useHistory()
 
   const handleClick = () => {
     history.push(
-      userType !== 'Admin'
-        ? `/assessments/${id}/${risk_name}`
-        : `/assessments/${id}/${risk_name}/${customerId}`
+      !isMember
+        ? `/assessments/${startupId}/${risk_name}/${id}`
+        : `/assessments/${id}/${risk_name}`
     )
   }
 
@@ -18,7 +23,7 @@ const AssessmentLink = props => {
     <CustomButton
       handleClick={handleClick}
       className={className}
-      label={userType !== 'Admin' ? 'Take assessment' : 'View'}
+      label={isMember ? 'Take Assessment' : 'View'}
     />
   )
 }

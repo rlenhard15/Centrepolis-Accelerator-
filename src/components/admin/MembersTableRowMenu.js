@@ -2,9 +2,9 @@ import React from 'react';
 
 import { ReactComponent as ShowMoreIcon } from '../../images/icons/more-vertical.svg';
 
-import './CustomersTableRowMenu.scss';
+import './MembersTableRowMenu.scss';
 
-const CustomersTableRowMenu = () => {
+const MembersTableRowMenu = () => {
   const [showMenu, setShowMenu] = React.useState();
 
   const toggleShowMenu = () => setShowMenu(!showMenu);
@@ -26,4 +26,4 @@ const CustomersTableRowMenu = () => {
   );
 };
 
-export default CustomersTableRowMenu;
+export default MembersTableRowMenu;

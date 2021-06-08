@@ -1,57 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-import { InputField } from '../common/InputField';
-import CustomSelect from '../common/Select';
+import { InputField } from '../common/InputField'
+import CustomSelect from '../common/Select'
 
-import { CustomButton } from '../common/Button';
+import { CustomButton } from '../common/Button'
 
-import useHttp from '../../hooks/useHttp.hook';
-import useForm from '../../hooks/useForm.hook';
-import validate from '../../validationRules/inviteTeam';
+import useHttp from '../../hooks/useHttp.hook'
+import useForm from '../../hooks/useForm.hook'
+import validate from '../../validationRules/inviteTeam'
+import { useAuthContext } from '../../CheckAuthorization'
 
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
-import {ReactComponent as CloseIcon} from '../../images/icons/close-icon.svg';
+import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg'
 
 
-import './InviteTeamPopup.scss';
+import './InviteTeamPopup.scss'
 
 const InviteTeamPopup = props => {
+  const { isStartupAdmin, isAdmin, isSuperAdmin } = useAuthContext()
+
   const inviteFields = {
     email: '',
-    company_name: null,
-    accelerator_id: Number(process.env.REACT_APP_ACCELERATOR_ID)
-  };
-  const { loading, request } = useHttp();
-  const { values, errors, handleChange, setValues, handleSubmit } = useForm(inviteTeam, validate, inviteFields);
+    userType: isStartupAdmin ? 'Member' : isSuperAdmin ? 'Admin' : null,
+    startupId: props.startupId,
+  }
+
+  const { loading, request } = useHttp()
+  const { values, errors, handleChange, setValues, handleSubmit } = useForm(inviteTeam, validate, inviteFields)
   const [inviteErrors, setInviteErrors] = useState({
     inviteEmailError: false,
-    inviteCompanyError: false
   })
 
   function inviteTeam() {
-    inviteTeamRequest();
+    inviteTeamRequest()
   }
 
   const inviteTeamRequest = async () => {
     try {
-      const customer = { email: values.email, company_name: values.company_name.value };
-      const newCustomer = await request(`api/customers`, 'POST', { customer });
-      props.addCustomers(newCustomer);
-      props.handleClosePopup();
+      const user = {
+        email: values.email,
+        type: values.userType.value,
+        startup_id: values.startupId
+      }
+
+      const newCustomer = await request(`api/users`, 'POST', { user })
+
+      props.addCustomers(newCustomer, values.userType.value)
+      props.handleClosePopup()
+
     } catch (err) {
-      if (err === 422) return setInviteErrors({inviteCompanyError: false, inviteEmailError:true});
-      if (err === 500) return setInviteErrors({inviteEmailError:false, inviteCompanyError:true});
+      if (err.status === 422) return setInviteErrors({ inviteEmailError: true })
     }
   }
 
-  const handleCompanyChange = option => {
-    setValues(v => ({ ...v, 'company_name': option }))
+  const handleUserTypeChange = option => {
+    setValues(v => ({ ...v, 'userType': option }))
   }
 
-  const companiesOptions = [
-    { label: 'Test', value: 'Test' },
-  ]
+  const getUsersOptions = () => {
+    if (isSuperAdmin) {
+      return [
+        { label: 'Admin', value: 'Admin' },
+        { label: 'Member', value: 'Member' },
+      ]
+    }
+
+    if (isAdmin) {
+      return [
+        { label: 'StartUp Admin', value: 'StartupAdmin' },
+        { label: 'Member', value: 'Member' },
+      ]
+    }
+
+    if (isStartupAdmin) {
+      return [
+        { label: 'Member', value: 'Member' },
+      ]
+    }
+  }
+
+  const userOptions = getUsersOptions()
 
   return (
     <div className="popup">
@@ -74,13 +103,16 @@ const InviteTeamPopup = props => {
               error={errors.email || inviteErrors.inviteEmailError}
               errorText={errors.email_message || '* this email has already been taken'}
             />
-            <CustomSelect
-              placeholder="Select company name"
-              value={values.company_name}
-              options={companiesOptions}
-              onChange={handleCompanyChange}
-              error={errors.company_name || inviteErrors.inviteCompanyError}
-            />
+            {(!isStartupAdmin && props.startupId) &&
+              <CustomSelect
+                placeholder="Select user type"
+                value={values.type}
+                options={userOptions}
+                onChange={handleUserTypeChange}
+                error={errors.userType}
+                errorText={errors.userTypeMsg}
+              />
+            }
             <CustomButton
               type='submit'
               label="Send Invite"

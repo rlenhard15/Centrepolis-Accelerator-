@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-import AssessmentCategory from './AssessmentsCategory';
+import AssessmentCategory from './AssessmentsCategory'
 
 const AssessmentsSettings = props => {
   return (
@@ -14,14 +14,13 @@ const AssessmentsSettings = props => {
           <AssessmentCategory
             {...category}
             index={i}
+            startupId={props.startupId}
             key={category.sub_category_id}
             assessmentId={props.assessmentId}
             assessmentName={props.assessmentName}
-            customerId={props.customerId}
             categoryId={props.subCategories.id}
             categoryName={props.subCategories.title}
             subCategoryId={category.sub_category_id}
-            userType={props.userType}
             assessments={props.assessments}
           />
         )
