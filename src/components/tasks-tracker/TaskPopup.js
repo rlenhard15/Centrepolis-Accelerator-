@@ -167,6 +167,11 @@ const TaskPopup = props => {
     const assessment = await getAssessments(assessmentNameForTask)
     const { riskCategories, selectedCategory } = getCategoriesAndSelectedCategory(assessment, taskInfo.category)
     const taskPriority = priority.find(p => p.value === taskInfo.priority)
+    const assignedUser = taskInfo.users_for_task.find(u => u.user_type === 'Member' || u.user_type === 'StartupAdmin')
+    const selectedUser = assignedUser && {
+      value: assignedUser.id,
+      label: `${assignedUser.first_name} ${assignedUser.last_name}`
+    }
 
     setState({
       ...state,
@@ -175,6 +180,7 @@ const TaskPopup = props => {
         risk_name: assessmentNameForTask
       },
       userOptions,
+      selectedUser,
       currentAssessmentInfo: assessment,
       riskCategories,
       selectedCategory,

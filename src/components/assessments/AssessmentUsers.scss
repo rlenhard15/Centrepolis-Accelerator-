@@ -1,4 +1,12 @@
 
 .assessment-users {
   padding-top: 26px;
+
+  .custom-table-body {
+    font-size: 16px;
+  }
+
+  .delete-icon {
+    cursor: pointer;
+  }
 }

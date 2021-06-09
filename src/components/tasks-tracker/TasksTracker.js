@@ -5,6 +5,7 @@ import TaskPopup from './TaskPopup'
 import { CustomButton } from '../common/Button'
 import Pagination from '../common/Pagination'
 import Loader from '../loader/Loader'
+import { useAuthContext } from '../../CheckAuthorization'
 
 import useHttp from '../../hooks/useHttp.hook'
 
@@ -13,6 +14,7 @@ import './TasksTracker.scss'
 
 const TasksTracker = props => {
   const { request } = useHttp()
+  const { isMember } = useAuthContext()
 
   const [state, setState] = useState({
     tasks: [],
@@ -27,22 +29,23 @@ const TasksTracker = props => {
     setState(state => ({ ...state, page: newPage }))
   }
 
-  const addTask = (newTask) => {
-    const updatedTasks = [newTask, ...state.tasks]
-    setState({ ...state, tasks: updatedTasks, showPopup: false })
+  const addTask = async (_newTask) => {
+    await getAllTasksRequest(state.page + 1)
+    setState(state => ({ ...state, showPopup: false }))
   }
 
-  const changeTask = (updatedTask) => {
-    const updatedTasks = [...state.tasks]
-    const updatedTaskIndex = updatedTasks.findIndex(task => task.id === updatedTask.id)
-    updatedTasks[updatedTaskIndex] = updatedTask
-    setState({ ...state, tasks: updatedTasks, showPopup: false })
+  const changeTask = async (_updatedTask) => {
+    await getAllTasksRequest(state.page + 1)
+    setState(state => ({ ...state, showPopup: false }))
   }
 
   const deleteTask = async (taskId) => {
     await request(`/api/tasks/${taskId}`, 'DELETE')
-    const updatedTasks = state.tasks.filter(task => task.id !== taskId)
-    setState({ ...state, tasks: updatedTasks })
+    if (state.tasks.length === 1 && state.totalPages > 1) {
+      await getAllTasksRequest(state.page)
+    } else {
+      await getAllTasksRequest(state.page + 1)
+    }
   }
 
   const getAllTasksRequest = async (page = 1) => {
@@ -75,12 +78,11 @@ const TasksTracker = props => {
     <div className="tasks-tracker">
       <div className="tasks-tracker-header">
         <h3>Tasks Dashboard</h3>
-        {
-          props.userType === 'Admin' ?
-            <CustomButton
-              label="Assign New Task"
-              handleClick={showPopupForNewTask}
-            /> : null
+        {!isMember ?
+          <CustomButton
+            label="Assign New Task"
+            handleClick={showPopupForNewTask}
+          /> : null
         }
       </div>
       <div className="tasks-tracker-content">

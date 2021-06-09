@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { ReactComponent as DeleteIcon } from '../../images/icons/delete-icon.svg'
 import Table from '../common/Table'
 import { useAuthContext } from '../../CheckAuthorization'
-// import useHttp from '../../hooks/useHttp.hook'
+import useHttp from '../../hooks/useHttp.hook'
 
 import './AssessmentUsers.scss'
 
@@ -14,7 +14,7 @@ const headers = [
   },
   {
     title: 'Email',
-    width: '34%',
+    width: '42%',
   },
   {
     title: 'Member Status',
@@ -22,11 +22,11 @@ const headers = [
   },
   {
     title: 'Last Visit',
-    width: '15%',
+    width: '10%',
   },
   {
     title: 'Tasks',
-    width: '10%',
+    width: '7%',
   },
   {
     width: '3%'
@@ -34,8 +34,13 @@ const headers = [
 ]
 
 export const AssessmentUsers = ({ members, startupAdmins }) => {
-  const { isSuperAdmin } = useAuthContext()
-  // const { request } = useHttp()
+  const { isSuperAdmin, isAdmin } = useAuthContext()
+  const { request } = useHttp()
+  const [rows, setRows] = useState([])
+
+  useEffect(() => {
+    setRows(mapDataToRow())
+  }, [])
 
   const mapDataToRow = () => {
     return mapMembersData()
@@ -67,7 +72,6 @@ export const AssessmentUsers = ({ members, startupAdmins }) => {
         'Startup Admin',
         admin.last_visit ? formatDate(admin.last_visit) : '--',
         admin.tasks_number,
-        isSuperAdmin && <DeleteIcon />,
       ]
     }))
   }
@@ -77,9 +81,9 @@ export const AssessmentUsers = ({ members, startupAdmins }) => {
     return `${user.first_name} ${user.last_name}`
   }
 
-  const handleDeleteAdmin = async (id) => {
-    // TODO
-    // await request(`/api/admins/${id}`)
+  const handleDeleteUser = (id) => async () => {
+    await request(`/api/users/${id}`, 'DELETE')
+    setRows(rows.filter(r => r.id !== id))
   }
 
   const formatDate = timestamp => {
@@ -91,9 +95,13 @@ export const AssessmentUsers = ({ members, startupAdmins }) => {
     return `${month < 10 ? `0${month}` : month}/${day < 10 ? `0${day}` : day}/${year}`
   }
 
+  const rowsData = isSuperAdmin || isAdmin
+    ? rows.map(r => ({ ...r, row: [...r.row, <DeleteIcon className="delete-icon" onClick={handleDeleteUser(r.id)} />] }))
+    : rows
+
   return (
     <div className="assessment-users">
-      <Table headers={headers} rows={mapDataToRow()} itemsName="member" />
+      <Table headers={headers} rows={rowsData} itemsName="member" />
     </div>
   )
 }

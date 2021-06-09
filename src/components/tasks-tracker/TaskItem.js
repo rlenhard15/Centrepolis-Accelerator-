@@ -1,16 +1,19 @@
-import React, { useState, memo } from 'react';
+import React, { useState, memo } from 'react'
 
-import { ReactComponent as EditIcon } from '../../images/icons/edit-icon.svg';
-import DeleteIcon from '../../images/icons/delete-icon.svg';
-import IconButton from '@material-ui/core/IconButton';
-import KeyboardArrowDownRoundedIcon from '@material-ui/icons/KeyboardArrowDownRounded';
+import { ReactComponent as EditIcon } from '../../images/icons/edit-icon.svg'
+import DeleteIcon from '../../images/icons/delete-icon.svg'
+import IconButton from '@material-ui/core/IconButton'
+import KeyboardArrowDownRoundedIcon from '@material-ui/icons/KeyboardArrowDownRounded'
+import { useAuthContext } from '../../CheckAuthorization'
 
-import useHttp from '../../hooks/useHttp.hook';
+import useHttp from '../../hooks/useHttp.hook'
 
-import './TaskItem.scss';
+import './TaskItem.scss'
 
 const TaskItem = memo(props => {
-  const { request } = useHttp();
+  const { request } = useHttp()
+  const { authData: { user }, isMember } = useAuthContext()
+
   const [state, setState] = useState({
     open: false,
     status: props.status,
@@ -18,12 +21,43 @@ const TaskItem = memo(props => {
 
   const handleCompleteTask = async () => {
     if (state.status === 'started') {
-      await request(`/api/tasks/${props.id}/mark_task_as_completed`, 'PUT');
-      setState({ ...state, open: !state.open, status: 'completed' });
+      await request(`/api/tasks/${props.id}/mark_task_as_completed`, 'PUT')
+      setState({ ...state, open: !state.open, status: 'completed' })
     }
   }
 
-  const formatDate = date => date.split('T')[0].split('-').reverse().join('/').replace(/\/20/g, '/');
+  const formatDate = date => date.split('T')[0].split('-').reverse().join('/').replace(/\/20/g, '/')
+
+  const isAbleToUpdateTask = () => {
+    return props.users_for_task.some(u => u.id === user.id)
+  }
+
+  const renderUtilityButtons = () => {
+    if (isMember || !isAbleToUpdateTask()) return null
+
+    return (
+      <div className="actions">
+        <IconButton
+          onClick={() => props.handleShowPopup(props.id)}
+          className="actions-edit"
+        >
+          <EditIcon />
+        </IconButton>
+        <IconButton
+          onClick={() => props.handleDeleteTask(props.id)}
+        >
+          <img src={DeleteIcon} alt="Delete" />
+        </IconButton>
+      </div>
+    )
+  }
+
+  const assignedUsers = () => {
+    return props.users_for_task
+      .filter(u => u.user_type === 'Member' || u.user_type === 'StartupAdmin')
+      .map(u => `${u.first_name} ${u.last_name}`)
+      .join(', ')
+  }
 
   return (
     <div className="task">
@@ -32,7 +66,7 @@ const TaskItem = memo(props => {
         <div className="task-main-info">
           <p>
             <span className="task-main-info-title">Assigned to</span>
-            <span className="task-main-info-text">Bessie Cooper</span>
+            <span className="task-main-info-text">{assignedUsers()}</span>
           </p>
           <p>
             <span className="task-main-info-title">Assessment</span>
@@ -55,51 +89,41 @@ const TaskItem = memo(props => {
               <span className="completed">
                 Completed
               </span>
-              : (
-                <>
-                  <IconButton
-                    className="complete-open-btn"
-                    onClick={() => setState({ ...state, open: !state.open })}
-                  >
-                    Incomplete
+              : isAbleToUpdateTask()
+                ? (
+                  <>
+                    <IconButton
+                      className="complete-open-btn"
+                      onClick={() => setState({ ...state, open: !state.open })}
+                    >
+                      Incomplete
                     <KeyboardArrowDownRoundedIcon />
-                  </IconButton>
-                  {
-                    state.open ?
-                      <div className="complete-options">
-                        <span className="complete-option disable">Incomplete</span>
-                        <IconButton
-                          className="complete-option"
-                          onClick={handleCompleteTask}
-                        >
-                          Complete
+                    </IconButton>
+                    {
+                      state.open ?
+                        <div className="complete-options">
+                          <span className="complete-option disable">Incomplete</span>
+                          <IconButton
+                            className="complete-option"
+                            onClick={handleCompleteTask}
+                          >
+                            Complete
                         </IconButton>
-                      </div> : null
-                  }
-                </>
-              )
+                        </div> : null
+                    }
+                  </>
+                ) : (
+                  <span>
+                    Incomplete
+                  </span>
+                )
           }
         </div>
         <p className="due-date">
           <span className="title">Due Date</span>
           <span className="date">{formatDate(props.due_date)}</span>
         </p>
-        {
-          props.userType === "Admin" ?
-            <div className="actions">
-              <IconButton
-                onClick={() => props.handleShowPopup(props.id)}
-                className="actions-edit"
-              >
-                <EditIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => props.handleDeleteTask(props.id)}
-              >
-                <img src={DeleteIcon} alt="Delete" />
-              </IconButton>
-            </div> : null
-        }
+        {renderUtilityButtons()}
       </div>
     </div>
   )
