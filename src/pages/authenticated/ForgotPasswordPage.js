@@ -1,35 +1,49 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
+import DashboardMenu from '../dashboard/DashboardMenu'
+import { InputField } from '../../components/common/InputField'
+import { CustomButton } from '../../components/common/Button'
+import Loader from '../../components/loader/Loader'
+import SuccessIcon from '../../components/common/SuccessIcon'
 
-import DashboardMenu from '../dashboard/DashboardMenu';
-import { InputField } from '../../components/common/InputField';
-import { CustomButton } from '../../components/common/Button';
-import Loader from '../../components/loader/Loader';
-import SuccessIcon from '../../components/common/SuccessIcon';
+import useHttp from '../../hooks/useHttp.hook'
+import useForm from '../../hooks/useForm.hook'
+import validate from '../../validationRules/forgotPassword'
 
-import useHttp from '../../hooks/useHttp.hook';
-import useForm from '../../hooks/useForm.hook';
-import validate from '../../validationRules/signIn';
-
-import './AuthorizationPage.scss';
-
-const signInFields = {
-  email: '',
-  accelerator_id: Number(process.env.REACT_APP_ACCELERATOR_ID),
-};
+import './AuthorizationPage.scss'
 
 const ForgotPasswordPage = () => {
+
+  const fields = {
+    email: '',
+  }
+
   const history = useHistory()
-  const { loading, request } = useHttp();
-  const { values, errors, handleChange, handleSubmit } = useForm(handleForgotPassword, validate, signInFields);
-  // TODO
-  const isSuccess = true
+  const { loading, request } = useHttp()
+  const { values, errors, handleChange, handleSubmit } = useForm(() => handleForgotPassword(), validate, fields)
+  const [isSuccess, setIsSuccess] = useState(false)
+
+  const handleForgotPassword = async (e) => {
+    try {
+      await request(`/users/password`, 'POST', {
+        user: {
+          email: values.email
+        }
+      })
+
+      setIsSuccess(true)
+    } catch (err) {
+      console.log(err)
+      // TODO
+    }
+  }
 
   const handleSignInClick = () => {
     history.push('/sign_in')
   }
 
+  // TODO - success render
   return (
     <div className="auth-page">
       <DashboardMenu />
@@ -41,7 +55,13 @@ const ForgotPasswordPage = () => {
                 <SuccessIcon />
               </div>
               <h3 className="auth-page-form-title">Success!</h3>
-              <h4 className="auth-page-form-subtitle">You have successfully changed the password</h4>
+              {/* <h4 className="auth-page-form-subtitle">You have successfully changed the password</h4> */}
+              <h4 className="auth-page-form-subtitle">
+                The email has been sent to {values.email}.
+              </h4>
+              <h4 className="auth-page-form-subtitle">
+                Please follow the instructions in the email in order to reset the password.
+              </h4>
               <CustomButton
                 handleClick={handleSignInClick}
                 className="auth-page-form-sign-in"
@@ -75,15 +95,7 @@ const ForgotPasswordPage = () => {
         {loading ? <Loader /> : null}
       </div>
     </div>
-  );
-};
+  )
+}
 
-const handleForgotPassword = async () => {
-  try {
-    // TODO
-  } catch (err) {
-    // TODO
-  }
-};
-
-export default ForgotPasswordPage;
+export default ForgotPasswordPage

@@ -1,20 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
-import { ReactComponent as LogoutIcon } from '../../images/icons/log-out.svg';
-import { ReactComponent as MoreIcon } from '../../images/icons/more-vertical.svg';
-import { ReactComponent as UserIcon } from '../../images/icons/user-default.svg';
+import { useAuthContext } from '../../CheckAuthorization'
+
+import { ReactComponent as LogoutIcon } from '../../images/icons/log-out.svg'
+import { ReactComponent as MoreIcon } from '../../images/icons/more-vertical.svg'
+import { ReactComponent as UserIcon } from '../../images/icons/user-default.svg'
 
 
 const HeaderMenu = props => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const logOut = () => {
-    localStorage.removeItem('userData');
-    sessionStorage.removeItem('userData');
-    props.history.push('/sign_in');
-  }
+  const [isOpen, setIsOpen] = useState(false)
+  const { logOut } = useAuthContext()
 
   return (
     <ClickAwayListener onClickAway={() => setIsOpen(false)}>

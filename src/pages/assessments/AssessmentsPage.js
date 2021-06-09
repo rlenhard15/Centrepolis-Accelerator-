@@ -16,7 +16,7 @@ import './AssessmentsPage.scss'
 const AssessmentsPage = props => {
   const settingsBlockRef = useRef(null)
   const { id, type, startupid: startupId } = props.match.params
-  const { authData: { user }, isMember } = useAuthContext()
+  const { authData: { user }, isMember, logOut } = useAuthContext()
 
   const { request } = useHttp()
   const [state, setState] = useState({
@@ -61,11 +61,9 @@ const AssessmentsPage = props => {
         loading: false
       })
     } catch (err) {
-      // if (err.status === 403 || err.status === 401) {
-      //   localStorage.removeItem('userData')
-      //   sessionStorage.removeItem('userData')
-      //   props.history.push('/sign_in')
-      // }
+      if (err.status === 403 || err.status === 401) {
+        logOut()
+      }
     }
   }
 

@@ -9,6 +9,7 @@ import Loader from '../../components/loader/Loader'
 import useHttp from '../../hooks/useHttp.hook'
 import useForm from '../../hooks/useForm.hook'
 import validate from '../../validationRules/signIn'
+import { useAuthContext } from '../../CheckAuthorization'
 
 import './AuthorizationPage.scss'
 
@@ -19,6 +20,7 @@ const SignInPage = props => {
     accelerator_id: Number(process.env.REACT_APP_ACCELERATOR_ID)
   }
   const { loading, request } = useHttp()
+  const { logIn } = useAuthContext()
   const { values, errors, handleChange, handleSubmit, setValues } = useForm(singIn, validate, signInFields)
   const [authorizationError, setAuthorizationError] = useState(false)
 
@@ -29,14 +31,7 @@ const SignInPage = props => {
   const signInRequest = async () => {
     try {
       const userData = await request(`/users/sign_in`, 'POST', { user: { ...values } })
-
-      if (values.keepSignedIn) {
-        localStorage.setItem('userData', JSON.stringify(userData))
-      } else {
-        sessionStorage.setItem('userData', JSON.stringify(userData))
-      }
-
-      props.history.push('/')
+      logIn(userData, values.keepSignedIn)
     } catch (err) {
       if (err.status === 401) setAuthorizationError(true)
     }

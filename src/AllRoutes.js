@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Switch, Route, Redirect } from 'react-router-dom'
 
-import SignUpPage from './pages/authenticated/SignUpPage'
+// import SignUpPage from './pages/authenticated/SignUpPage'
 import SignInPage from './pages/authenticated/SignInPage'
 import ForgotPasswordPage from './pages/authenticated/ForgotPasswordPage'
 import ConfirmAccountPage from './pages/authenticated/ConfirmAccountPage'
@@ -38,9 +38,10 @@ export const useRoutes = (isAuthenticated, authData) => {
       </Switch>
     )
   }
+
   return (
     <Switch>
-      <Route path="/sign_up" component={SignUpPage} />
+      {/* <Route path="/sign_up" component={SignUpPage} /> */}
       <Route path="/sign_in" component={SignInPage} />
       <Route path="/forgot-password" component={ForgotPasswordPage} />
       <Route path="/users/password" component={ConfirmAccountPage} />

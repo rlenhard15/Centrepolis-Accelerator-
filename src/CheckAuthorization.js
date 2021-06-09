@@ -10,7 +10,10 @@ const CheckAuthorization = () => {
   const history = useHistory()
   const path = history.location.pathname
 
-  const [authData, setAuthData] = useState(JSON.parse(localStorage.getItem('userData') || sessionStorage.getItem('userData')))
+  const [authData, setAuthData] = useState(
+    JSON.parse(localStorage.getItem('userData') || sessionStorage.getItem('userData'))
+  )
+
   const isAuthenticated = Boolean(authData)
   const userType = authData?.user_type
 
@@ -41,6 +44,22 @@ const CheckAuthorization = () => {
     }
   }
 
+  const logOut = () => {
+    localStorage.removeItem('userData')
+    sessionStorage.removeItem('userData')
+    setAuthData(null)
+    history.push('/sign_in')
+  }
+
+  const logIn = (userData, keepMeSignedIn) => {
+    if (keepMeSignedIn) {
+      localStorage.setItem('userData', JSON.stringify(userData))
+    } else {
+      sessionStorage.setItem('userData', JSON.stringify(userData))
+    }
+    setAuthData(userData)
+  }
+
   const providerData = {
     authData,
     isAuthenticated,
@@ -49,6 +68,8 @@ const CheckAuthorization = () => {
     isStartupAdmin,
     isMember,
     handleUpdateUser,
+    logIn,
+    logOut,
   }
 
   return (

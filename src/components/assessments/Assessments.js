@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { Link } from 'react-router-dom'
 
 import Loader from '../loader/Loader'
@@ -12,6 +12,7 @@ import { CustomButton } from '../common/Button'
 import InviteTeamPopup from '../admin/InviteTeamPopup'
 import AssessmentUsers from './AssessmentUsers'
 
+import { useAuthContext } from '../../CheckAuthorization'
 import useHttp from '../../hooks/useHttp.hook'
 
 import './Assessment.scss'
@@ -19,7 +20,7 @@ import './Assessment.scss'
 const Assessments = props => {
   const { request } = useHttp()
   const { id } = useParams()
-  const history = useHistory()
+  const { logOut } = useAuthContext()
 
   const pageBaseUrl = `/assessments/${id}`
 
@@ -70,11 +71,9 @@ const Assessments = props => {
 
       setAssessments(assessments, startup)
     } catch (err) {
-      // if (err.status === 403 || err.status === 401) {
-      //   localStorage.removeItem('userData')
-      //   sessionStorage.removeItem('userData')
-      //   history.push('/sign_in')
-      // }
+      if (err.status === 403 || err.status === 401) {
+        logOut()
+      }
     }
   }
 

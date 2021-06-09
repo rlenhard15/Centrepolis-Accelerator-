@@ -6,6 +6,7 @@ import DashboardMenu from './DashboardMenu'
 import AdminDashboard from '../../components/admin/AdminDashboard'
 import MemberDashboard from '../../components/member/MemberDashboard'
 import Assessments from '../../components/assessments/Assessments'
+import { useAuthContext } from '../../CheckAuthorization'
 
 import useHttp from '../../hooks/useHttp.hook'
 
@@ -14,6 +15,8 @@ import './DashboardPage.scss'
 const DashboardPage = props => {
   const { user } = props.userData
   const { loading, request } = useHttp()
+  const { logOut, isAdmin, isSuperAdmin, isMember } = useAuthContext()
+
   const [members, setMembers] = useState([])
 
   const addMembers = newMember => {
@@ -25,19 +28,18 @@ const DashboardPage = props => {
       const members = await request(`/api/members`)
       setMembers(members)
     } catch (err) {
-      // if (err.status === 403 || err.status === 401) {
-      //   localStorage.removeItem('userData');
-      //   sessionStorage.removeItem('userData');
-      //   props.history.push('/sign_in');
-      // }
+      if (err.status === 403 || err.status === 401) {
+        logOut()
+      }
     }
   }
 
   useEffect(() => {
     // For prevent sending request on page with assessments because this page doesn't use info from member request
     if (props.history.location.pathname.indexOf('/assessments/') === -1) {
-      props.userData.user_type === 'Admin' &&
+      if (isAdmin || isSuperAdmin) {
         getMembersRequest()
+      }
     }
   }, [])
 
@@ -48,7 +50,7 @@ const DashboardPage = props => {
         <Header className="board" {...props} />
         <div className="dashboard-content">
           {
-            props.userData.user_type !== 'Member' ? (
+            !isMember ? (
               <>
                 <Route exact path="/" render={() =>
                   <AdminDashboard
