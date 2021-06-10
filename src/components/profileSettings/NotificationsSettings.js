@@ -1,4 +1,5 @@
 import React from 'react'
+import toastr from 'toastr'
 
 import { CustomButton } from '../common/Button'
 import { CustomSwitch } from '../common/Switch'
@@ -6,23 +7,30 @@ import { InputField } from '../../components/common/InputField'
 import useForm from '../../hooks/useForm.hook'
 import useHttp from '../../hooks/useHttp.hook'
 import validate from '../../validationRules/notifications'
+import { useAuthContext } from '../../CheckAuthorization'
+
 import './NotificationsSettings.scss'
 
 const NotificationsSettings = () => {
+  const { authData, handleUpdateUser } = useAuthContext()
 
   const inviteFields = {
-    // TODO
-    email: '',
-    notificationsEnabled: true,
+    notificationsEnabled: authData.user.email_notification,
   }
 
   const { loading, request } = useHttp()
   const { values, errors, handleChange, handleSubmit, setValues } = useForm(() => changePassword(), validate, inviteFields)
 
   const changePassword = async () => {
-    await request(`api/users/update_email_notification`, 'PUT', {
-      email_notification: values.notificationsEnabled
-    })
+    try {
+      const user = await request(`api/users/update_email_notification`, 'PUT', {
+        email_notification: values.notificationsEnabled.toString()
+      })
+      handleUpdateUser(user)
+      toastr.success('Notifications have been updated', 'Success')
+    } catch (error) {
+      toastr.error('Something went wrong', 'Error')
+    }
   }
 
   const handleToggleNotifications = (_e, value) => {
@@ -38,10 +46,11 @@ const NotificationsSettings = () => {
       <InputField
         label="Email"
         name="email"
-        value={values.email}
+        value={authData.user.email}
         onChange={handleChange}
         error={errors.email}
         errorText={errors.emailError}
+        disabled={true}
       />
       <CustomSwitch
         label="Send email notifications"

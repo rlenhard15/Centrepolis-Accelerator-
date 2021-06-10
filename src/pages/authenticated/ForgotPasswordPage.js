@@ -24,7 +24,7 @@ const ForgotPasswordPage = () => {
   const { values, errors, handleChange, handleSubmit } = useForm(() => handleForgotPassword(), validate, fields)
   const [isSuccess, setIsSuccess] = useState(false)
 
-  const handleForgotPassword = async (e) => {
+  const handleForgotPassword = async (_e) => {
     try {
       await request(`/users/password`, 'POST', {
         user: {

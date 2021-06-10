@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { success, error } from 'toastr'
 
 import { CustomButton } from '../common/Button'
 import { InputField } from '../../components/common/InputField'
@@ -22,9 +23,7 @@ const PersonSettings = () => {
   const { loading, request } = useHttp()
   const { values, errors, handleChange, handleSubmit } = useForm(() => updateUser(), validate, inviteFields)
 
-  // const [inviteErrors, setInviteErrors] = useState({
-  //   inviteEmailError: false,
-  // })
+  const [emailTakenError, setEmailTakenError] = useState(null)
 
   const updateUser = async () => {
     try {
@@ -33,12 +32,16 @@ const PersonSettings = () => {
         user: {
           first_name: values.firstName,
           last_name: values.lastName,
-          phone_number: values.phoneNumber
+          phone_number: values.phoneNumber,
+          email: values.email,
         }
       })
       handleUpdateUser(user)
+      success('Your account has been updated', 'Success')
     } catch (err) {
-      // if (err === 422) return setInviteErrors({ inviteEmailError: true })
+      const errMessage = err.body?.email?.[0] || 'Something went wrong'
+      if (err.status === 422) setEmailTakenError('Email has already been taken')
+      error(errMessage, 'Error')
     }
   }
 
@@ -72,8 +75,8 @@ const PersonSettings = () => {
           name="email"
           value={values.email}
           onChange={handleChange}
-          error={errors.email}
-          errorText={errors.emailError}
+          error={errors.email || emailTakenError}
+          errorText={errors.emailError || emailTakenError}
         />
         <InputField
           label="Phone Number"

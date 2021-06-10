@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import toastr from 'toastr'
 
 import { CustomButton } from '../common/Button'
 import { InputField } from '../../components/common/InputField'
@@ -30,11 +31,13 @@ const PasswordSettings = () => {
       }
 
       await request(`api/users/change_password`, 'PUT', { user })
+      toastr.success('Your password has been updated', 'Success')
     } catch (err) {
       const currentPasswordError = err.body?.current_password?.[0]
       if (currentPasswordError) setCurrentPasswordServer(currentPasswordError)
       const newPasswordError = err.body?.password?.[0]
       if (newPasswordError) setNewPasswordServer(newPasswordError)
+      toastr.error(currentPasswordError || newPasswordError || 'Something went wrong', 'Error')
     }
   }
 

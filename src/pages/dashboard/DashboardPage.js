@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Route } from 'react-router-dom'
 
 import Header from '../../components/header/Header'
@@ -8,40 +8,11 @@ import MemberDashboard from '../../components/member/MemberDashboard'
 import Assessments from '../../components/assessments/Assessments'
 import { useAuthContext } from '../../CheckAuthorization'
 
-import useHttp from '../../hooks/useHttp.hook'
 
 import './DashboardPage.scss'
 
 const DashboardPage = props => {
-  const { user } = props.userData
-  const { loading, request } = useHttp()
-  const { logOut, isAdmin, isSuperAdmin, isMember } = useAuthContext()
-
-  const [members, setMembers] = useState([])
-
-  const addMembers = newMember => {
-    setMembers([...members, newMember])
-  }
-
-  const getMembersRequest = async () => {
-    try {
-      const members = await request(`/api/members`)
-      setMembers(members)
-    } catch (err) {
-      if (err.status === 403 || err.status === 401) {
-        logOut()
-      }
-    }
-  }
-
-  useEffect(() => {
-    // For prevent sending request on page with assessments because this page doesn't use info from member request
-    if (props.history.location.pathname.indexOf('/assessments/') === -1) {
-      if (isAdmin || isSuperAdmin) {
-        getMembersRequest()
-      }
-    }
-  }, [])
+  const { isMember } = useAuthContext()
 
   return (
     <div className="dashboard-page">
@@ -52,14 +23,7 @@ const DashboardPage = props => {
           {
             !isMember ? (
               <>
-                <Route exact path="/" render={() =>
-                  <AdminDashboard
-                    user={user}
-                    customers={members}
-                    addMembers={addMembers}
-                    loading={loading}
-                  />}
-                />
+                <Route exact path="/" render={() => <AdminDashboard />} />
                 <Route path="/assessments/:id/" render={() =>
                   <Assessments
                     {...props}

@@ -1,18 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import EmptyDashboard from './EmptyDashboard'
-import MembersTable from './MembersTable'
+import StartupsTable from './StartupsTable'
 import InviteTeamPopup from './InviteTeamPopup'
 import StartupPopup from '../startup/StartupPopup'
 import { CustomButton } from '../common/Button'
+import Pagination from '../common/Pagination'
+
 import { useAuthContext } from '../../CheckAuthorization'
+import useHttp from '../../hooks/useHttp.hook'
+
 import Loader from '../loader/Loader'
 
-const Dashboard = props => {
-  const { isSuperAdmin } = useAuthContext()
+const Dashboard = () => {
+  const { authData: { user }, isSuperAdmin, logOut, isAdmin } = useAuthContext()
+  const { loading, request } = useHttp()
 
+  const [page, setPage] = useState(0)
   const [showInvitePopup, setShowInvitePopup] = useState(false)
   const [showCreateStartupPopup, setCreateStartupPopup] = useState(false)
+  const [startupsData, setStartups] = useState(null)
 
   const handleCloseModal = () => {
     setShowInvitePopup(false)
@@ -29,21 +36,42 @@ const Dashboard = props => {
     setCreateStartupPopup(false)
   }
 
-  const handleIviteAdmin = admin => {
-    // TODO
+  const handleIviteAdmin = _admin => {
+    getMembersRequest()
   }
 
-  const handleCreateStartup = startup => {
-    // TODO
+  const handleCreateStartup = _startup => {
+    getMembersRequest()
   }
 
-  if (props.loading) return <Loader />
+  const handleChangePage = (_event, newPage) => {
+    setPage(newPage)
+  }
 
-  const displayName = [props.user.first_name, props.user.last_name].filter(Boolean).join(' ')
+  const getMembersRequest = async () => {
+    try {
+      const startups = await request(`/api/startups?page=${page + 1}`)
+      setStartups(startups)
+    } catch (err) {
+      if (err.status === 403 || err.status === 401) {
+        logOut()
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (isAdmin || isSuperAdmin) {
+      getMembersRequest()
+    }
+  }, [page])
+
+  if (loading && !startupsData) return <Loader />
+
+  const displayName = [user.first_name, user.last_name].filter(Boolean).join(' ')
 
   return (
     <>
-      {props.customers.length ? (
+      {startupsData?.startups.length ? (
         <>
           <div className="dashboard-content-header">
             <h3 className="dashboard-title">
@@ -63,10 +91,16 @@ const Dashboard = props => {
               }
             </div>
           </div>
-          <MembersTable
-            members={props.customers}
-            showAssessments={props.showAssessments}
-          />
+          <StartupsTable startupsData={startupsData} />
+          {startupsData.total_pages ?
+            <Pagination
+              page={page}
+              totalPages={startupsData.total_pages}
+              handleChangePage={handleChangePage}
+              itemsName='Startup'
+              outlined={true}
+            /> : null
+          }
         </>
       ) : (
         <EmptyDashboard

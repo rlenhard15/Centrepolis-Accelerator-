@@ -1,7 +1,3 @@
-export default function validate(values) {
-  let errors = {}
-
-  // TODO
-
-  return errors
+export default function validate(_values) {
+  return {}
 };

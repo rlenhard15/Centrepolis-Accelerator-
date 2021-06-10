@@ -1,13 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-import { ReactComponent as ShowMoreIcon } from '../../images/icons/more-vertical.svg';
+import { ReactComponent as ShowMoreIcon } from '../../images/icons/more-vertical.svg'
 
-import './MembersTableRowMenu.scss';
+import './StartupsTableRowMenu.scss'
 
-const MembersTableRowMenu = () => {
-  const [showMenu, setShowMenu] = React.useState();
+const StartupsTableRowMenu = () => {
+  const [showMenu, setShowMenu] = React.useState()
 
-  const toggleShowMenu = () => setShowMenu(!showMenu);
+  const toggleShowMenu = () => setShowMenu(!showMenu)
 
   return (
     <div className="menu-actions">
@@ -23,7 +23,7 @@ const MembersTableRowMenu = () => {
       }
       <ShowMoreIcon className="menu-actions-icon" onClick={toggleShowMenu} />
     </div>
-  );
-};
+  )
+}
 
-export default MembersTableRowMenu;
+export default StartupsTableRowMenu

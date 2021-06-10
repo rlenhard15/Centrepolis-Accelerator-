@@ -14,6 +14,7 @@ import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg'
 
 import useHttp from '../../hooks/useHttp.hook'
+import { useAuthContext } from '../../CheckAuthorization'
 
 import './TaskPopup.scss'
 
@@ -24,6 +25,8 @@ const priority = [
 ]
 
 const TaskPopup = props => {
+  const { isStartupAdmin } = useAuthContext()
+
   const { loading, request } = useHttp()
   const [state, setState] = useState({
     currentAssessment: props.assessments[0],
@@ -91,6 +94,7 @@ const TaskPopup = props => {
   // Field will have error if some of form fields is empty and this field will not have a value
   const checkFields = () => {
     if (
+      !state.selectedUser ||
       !state.selectedStage ||
       !state.taskPriority ||
       !state.dueDate ||
@@ -167,7 +171,10 @@ const TaskPopup = props => {
     const assessment = await getAssessments(assessmentNameForTask)
     const { riskCategories, selectedCategory } = getCategoriesAndSelectedCategory(assessment, taskInfo.category)
     const taskPriority = priority.find(p => p.value === taskInfo.priority)
-    const assignedUser = taskInfo.users_for_task.find(u => u.user_type === 'Member' || u.user_type === 'StartupAdmin')
+    const assignedUser = isStartupAdmin
+      ? taskInfo.members_for_task[0]
+      : taskInfo.users_for_task.find(u => u.user_type === 'Member' || u.user_type === 'StartupAdmin')
+
     const selectedUser = assignedUser && {
       value: assignedUser.id,
       label: `${assignedUser.first_name} ${assignedUser.last_name}`

@@ -20,11 +20,9 @@ import './Assessment.scss'
 const Assessments = props => {
   const { request } = useHttp()
   const { id } = useParams()
-  const { logOut } = useAuthContext()
+  const { logOut, isMember } = useAuthContext()
 
   const pageBaseUrl = `/assessments/${id}`
-
-  const isAdmin = props.userType === 'Admin'
 
   const [state, setState] = useState({
     customer: props.customer || null,
@@ -120,14 +118,14 @@ const Assessments = props => {
   const { name: companyName, members, startup_admins: startupAdmins } = state.startup
 
   return (
-    <div className={`assessment ${!isAdmin ? 'admin' : 'customer'}`}>
+    <div className={`assessment ${!isMember ? 'admin' : 'customer'}`}>
       <div className="assessment-header">
         <div className="assessment-breadcrumbs">
           <Link to="/" className="active">Dashboard</Link>
           <img src={ArrowRightSmallImg} alt="" />
           <span>{companyName}</span>
         </div>
-        {isAdmin ? (
+        {!isMember ? (
           <>
             <h3 className="assessment-title">
               <span>{companyName}</span>
@@ -147,7 +145,7 @@ const Assessments = props => {
         )}
       </div>
 
-      {isAdmin ? (
+      {!isMember ? (
         <Tabs baseUrl={pageBaseUrl}>
           <Tab tab="" label="Assignments">
             <div className="assessment-risks">
