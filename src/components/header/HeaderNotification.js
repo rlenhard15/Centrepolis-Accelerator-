@@ -51,7 +51,6 @@ const HeaderNotification = props => {
   }
 
   const ref = useCallback(node => {
-    console.log('jere')
     if (loading) return
     if (observer.current) observer.current.disconnect()
     observer.current = new IntersectionObserver(entries => {
