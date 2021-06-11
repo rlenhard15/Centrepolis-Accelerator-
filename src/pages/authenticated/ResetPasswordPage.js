@@ -34,7 +34,6 @@ const ResetPasswordPage = props => {
 
   const handleResetPassword = async (_e) => {
     const { token } = parseParams()
-    console.log(token)
     try {
       await request(`/users/password`, 'PUT', {
         reset_password_token: token,

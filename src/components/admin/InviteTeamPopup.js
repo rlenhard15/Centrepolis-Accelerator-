@@ -22,7 +22,11 @@ const InviteTeamPopup = props => {
 
   const inviteFields = {
     email: '',
-    userType: isStartupAdmin ? 'Member' : isSuperAdmin ? 'Admin' : null,
+    userType: isStartupAdmin ? {
+      value: 'Member',
+    } : isSuperAdmin ? {
+      value: 'Admin'
+    } : null,
     startupId: props.startupId,
   }
 
