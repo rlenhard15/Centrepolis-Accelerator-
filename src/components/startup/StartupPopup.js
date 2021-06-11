@@ -13,10 +13,10 @@ import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg'
 
 
 const StartupPopup = props => {
-  const { handleClosePopup, handleCreateStartup } = props
+  const { handleClosePopup, handleCreateStartup, startupId, startupName } = props
 
   const formData = {
-    startupName: '',
+    startupName: startupName || '',
   }
 
   const { loading, request } = useHttp()
@@ -27,9 +27,14 @@ const StartupPopup = props => {
       name: values.startupName
     }
 
-    const newStartup = await request(`api/startups`, 'POST', { startup })
+    if (startupId) {
+      const updatedStartup = await request(`api/startups/${startupId}`, 'PUT', { startup })
+      handleCreateStartup(updatedStartup)
+    } else {
+      const newStartup = await request(`api/startups`, 'POST', { startup })
+      handleCreateStartup(newStartup)
+    }
 
-    handleCreateStartup(newStartup)
     handleClosePopup()
   }
 
@@ -37,7 +42,7 @@ const StartupPopup = props => {
     <div className="popup">
       <ClickAwayListener onClickAway={handleClosePopup}>
         <div className="popup-content invite-popup">
-          <p className="popup-content-title">Create Startup</p>
+          <p className="popup-content-title">{startupId ? 'Update' : 'Create'} Startup</p>
           <button
             className="popup-close-btn"
             onClick={handleClosePopup}>
@@ -55,7 +60,7 @@ const StartupPopup = props => {
             />
             <CustomButton
               type='submit'
-              label="Create"
+              label={startupId ? 'Save' : 'Create'}
               disabled={loading}
             />
           </form>

@@ -37,8 +37,29 @@ const headers = [
 ]
 
 
-const StartupsTable = ({ startupsData }) => {
-  const rows = mapStartupsToRow(startupsData.startups)
+const StartupsTable = ({ startupsData, openEditStartupPopup, handleDeleteStartUp }) => {
+
+  const mapStartupsToRow = () => startupsData.startups.map(startup => ({
+    id: startup.id,
+    row: [
+      getUsersNames(startup.admins),
+      <Link to={`/assessments/${startup.id}`} className="startups-link">
+        {startup.name}
+      </Link>,
+      <div className="startups-st-admins">
+        {getUsersNames(startup.startup_admins)}
+      </div>,
+      formAssessmentRisk(startup.assessments_risk_list, 'CRL'),
+      formAssessmentRisk(startup.assessments_risk_list, 'TRL'),
+      formAssessmentRisk(startup.assessments_risk_list, 'MRL'),
+      <RowMenu
+        openEditStartupPopup={() => openEditStartupPopup(startup.id, startup.name)}
+        handleDeleteStartUp={() => handleDeleteStartUp(startup.id)}
+      />,
+    ]
+  }))
+
+  const rows = mapStartupsToRow()
 
   return (
     <div className="startups-table">
@@ -46,23 +67,6 @@ const StartupsTable = ({ startupsData }) => {
     </div>
   )
 }
-
-const mapStartupsToRow = startups => startups.map(startup => ({
-  id: startup.id,
-  row: [
-    getUsersNames(startup.admins),
-    <Link to={`/assessments/${startup.id}`} className="startups-link">
-      {startup.name}
-    </Link>,
-    <div className="startups-st-admins">
-      {getUsersNames(startup.startup_admins)}
-    </div>,
-    formAssessmentRisk(startup.assessments_risk_list, 'CRL'),
-    formAssessmentRisk(startup.assessments_risk_list, 'TRL'),
-    formAssessmentRisk(startup.assessments_risk_list, 'MRL'),
-    <RowMenu />,
-  ]
-}))
 
 const getUsersNames = users => {
   if (!users.length) return '--'

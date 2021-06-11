@@ -12,28 +12,31 @@ import useHttp from '../../hooks/useHttp.hook'
 
 import Loader from '../loader/Loader'
 
+const USER_INVITE_MODAL = 'USER_INVITE_MODAL'
+const STARTUP_MODAL = 'STARTUP_MODAL'
+
 const Dashboard = () => {
   const { authData: { user }, isSuperAdmin, logOut, isAdmin } = useAuthContext()
   const { loading, request } = useHttp()
 
   const [page, setPage] = useState(0)
-  const [showInvitePopup, setShowInvitePopup] = useState(false)
-  const [showCreateStartupPopup, setCreateStartupPopup] = useState(false)
+  const [modal, setModal] = useState(null)
   const [startupsData, setStartups] = useState(null)
 
   const handleCloseModal = () => {
-    setShowInvitePopup(false)
-    setCreateStartupPopup(false)
+    setModal(null)
   }
 
   const openCreateStartupPopup = () => {
-    setShowInvitePopup(false)
-    setCreateStartupPopup(true)
+    setModal({ type: STARTUP_MODAL })
+  }
+
+  const openEditStartupPopup = (id, startupName) => {
+    setModal({ type: STARTUP_MODAL, data: { startupId: id, startupName } })
   }
 
   const openShowInvitePopup = () => {
-    setShowInvitePopup(true)
-    setCreateStartupPopup(false)
+    setModal({ type: USER_INVITE_MODAL })
   }
 
   const handleIviteAdmin = _admin => {
@@ -56,6 +59,34 @@ const Dashboard = () => {
       if (err.status === 403 || err.status === 401) {
         logOut()
       }
+    }
+  }
+
+  const handleDeleteStartUp = async (id) => {
+    await request(`/api/startups/${id}`, 'DELETE')
+    await getMembersRequest()
+  }
+
+  const renderModal = () => {
+    switch (modal?.type) {
+      case USER_INVITE_MODAL:
+        return (
+          <InviteTeamPopup
+            handleClosePopup={handleCloseModal}
+            addCustomers={handleIviteAdmin}
+          />
+        )
+      case STARTUP_MODAL:
+        return (
+          <StartupPopup
+            handleClosePopup={handleCloseModal}
+            handleCreateStartup={handleCreateStartup}
+            startupId={modal.data?.startupId}
+            startupName={modal.data?.startupName}
+          />
+        )
+      default:
+        return null
     }
   }
 
@@ -91,13 +122,17 @@ const Dashboard = () => {
               }
             </div>
           </div>
-          <StartupsTable startupsData={startupsData} />
+          <StartupsTable
+            startupsData={startupsData}
+            openEditStartupPopup={openEditStartupPopup}
+            handleDeleteStartUp={handleDeleteStartUp}
+          />
           {startupsData.total_pages ?
             <Pagination
               page={page}
               totalPages={startupsData.total_pages}
               handleChangePage={handleChangePage}
-              itemsName='Startup'
+              itemsName='Startups'
               outlined={true}
             /> : null
           }
@@ -108,18 +143,7 @@ const Dashboard = () => {
           openShowInvitePopup={openShowInvitePopup}
         />
       )}
-      {showCreateStartupPopup &&
-        <StartupPopup
-          handleClosePopup={handleCloseModal}
-          handleCreateStartup={handleCreateStartup}
-        />
-      }
-      {showInvitePopup &&
-        <InviteTeamPopup
-          handleClosePopup={handleCloseModal}
-          addCustomers={handleIviteAdmin}
-        />
-      }
+      {renderModal()}
     </>
   )
 }

@@ -1,44 +1,59 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react'
+import toastr from 'toastr'
 
-import { AuthLogo } from '../../components/logos/AuthLogo';
-import DashboardMenu from '../dashboard/DashboardMenu';
-import { InputField } from '../../components/common/InputField';
-import { CustomButton } from '../../components/common/Button';
-import Loader from '../../components/loader/Loader';
+import DashboardMenu from '../dashboard/DashboardMenu'
+import { InputField } from '../../components/common/InputField'
+import { CustomButton } from '../../components/common/Button'
+import Loader from '../../components/loader/Loader'
 
-import useHttp from '../../hooks/useHttp.hook';
-import useForm from '../../hooks/useForm.hook';
-import validate from '../../validationRules/confirmAccount';
+import useHttp from '../../hooks/useHttp.hook'
+import useForm from '../../hooks/useForm.hook'
+import validate from '../../validationRules/confirmAccount'
+import { useAuthContext } from '../../CheckAuthorization'
 
-import './AuthorizationPage.scss';
+import './AuthorizationPage.scss'
 
 const ConfirmAccountPage = props => {
   const confirmFields = {
     password: '',
     first_name: '',
     last_name: '',
-  };
-  const { loading, request } = useHttp();
-  const { values, errors, handleChange, handleSubmit } = useForm(confirmAccount, validate, confirmFields);
+  }
+
+  const { loading, request } = useHttp()
+  const { values, errors, handleChange, handleSubmit } = useForm(confirmAccount, validate, confirmFields)
+  const { logIn } = useAuthContext()
+
+  useEffect(() => {
+    const { token, isForgotPassword } = parseParams()
+    if (!token) props.history.push('/sign_in')
+    if (isForgotPassword) props.history.push(`/users/password-reset?reset_password_token=${token}`)
+  }, [])
 
   function confirmAccount() {
-    confirmAccountRequest();
+    confirmAccountRequest()
   }
 
   const confirmAccountRequest = async () => {
-    const resetToken = props.location.search.split('=')[1];
+    const { token } = parseParams()
+
     try {
-      const userData = await request(`/users/password`, 'PUT', { reset_password_token: resetToken, ...values });
+      const userData = await request(`/users/password`, 'PUT', { reset_password_token: token, ...values })
+      logIn(userData, values.keepSignedIn)
+    } catch (err) {
+      toastr.error('Something went wrong.', 'Error')
+    }
+  }
 
-      if (values.keepSignedIn) {
-        localStorage.setItem('userData', JSON.stringify(userData));
-      } else {
-        sessionStorage.setItem('userData', JSON.stringify(userData));
-      }
+  const parseParams = () => {
+    const params = new URLSearchParams(props.location.search)
+    const token = params.get('reset_password_token')
+    const isForgotPassword = params.get('forgot_password') === `'true'`
 
-      props.history.push('/');
-    } catch (err) { }
+    return {
+      token,
+      isForgotPassword,
+    }
   }
 
   return (

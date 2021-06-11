@@ -4,7 +4,7 @@ import { ReactComponent as ShowMoreIcon } from '../../images/icons/more-vertical
 
 import './StartupsTableRowMenu.scss'
 
-const StartupsTableRowMenu = () => {
+const StartupsTableRowMenu = ({ openEditStartupPopup, handleDeleteStartUp }) => {
   const [showMenu, setShowMenu] = React.useState()
 
   const toggleShowMenu = () => setShowMenu(!showMenu)
@@ -13,10 +13,10 @@ const StartupsTableRowMenu = () => {
     <div className="menu-actions">
       {showMenu &&
         <div className="menu-actions-popup">
-          <span className="menu-action">
+          <span onClick={openEditStartupPopup} className="menu-action">
             Edit
           </span>
-          <span className="menu-action">
+          <span onClick={handleDeleteStartUp} className="menu-action">
             Delete
           </span>
         </div>

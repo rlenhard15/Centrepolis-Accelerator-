@@ -5,6 +5,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 // import SignUpPage from './pages/authenticated/SignUpPage'
 import SignInPage from './pages/authenticated/SignInPage'
 import ForgotPasswordPage from './pages/authenticated/ForgotPasswordPage'
+import ResetPasswordPage from './pages/authenticated/ResetPasswordPage'
 import ConfirmAccountPage from './pages/authenticated/ConfirmAccountPage'
 import DashBoardPage from './pages/dashboard/DashboardPage'
 import AssessmentsPage from './pages/assessments/AssessmentsPage'
@@ -45,6 +46,8 @@ export const useRoutes = (isAuthenticated, authData) => {
       <Route path="/sign_in" component={SignInPage} />
       <Route path="/forgot-password" component={ForgotPasswordPage} />
       <Route path="/users/password" component={ConfirmAccountPage} />
+      <Route path="/users/password-reset" component={ResetPasswordPage} />
+      <Redirect to="/sign_in" />
     </Switch>
   )
 }

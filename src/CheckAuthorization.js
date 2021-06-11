@@ -25,9 +25,9 @@ const CheckAuthorization = () => {
   const allRoutes = useRoutes(isAuthenticated, authData)
   const isConfirmationPage = path === '/users/password'
 
-  useEffect(() => {
-    if (!isAuthenticated) isConfirmationPage ? history.push(history.location) : history.push('/sign_in')
-  }, [])
+  // useEffect(() => {
+  //   if (!isAuthenticated) isConfirmationPage ? history.push(history.location) : history.push('/sign_in')
+  // }, [])
 
   const handleUpdateUser = user => {
     const localAuthData = JSON.parse(localStorage.getItem('userData'))

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import toastr from 'toastr'
 
 import DashboardMenu from '../dashboard/DashboardMenu'
 import { InputField } from '../../components/common/InputField'
@@ -19,7 +19,6 @@ const ForgotPasswordPage = () => {
     email: '',
   }
 
-  const history = useHistory()
   const { loading, request } = useHttp()
   const { values, errors, handleChange, handleSubmit } = useForm(() => handleForgotPassword(), validate, fields)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -34,16 +33,10 @@ const ForgotPasswordPage = () => {
 
       setIsSuccess(true)
     } catch (err) {
-      console.log(err)
-      // TODO
+      toastr.error('Something went wrong', 'Error')
     }
   }
 
-  const handleSignInClick = () => {
-    history.push('/sign_in')
-  }
-
-  // TODO - success render
   return (
     <div className="auth-page">
       <DashboardMenu />
@@ -55,19 +48,12 @@ const ForgotPasswordPage = () => {
                 <SuccessIcon />
               </div>
               <h3 className="auth-page-form-title">Success!</h3>
-              {/* <h4 className="auth-page-form-subtitle">You have successfully changed the password</h4> */}
               <h4 className="auth-page-form-subtitle">
                 The email has been sent to {values.email}.
               </h4>
               <h4 className="auth-page-form-subtitle">
                 Please follow the instructions in the email in order to reset the password.
               </h4>
-              <CustomButton
-                handleClick={handleSignInClick}
-                className="auth-page-form-sign-in"
-                type="submit"
-                label="Sign In"
-              />
             </>
           ) : (
             <>

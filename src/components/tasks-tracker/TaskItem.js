@@ -58,7 +58,7 @@ const TaskItem = memo(props => {
     const users = isStartupAdmin || isMember ? props.members_for_task : props.users_for_task
 
     return users
-      .filter(u => u.user_type !== 'Admin' || u.user_type === 'SuperAdmin')
+      .filter(u => u.user_type !== 'Admin' || u.user_type !== 'SuperAdmin')
       .map(u => `${u.first_name} ${u.last_name}`)
       .join(', ') || '--'
   }
@@ -101,7 +101,7 @@ const TaskItem = memo(props => {
                       onClick={() => setState({ ...state, open: !state.open })}
                     >
                       Incomplete
-                    <KeyboardArrowDownRoundedIcon />
+                      <KeyboardArrowDownRoundedIcon />
                     </IconButton>
                     {
                       state.open ?
@@ -112,7 +112,7 @@ const TaskItem = memo(props => {
                             onClick={handleCompleteTask}
                           >
                             Complete
-                        </IconButton>
+                          </IconButton>
                         </div> : null
                     }
                   </>
