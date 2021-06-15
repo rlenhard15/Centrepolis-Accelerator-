@@ -54,7 +54,8 @@ const Dashboard = () => {
   const getMembersRequest = async () => {
     try {
       const startups = await request(`/api/startups?page=${page + 1}`)
-      setStartups(startups)
+      startups.current_page > startups.total_pages ? setPage(page - 1) : setStartups(startups)
+
     } catch (err) {
       if (err.status === 403 || err.status === 401) {
         logOut()
@@ -137,12 +138,14 @@ const Dashboard = () => {
             /> : null
           }
         </>
-      ) : (
-        <EmptyDashboard
-          openCreateStartupPopup={openCreateStartupPopup}
-          openShowInvitePopup={openShowInvitePopup}
-        />
-      )}
+      ) :
+        (
+          <EmptyDashboard
+            openCreateStartupPopup={openCreateStartupPopup}
+            openShowInvitePopup={openShowInvitePopup}
+          />
+        )
+      }
       {renderModal()}
     </>
   )

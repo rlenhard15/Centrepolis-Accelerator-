@@ -42,31 +42,9 @@ const StartupPopup = props => {
 
   const createStartup = async () => {
 
-    const startup = {
-      name: values.startupName
-    }
-
-    if(isSuperAdmin) {
-
-      if (startupId) {
-        const updatedStartup = await request(`api/startups/${startupId}`, 'PUT', { startup })
-        handleCreateStartup(updatedStartup)
-      } else {
-        const newStartup = await request(
-          `api/startups`,
-          'POST',
-          {
-            startup: {
-              name: startup.name,
-              admins_startups_attributes: [{admin_id: currentAdmin.value}]
-            }
-          }
-        )
-        handleCreateStartup(newStartup)
-      }
-      handleClosePopup()
-      return
-    }
+    const startup = isSuperAdmin
+      ? {name: values.startupName, admins_startups_attributes: [{admin_id: currentAdmin.value}]} 
+      : {name: values.startupName}
 
     if (startupId) {
       const updatedStartup = await request(`api/startups/${startupId}`, 'PUT', { startup })
