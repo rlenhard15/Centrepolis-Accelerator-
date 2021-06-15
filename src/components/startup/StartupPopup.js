@@ -83,7 +83,7 @@ const StartupPopup = props => {
             />
             {isSuperAdmin && (
               <CustomSelect
-                isDisable={true}
+                isDisable={loading}
                 options={admins}
                 placeholder='List of admins'
                 value={currentAdmin}
