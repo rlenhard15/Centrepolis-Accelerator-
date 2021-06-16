@@ -1,31 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 import { InputField } from '../common/InputField'
-
+import CustomSelect from '../common/Select'
 import { CustomButton } from '../common/Button'
 
 import useHttp from '../../hooks/useHttp.hook'
 import useForm from '../../hooks/useForm.hook'
+import { useAuthContext } from '../../CheckAuthorization'
 import validate from '../../validationRules/createStartup'
 
 import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg'
 
-
 const StartupPopup = props => {
+
+  const [admins, setAdmins] = useState([])
+  const [currentAdmin, setCurrentAdmin] = useState([])
+
   const { handleClosePopup, handleCreateStartup, startupId, startupName } = props
 
   const formData = {
     startupName: startupName || '',
   }
 
+  const { isSuperAdmin } = useAuthContext()
+
   const { loading, request } = useHttp()
   const { values, errors, handleChange, handleSubmit } = useForm(() => createStartup(), validate, formData)
 
-  const createStartup = async () => {
-    const startup = {
-      name: values.startupName
+  useEffect(() => {
+    if (isSuperAdmin) {
+
+      async function fetchAdmins() {
+        const response = await request(`api/admins`)
+        const result = response.map(admin => ({ value: admin.id, label: `${admin.first_name} ${admin.last_name}` }))
+        setAdmins(result)
+      }
+      fetchAdmins()
     }
+  }, [])
+
+  const createStartup = async () => {
+
+    const startup = isSuperAdmin
+      ? {name: values.startupName, admins_startups_attributes: [{admin_id: currentAdmin.value}]} 
+      : {name: values.startupName}
 
     if (startupId) {
       const updatedStartup = await request(`api/startups/${startupId}`, 'PUT', { startup })
@@ -36,6 +55,10 @@ const StartupPopup = props => {
     }
 
     handleClosePopup()
+  }
+
+  const handleChangeSelect = (e) => {
+    setCurrentAdmin(e)
   }
 
   return (
@@ -58,6 +81,16 @@ const StartupPopup = props => {
               error={errors.startupName}
               errorText={errors.startupNameMessage}
             />
+            {isSuperAdmin && (
+              <CustomSelect
+                label="Assigned User"
+                isDisable={loading}
+                options={admins}
+                placeholder='List of admins'
+                value={currentAdmin}
+                onChange={(e) => handleChangeSelect(e)}
+              />
+            )}
             <CustomButton
               type='submit'
               label={startupId ? 'Save' : 'Create'}
