@@ -14,8 +14,8 @@ import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg'
 
 const StartupPopup = props => {
 
-  const [admins, setAdmins] = useState('')
-  const [currentAdmin, setCurrentAdmin] = useState('')
+  const [admins, setAdmins] = useState([])
+  const [currentAdmin, setCurrentAdmin] = useState([])
 
   const { handleClosePopup, handleCreateStartup, startupId, startupName } = props
 
@@ -29,7 +29,7 @@ const StartupPopup = props => {
   const { values, errors, handleChange, handleSubmit } = useForm(() => createStartup(), validate, formData)
 
   useEffect(() => {
-    if(isSuperAdmin) {
+    if (isSuperAdmin) {
 
       async function fetchAdmins() {
         const response = await request(`api/admins`)

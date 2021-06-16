@@ -290,7 +290,7 @@ const TaskPopup = props => {
             <div className="form-row">
               <div className="form-group">
                 <CustomSelect
-                  isDisable={loading}
+                  isDisable={true}
                   label="Task Priority"
                   placeholder='Select priority'
                   options={priority}
