@@ -33,7 +33,7 @@ const StartupPopup = props => {
 
       async function fetchAdmins() {
         const response = await request(`api/admins`)
-        const result = response.map(admin => ({ value: admin.id, label: admin.first_name }))
+        const result = response.map(admin => ({ value: admin.id, label: `${admin.first_name} ${admin.last_name}` }))
         setAdmins(result)
       }
       fetchAdmins()
@@ -83,6 +83,7 @@ const StartupPopup = props => {
             />
             {isSuperAdmin && (
               <CustomSelect
+                label="Assigned User"
                 isDisable={loading}
                 options={admins}
                 placeholder='List of admins'
