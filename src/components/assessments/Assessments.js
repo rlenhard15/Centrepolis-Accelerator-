@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from "react-router-dom"
 import { Link } from 'react-router-dom'
+import toastr from 'toastr'
 
 import Loader from '../loader/Loader'
 import AssessmentsItem from './AssessmentItem'
@@ -111,6 +112,7 @@ const Assessments = props => {
           : { members: [user, ...state.startup.members] }
       }
     }))
+    toastr.success('User has been invited', 'Success')
   }
 
   if (state.loading) return <Loader />

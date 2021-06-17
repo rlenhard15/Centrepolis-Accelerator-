@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import toastr from 'toastr'
 
 import TaskItem from './TaskItem'
 import TaskPopup from './TaskPopup'
@@ -32,11 +33,13 @@ const TasksTracker = props => {
   const addTask = async (_newTask) => {
     await getAllTasksRequest(state.page + 1)
     setState(state => ({ ...state, showPopup: false }))
+    toastr.success('Task has been created', 'Success')
   }
 
   const changeTask = async (_updatedTask) => {
     await getAllTasksRequest(state.page + 1)
     setState(state => ({ ...state, showPopup: false }))
+    toastr.success('Task has been updated', 'Success')
   }
 
   const deleteTask = async (taskId) => {
@@ -46,6 +49,7 @@ const TasksTracker = props => {
     } else {
       await getAllTasksRequest(state.page + 1)
     }
+    toastr.success('Task has been removed', 'Success')
   }
 
   const getAllTasksRequest = async (page = 1) => {

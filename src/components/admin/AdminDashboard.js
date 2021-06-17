@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import toastr from 'toastr'
 
 import EmptyDashboard from './EmptyDashboard'
 import StartupsTable from './StartupsTable'
@@ -41,10 +42,12 @@ const Dashboard = () => {
 
   const handleIviteAdmin = _admin => {
     getMembersRequest()
+    toastr.success('Admin has been invited', 'Success')
   }
 
   const handleCreateStartup = _startup => {
     getMembersRequest()
+    toastr.success('Startup has been created', 'Success')
   }
 
   const handleChangePage = (_event, newPage) => {
@@ -56,9 +59,9 @@ const Dashboard = () => {
       const startups = await request(`/api/startups?page=${page + 1}`)
       if (startups.current_page > startups.total_pages) {
         setPage(page - 1)
-        } else {
+      } else {
         setStartups(startups)
-        }
+      }
 
     } catch (err) {
       if (err.status === 403 || err.status === 401) {

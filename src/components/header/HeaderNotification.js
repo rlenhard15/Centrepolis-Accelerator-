@@ -24,7 +24,7 @@ const HeaderNotification = props => {
   const formatTime = (createdAt) => {
     const date = new Date(createdAt)
     const seconds = Math.floor((Date.now() - date.getTime()) / 1000)
-    const interval = intervals.find(i => i.seconds < seconds) || intervals[0]
+    const interval = intervals.slice().reverse().find(i => i.seconds <= seconds) || intervals[0]
     const count = seconds < 0 ? 1 : Math.floor(seconds / interval.seconds)
     return `${count} ${interval.label}${count !== 1 ? 's' : ''} ago`
   }
@@ -63,12 +63,9 @@ const HeaderNotification = props => {
   }, [loading, props.hasMore])
 
   const assignedUsers = (task) => {
-    return task.users
-      .filter(u => u.user_type === 'Admin' || u.user_type === 'SuperAdmin')
-      .map(u => `${u.first_name} ${u.last_name}`)
-      .join(', ') || '--'
+    const user = task.users[1]
+    return user ? `${user.first_name} ${user.last_name}` : '--'
   }
-
 
   return (
     <ClickAwayListener onClickAway={() => setIsOpen(false)}>

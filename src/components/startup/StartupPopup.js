@@ -43,8 +43,8 @@ const StartupPopup = props => {
   const createStartup = async () => {
 
     const startup = isSuperAdmin
-      ? {name: values.startupName, admins_startups_attributes: [{admin_id: currentAdmin.value}]} 
-      : {name: values.startupName}
+      ? { name: values.startupName, admins_startups_attributes: [{ admin_id: currentAdmin.value }] }
+      : { name: values.startupName }
 
     if (startupId) {
       const updatedStartup = await request(`api/startups/${startupId}`, 'PUT', { startup })
@@ -74,7 +74,7 @@ const StartupPopup = props => {
           <form noValidate autoComplete="off" onSubmit={handleSubmit}>
             <InputField
               label="Startup Name"
-              placeholder="Enter team manager’s email address"
+              placeholder="Enter startup name"
               name="startupName"
               value={values.startupName}
               onChange={handleChange}

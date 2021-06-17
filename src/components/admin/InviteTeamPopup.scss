@@ -56,8 +56,16 @@
 }
 
 .invite-popup {
+  .text-field {
+    margin-bottom: 10px;
+  }
+
   .text-field-label {
     font-size: 0.7778rem;
+  }
+
+  .custom-select-label {
+    color: #495368;
   }
 }
 

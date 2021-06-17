@@ -57,7 +57,7 @@ const ForgotPasswordPage = () => {
             </>
           ) : (
             <>
-              <h3 className="auth-page-form-title">Forgot Passwod?</h3>
+              <h3 className="auth-page-form-title">Forgot Password?</h3>
               <h4 className="auth-page-form-subtitle">Enter the email address you used when you joined and we will send you the instructions</h4>
               <InputField
                 label="Email Address"

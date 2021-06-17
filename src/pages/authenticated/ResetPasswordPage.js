@@ -80,7 +80,7 @@ const ResetPasswordPage = props => {
             </>
           ) : (
             <>
-              <h3 className="auth-page-form-title">Reset Passwod</h3>
+              <h3 className="auth-page-form-title">Reset Password</h3>
               <h4 className="auth-page-form-subtitle">Please enter your new password to login into your account</h4>
               <InputField
                 label="New password"

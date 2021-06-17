@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import toastr from 'toastr'
 
 import AssessmentSlider from './AssessmentsSlider'
 import AssessmentsStage from './AssessmentsStage'
@@ -61,6 +62,11 @@ const AssessmentCategory = props => {
     return title ? `${index + 1}. ${title}` : null
   }
 
+  const handleClosePopup = () => {
+    setState({ ...state, showPopup: false })
+    toastr.success('Task has been created', 'Success')
+  }
+
   useEffect(() => {
     const activeStageIndex = stages.findIndex(stage => current_stage_id === stage.id)
     handleChangeProgress(activeStageIndex)
@@ -119,7 +125,7 @@ const AssessmentCategory = props => {
           assessments={assessments}
           assessmentName={assessmentName}
           currentCustomerId={customerId}
-          handleClosePopup={() => setState({ ...state, showPopup: false })}
+          handleClosePopup={handleClosePopup}
           infoForCreateTaskFromStage={state.infoForCreateTaskFromStage}
           startupId={startupId}
         />

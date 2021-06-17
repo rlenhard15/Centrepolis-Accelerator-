@@ -62,6 +62,13 @@ const InviteTeamPopup = props => {
     setValues(v => ({ ...v, 'userType': option }))
   }
 
+  const getModalTitle = () => {
+    if (isSuperAdmin && !props.startupId) return 'Invite Admin'
+    return isStartupAdmin
+      ? 'Invite Member'
+      : 'Invite User'
+  }
+
   const getUsersOptions = () => {
     if (isSuperAdmin) {
       return [
@@ -72,7 +79,7 @@ const InviteTeamPopup = props => {
 
     if (isAdmin) {
       return [
-        { label: 'StartUp Admin', value: 'StartupAdmin' },
+        { label: 'Startup Admin', value: 'StartupAdmin' },
         { label: 'Member', value: 'Member' },
       ]
     }
@@ -90,7 +97,7 @@ const InviteTeamPopup = props => {
     <div className="popup">
       <ClickAwayListener onClickAway={props.handleClosePopup}>
         <div className="popup-content invite-popup">
-          <p className="popup-content-title">Invite Team Manager</p>
+          <p className="popup-content-title">{getModalTitle()}</p>
           <button
             className="popup-close-btn"
             onClick={props.handleClosePopup}>
@@ -99,7 +106,7 @@ const InviteTeamPopup = props => {
           <form noValidate autoComplete="off" onSubmit={handleSubmit}>
             <InputField
               label="Email Address"
-              placeholder="Enter team manager’s email address"
+              placeholder="Enter user’s email address"
               type="email"
               name="email"
               value={values.email}
@@ -109,6 +116,7 @@ const InviteTeamPopup = props => {
             />
             {(!isStartupAdmin && props.startupId) &&
               <CustomSelect
+                label="User type"
                 placeholder="Select user type"
                 value={values.type}
                 options={userOptions}
