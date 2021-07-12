@@ -12,7 +12,7 @@ import './TaskItem.scss'
 
 const TaskItem = memo(props => {
   const { request } = useHttp()
-  const { authData: { user }, isMember, isStartupAdmin } = useAuthContext()
+  const { authData: { user }, isMember, isTeamLead } = useAuthContext()
 
   const [state, setState] = useState({
     open: false,
@@ -29,7 +29,7 @@ const TaskItem = memo(props => {
   const formatDate = date => date.split('T')[0].split('-').reverse().join('/').replace(/\/20/g, '/')
 
   const isAbleToUpdateTask = () => {
-    if (isStartupAdmin || isMember) return true
+    if (isTeamLead || isMember) return true
 
     return props.users_for_task.some(u => u.id === user.id)
   }
@@ -55,7 +55,7 @@ const TaskItem = memo(props => {
   }
 
   const assignedUsers = () => {
-    const users = isStartupAdmin || isMember ? props.members_for_task : props.users_for_task
+    const users = isTeamLead || isMember ? props.members_for_task : props.users_for_task
 
     return users
       .filter(u => u.user_type !== 'Admin' || u.user_type !== 'SuperAdmin')

@@ -18,7 +18,7 @@ export const useRoutes = (isAuthenticated, authData) => {
       <Switch>
         <Route exact path="/" render={props => {
 
-          if (authData.user_type === 'Member' || authData.user_type === 'StartupAdmin') {
+          if (authData.user_type === 'Member' || authData.user_type === 'TeamLead') {
             return <Redirect to={`/assessments/${authData.user.startup_id}`} />
           }
 

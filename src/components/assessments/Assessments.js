@@ -107,8 +107,8 @@ const Assessments = props => {
       ...state,
       startup: {
         ...state.startup,
-        ...type === 'StartupAdmin'
-          ? { startup_admins: [user, ...state.startup.startup_admins] }
+        ...type === 'TeamLead'
+          ? { team_leads: [user, ...state.startup.team_leads] }
           : { members: [user, ...state.startup.members] }
       }
     }))
@@ -117,7 +117,7 @@ const Assessments = props => {
 
   if (state.loading) return <Loader />
 
-  const { name: companyName, members, startup_admins: startupAdmins } = state.startup
+  const { name: companyName, members, team_leads: teamLeads } = state.startup
 
   return (
     <div className={`assessment ${!isMember ? 'admin' : 'customer'}`}>
@@ -169,7 +169,7 @@ const Assessments = props => {
             />
           </Tab>
           <Tab tab="users" label="Users">
-            <AssessmentUsers members={members} startupAdmins={startupAdmins} />
+            <AssessmentUsers members={members} teamLeads={teamLeads} />
           </Tab>
         </Tabs>
       ) : (

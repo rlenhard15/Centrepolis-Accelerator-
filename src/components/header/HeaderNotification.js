@@ -63,7 +63,7 @@ const HeaderNotification = props => {
   }, [loading, props.hasMore])
 
   const assignedUsers = (task) => {
-    const user = task.users[1]
+    const user = task.created_by
     return user ? `${user.first_name} ${user.last_name}` : '--'
   }
 

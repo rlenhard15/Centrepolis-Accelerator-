@@ -16,7 +16,7 @@ const headers = [
     width: '16%',
   },
   {
-    title: 'Startup Admins',
+    title: 'Team Leads',
     width: '17%',
   },
   {
@@ -47,7 +47,7 @@ const StartupsTable = ({ startupsData, openEditStartupPopup, handleDeleteStartUp
         {startup.name}
       </Link>,
       <div className="startups-st-admins">
-        {getUsersNames(startup.startup_admins)}
+        {getUsersNames(startup.team_leads)}
       </div>,
       formAssessmentRisk(startup.assessments_risk_list, 'CRL'),
       formAssessmentRisk(startup.assessments_risk_list, 'TRL'),

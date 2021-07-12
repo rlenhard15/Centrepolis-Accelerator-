@@ -25,11 +25,12 @@ const priority = [
 ]
 
 const TaskPopup = props => {
-  const { isStartupAdmin } = useAuthContext()
+  const { isTeamLead } = useAuthContext()
 
   const { loading, request } = useHttp()
   const [state, setState] = useState({
     currentAssessment: props.assessments[0],
+    selectedUsers: [],
     currentAssessmentInfo: null,
     isChangeAssessment: false,
     riskCategories: [],
@@ -94,7 +95,7 @@ const TaskPopup = props => {
   // Field will have error if some of form fields is empty and this field will not have a value
   const checkFields = () => {
     if (
-      !state.selectedUser ||
+      !state.selectedUsers.length ||
       !state.selectedStage ||
       !state.taskPriority ||
       !state.dueDate ||
@@ -126,9 +127,7 @@ const TaskPopup = props => {
         title: state.taskText,
         priority: state.taskPriority.value,
         due_date: state.dueDate.toDateString(),
-        task_users_attributes: [{
-          user_id: state.selectedUser.value
-        }]
+        task_users_attributes: state.selectedUsers.map(({ value }) => ({ user_id: value })),
       }
 
       props.taskForEdit ?
@@ -171,14 +170,15 @@ const TaskPopup = props => {
     const assessment = await getAssessments(assessmentNameForTask)
     const { riskCategories, selectedCategory } = getCategoriesAndSelectedCategory(assessment, taskInfo.category)
     const taskPriority = priority.find(p => p.value === taskInfo.priority)
-    const assignedUser = isStartupAdmin
-      ? taskInfo.members_for_task[0]
-      : taskInfo.users_for_task.find(u => u.user_type === 'Member' || u.user_type === 'StartupAdmin')
 
-    const selectedUser = assignedUser && {
-      value: assignedUser.id,
-      label: `${assignedUser.first_name} ${assignedUser.last_name}`
-    }
+    const assignedUsers = isTeamLead
+      ? taskInfo.members_for_task
+      : taskInfo.users_for_task
+
+    const selectedUsers = assignedUsers.map(u => ({
+      value: u.id,
+      label: `${u.first_name} ${u.last_name}`
+    }))
 
     setState({
       ...state,
@@ -187,7 +187,7 @@ const TaskPopup = props => {
         risk_name: assessmentNameForTask
       },
       userOptions,
-      selectedUser,
+      selectedUsers,
       currentAssessmentInfo: assessment,
       riskCategories,
       selectedCategory,
@@ -201,13 +201,12 @@ const TaskPopup = props => {
     const userOptions = data.members
       .filter(member => member.first_name)
       .map(member => ({ value: member.id, label: `${member.first_name} ${member.last_name}` }))
-      .concat(
-        data.startup_admins
-          .filter(admin => admin.first_name)
-          .map(admin => ({ value: admin.id, label: `${admin.first_name} ${admin.last_name}` }))
-      )
 
-    return userOptions
+    return isTeamLead ? userOptions : userOptions.concat(
+      data.team_leads
+        .filter(admin => admin.first_name)
+        .map(admin => ({ value: admin.id, label: `${admin.first_name} ${admin.last_name}` }))
+    )
   }
 
   const setOptionsForCreateTaskFromStage = async () => {
@@ -277,7 +276,7 @@ const TaskPopup = props => {
               currentAssessmentInfo={state.currentAssessmentInfo}
               riskCategories={state.riskCategories}
               userOptions={state.userOptions}
-              selectedUser={state.selectedUser}
+              selectedUsers={state.selectedUsers}
               selectedCategory={state.selectedCategory}
               selectedSubcategory={state.selectedSubcategory}
               selectedStage={state.selectedStage}

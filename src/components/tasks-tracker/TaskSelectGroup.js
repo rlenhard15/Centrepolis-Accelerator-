@@ -36,7 +36,7 @@ const TaskSelectGroup = props => {
   }
 
   const handleUserChange = e => {
-    props.handleChangeSelect(e, 'selectedUser')
+    props.handleChangeSelect(e, 'selectedUsers')
   }
 
   const handleCategoryChange = e => {
@@ -74,9 +74,11 @@ const TaskSelectGroup = props => {
         placeholder='Assign to'
         options={props.userOptions}
         onChange={handleUserChange}
-        value={props.selectedUser}
+        value={props.selectedUsers}
         isDisabled={!props.userOptions.length}
-        error={props.error && !props.selectedUser}
+        error={props.error && !props.selectedUsers}
+        getValue={console.log}
+        isMulti={true}
       />
       <CustomSelect
         isDisable={true}

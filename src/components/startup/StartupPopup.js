@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
 import { InputField } from '../common/InputField'
@@ -15,7 +15,9 @@ import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg'
 const StartupPopup = props => {
 
   const [admins, setAdmins] = useState([])
-  const [currentAdmin, setCurrentAdmin] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPage, setTotalPage] = useState(1)
+  const [currentAdmins, setCurrentAdmins] = useState([])
 
   const { handleClosePopup, handleCreateStartup, startupId, startupName } = props
 
@@ -24,27 +26,46 @@ const StartupPopup = props => {
   }
 
   const { isSuperAdmin } = useAuthContext()
+  const observer = useRef()
 
   const { loading, request } = useHttp()
+  const { loading: startupLoading, request: startupRequest } = useHttp()
+
   const { values, errors, handleChange, handleSubmit } = useForm(() => createStartup(), validate, formData)
 
   useEffect(() => {
-    if (isSuperAdmin) {
-
-      async function fetchAdmins() {
-        const response = await request(`api/admins`)
-        const result = response.map(admin => ({ value: admin.id, label: `${admin.first_name} ${admin.last_name}` }))
-        setAdmins(result)
-      }
-      fetchAdmins()
+    if (startupId) {
+      getInitStartupData()
     }
   }, [])
+
+  useEffect(() => {
+    if (isSuperAdmin) {
+      fetchAdmins()
+    }
+  }, [currentPage])
+
+  async function getInitStartupData() {
+    const { admins } = await startupRequest(`api/startups/${startupId}`)
+    setCurrentAdmins(admins.map(admin => ({
+      value: admin.id,
+      label: `${admin.first_name} ${admin.last_name}`
+    })))
+  }
+
+  async function fetchAdmins() {
+    const response = await request(`api/admins?page=${currentPage}`)
+    setTotalPage(response.total_pages)
+    setAdmins(admins => admins.concat(response.admins))
+  }
 
   const createStartup = async () => {
 
     const startup = isSuperAdmin
-      ? { name: values.startupName, admins_startups_attributes: [{ admin_id: currentAdmin.value }] }
-      : { name: values.startupName }
+      ? {
+          name: values.startupName,
+          admins_startups_attributes: currentAdmins.map(({ value }) => ({ admin_id: value }))
+      } : { name: values.startupName }
 
     if (startupId) {
       const updatedStartup = await request(`api/startups/${startupId}`, 'PUT', { startup })
@@ -58,8 +79,29 @@ const StartupPopup = props => {
   }
 
   const handleChangeSelect = (e) => {
-    setCurrentAdmin(e)
+    setCurrentAdmins(e)
   }
+
+  const ref = node => {
+    if (loading) return
+    if (observer.current) observer.current.disconnect()
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting && totalPage > currentPage) {
+        setCurrentPage(page => page + 1)
+      }
+    })
+
+    if (node) observer.current.observe(node)
+  }
+
+  const adminOptions = admins
+    .map((admin, i) => ({
+        value: admin.id,
+        label:
+          <div ref={i + 1 === admins.length ? ref : null}>
+            {admin.first_name} {admin.last_name}
+          </div>
+      }))
 
   return (
     <div className="popup">
@@ -84,11 +126,13 @@ const StartupPopup = props => {
             {isSuperAdmin && (
               <CustomSelect
                 label="Assigned User"
-                isDisable={loading}
-                options={admins}
+                isDisabled={adminOptions.length === 0 || startupLoading}
+                options={adminOptions}
                 placeholder='List of admins'
-                value={currentAdmin}
-                onChange={(e) => handleChangeSelect(e)}
+                value={currentAdmins}
+                onChange={handleChangeSelect}
+                maxMenuHeight={180}
+                isMulti={true}
               />
             )}
             <CustomButton

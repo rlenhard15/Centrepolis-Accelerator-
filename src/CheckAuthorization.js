@@ -8,7 +8,6 @@ export const useAuthContext = () => useContext(AuthContext)
 
 const CheckAuthorization = () => {
   const history = useHistory()
-  // const path = history.location.pathname
 
   const [authData, setAuthData] = useState(
     JSON.parse(localStorage.getItem('userData') || sessionStorage.getItem('userData'))
@@ -19,15 +18,10 @@ const CheckAuthorization = () => {
 
   const isSuperAdmin = userType === 'SuperAdmin'
   const isAdmin = userType === 'Admin'
-  const isStartupAdmin = userType === 'StartupAdmin'
+  const isTeamLead = userType === 'TeamLead'
   const isMember = userType === 'Member'
 
   const allRoutes = useRoutes(isAuthenticated, authData)
-
-  // const isConfirmationPage = path === '/users/password'
-  // useEffect(() => {
-  //   if (!isAuthenticated) isConfirmationPage ? history.push(history.location) : history.push('/sign_in')
-  // }, [])
 
   const handleUpdateUser = user => {
     const localAuthData = JSON.parse(localStorage.getItem('userData'))
@@ -65,7 +59,7 @@ const CheckAuthorization = () => {
     isAuthenticated,
     isAdmin,
     isSuperAdmin,
-    isStartupAdmin,
+    isTeamLead,
     isMember,
     handleUpdateUser,
     logIn,

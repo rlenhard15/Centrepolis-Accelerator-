@@ -18,11 +18,11 @@ import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg'
 import './InviteTeamPopup.scss'
 
 const InviteTeamPopup = props => {
-  const { isStartupAdmin, isAdmin, isSuperAdmin } = useAuthContext()
+  const { isTeamLead, isAdmin, isSuperAdmin } = useAuthContext()
 
   const inviteFields = {
     email: '',
-    userType: isStartupAdmin ? {
+    userType: isTeamLead ? {
       value: 'Member',
     } : isSuperAdmin ? {
       value: 'Admin'
@@ -64,7 +64,7 @@ const InviteTeamPopup = props => {
 
   const getModalTitle = () => {
     if (isSuperAdmin && !props.startupId) return 'Invite Admin'
-    return isStartupAdmin
+    return isTeamLead
       ? 'Invite Member'
       : 'Invite User'
   }
@@ -79,12 +79,12 @@ const InviteTeamPopup = props => {
 
     if (isAdmin) {
       return [
-        { label: 'Startup Admin', value: 'StartupAdmin' },
+        { label: 'Team Lead', value: 'TeamLead' },
         { label: 'Member', value: 'Member' },
       ]
     }
 
-    if (isStartupAdmin) {
+    if (isTeamLead) {
       return [
         { label: 'Member', value: 'Member' },
       ]
@@ -114,7 +114,7 @@ const InviteTeamPopup = props => {
               error={errors.email || inviteErrors.inviteEmailError}
               errorText={errors.email_message || '* this email has already been taken'}
             />
-            {(!isStartupAdmin && props.startupId) &&
+            {(!isTeamLead && props.startupId) &&
               <CustomSelect
                 label="User type"
                 placeholder="Select user type"

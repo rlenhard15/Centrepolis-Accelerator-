@@ -57,6 +57,9 @@ const CustomSelect = props => {
         value={props.value}
         onChange={props.onChange}
         isDisabled={props.isDisabled}
+        getValue={props.getValue}
+        isMulti={props.isMulti}
+        maxMenuHeight={props.maxMenuHeight}
       />
       {props.errorText && <p className="error-text">
         {props.errorText}

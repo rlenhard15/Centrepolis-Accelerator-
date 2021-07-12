@@ -33,7 +33,7 @@ const headers = [
   }
 ]
 
-export const AssessmentUsers = ({ members, startupAdmins }) => {
+export const AssessmentUsers = ({ members, teamLeads }) => {
   const { isSuperAdmin, isAdmin } = useAuthContext()
   const { request } = useHttp()
   const [rows, setRows] = useState([])
@@ -63,13 +63,13 @@ export const AssessmentUsers = ({ members, startupAdmins }) => {
   }
 
   const mapAdminsData = () => {
-    return startupAdmins.map(admin => ({
+    return teamLeads.map(admin => ({
       id: admin.id,
       createdAt: admin.created_at,
       row: [
         getUserName(admin),
         admin.email,
-        'Startup Admin',
+        'Team Lead',
         admin.last_visit ? formatDate(admin.last_visit) : '--',
         admin.tasks_number,
       ]
