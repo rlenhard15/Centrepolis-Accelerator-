@@ -25,6 +25,14 @@ const AssessmentsSettings = props => {
           />
         )
       }
+      {props.assessmentName === "CRL" && (
+        <>
+          <p className="assessment-additional-info">Courtesy of Michigan Small Business Development Center (complimentary licence for this software for Innovation Centers)</p>
+          {props.subCategories?.title === "IP Risk" && (
+            <p className="assessment-additional-info">(Patents, Trademarks, Copyright & Trade secrets)</p>
+          )}
+        </>
+      )}
     </div>
   )
 }
