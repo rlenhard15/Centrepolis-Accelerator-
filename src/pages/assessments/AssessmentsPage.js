@@ -16,7 +16,7 @@ import './AssessmentsPage.scss'
 const AssessmentsPage = props => {
   const settingsBlockRef = useRef(null)
   const { id, type, startupid: startupId } = props.match.params
-  const { authData: { user }, isMember, logOut } = useAuthContext()
+  const { authData: { user }, isMember, isSuperAdmin, isAdmin, logOut } = useAuthContext()
 
   const { request } = useHttp()
   const [state, setState] = useState({
@@ -51,6 +51,7 @@ const AssessmentsPage = props => {
       const getAssessmentsResponse = await request(`/api/assessments/?startup_id=${startupId}`)
       const assessments = getAssessmentsResponse.map(ass => ({ ...ass, risk_name: ass.name.split(' ')[0] }))
       const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(categories[0].id)}`)
+      const startup = (isAdmin || isSuperAdmin) && (state.startup ? state.startup : await request(`api/startups/${startupId}`))
 
       setState({
         ...state,
@@ -58,6 +59,7 @@ const AssessmentsPage = props => {
         categories,
         subCategories,
         activeCategory: categories[0].id,
+        startup,
         loading: false
       })
     } catch (err) {
@@ -83,6 +85,12 @@ const AssessmentsPage = props => {
                   <div className="assessment-breadcrumbs">
                     <Link to="/" className="active">Dashboard</Link>
                     <img src={ArrowRightSmallImg} alt="" />
+                    {(isAdmin || isSuperAdmin) && (
+                      <>
+                        <Link to={`/assessments/${startupId}`} className="active">{state.startup?.name}</Link>
+                        <img src={ArrowRightSmallImg} alt="" />
+                      </>
+                    )}
                     <span>{type} Risk</span>
                   </div>
                   <h3 className="assessment-title">{type} Risk</h3>
