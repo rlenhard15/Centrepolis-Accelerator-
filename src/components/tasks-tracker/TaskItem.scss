@@ -96,8 +96,9 @@
 
       &-open-btn {
         padding: 10px 0px 10px 10px;
-        color: #4971FF;
-        font-size: 0.8889rem;
+        color: #495368;
+        font-size: 16px;
+        font-weight: 500;
 
         svg {
           color: #171C48;
@@ -111,12 +112,16 @@
         position: absolute;
         width: 100%;
         background-color: #fff;
+        border: 1px solid #D3D3D3;
+        box-sizing: border-box;
+        border-radius: 4px;
         z-index: 5;
 
         span {
           width: 100%;
           font-size: 0.8889rem;
           text-align: center;
+
 
           &.disable {
             padding: 12px;
@@ -126,14 +131,18 @@
 
         button {
           width: 100%;
-          color: #4971FF;
+          color: #495368;
         }
+      }
+
+      &-option:not(:last-child) {
+        border-bottom: 0.5px solid #D3D3D3;
       }
 
       .completed {
         display: block;
         margin: 0 5px 15px 0;
-        color: #4971FF;
+        color: #495368;
         font-size: 0.8889rem;
       }
     }
@@ -157,6 +166,12 @@
       justify-content: center;
       margin-top: auto;
       margin-right: -5px;
+
+      &-edit {
+        svg path {
+          stroke: #0A0E2E;
+        }
+      }
 
       button {
         width: 45px;

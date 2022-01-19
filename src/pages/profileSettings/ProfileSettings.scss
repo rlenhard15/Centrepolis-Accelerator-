@@ -1,0 +1,62 @@
+.profile-settings-page {
+  display: flex;
+  min-height: 100vh;
+}
+
+.profile-settings {
+  flex: 1;
+  position: relative;
+  background: #f7f8fa;
+  height: 100vh;
+  overflow: auto;
+
+  &-title {
+    margin: 0 0 16px;
+    color: #0A0E2E;
+    font-size: 2rem;
+  }
+
+  &-subheader {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    color: #495368;
+    margin-bottom: 40px;
+  }
+
+  &-cnt {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-content {
+    margin-top: 40px;
+    width: 1000px;
+  }
+
+  .person-settings,
+  .password-settings,
+  .notifications-settings {
+    margin-bottom: 26px;
+  }
+
+}
+
+@media screen and (max-width: 1440px) {
+  .profile-settings {
+    &-content {
+      width: 800px;
+    }
+  }
+}
+
+
+@media screen and (max-width: 1200px) {
+  .profile-settings {
+    &-content {
+      width: 650px;
+    }
+  }
+}

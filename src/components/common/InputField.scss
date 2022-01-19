@@ -1,18 +1,19 @@
 .text-field {
   position: relative;
-  margin-bottom: 25px;
+  margin-bottom: 26px;
   color: #9E9E9E;
 
   &-label {
     display: inline-block;
     margin-bottom: 10px;
-    font-size: 0.7778rem;
+    font-size: 14px;
+    color: #495368;
   }
 
   &-input {
     width: 100%;
     padding: 11px 16px 13px;
-    border: 1px solid #EFEFEF;
+    border: 1px solid #D3D3D3;
     border-radius: 4px;
     color: rgba(10, 14, 46, .6);
     font-size: 0.8889rem;
@@ -31,7 +32,7 @@
 
     &:focus {
       outline: none;
-      border: 1px solid #4971FF;
+      border: 1px solid #70C497;
     }
 
     &.error {
@@ -55,12 +56,6 @@
 
 @media screen and (max-width: 1440px) {
   .text-field {
-    margin-bottom: 20px;
-
-    &-label {
-      margin-bottom: 5px;
-    }
-
     .error-text {
       bottom: -15px;
       font-size: 10px;

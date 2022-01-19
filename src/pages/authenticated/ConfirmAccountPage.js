@@ -1,43 +1,64 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react'
+import toastr from 'toastr'
 
-import { AuthLogo } from '../../components/logos/AuthLogo';
-import { InputField } from '../../components/common/InputField';
-import { CustomButton } from '../../components/common/Button';
-import Loader from '../../components/loader/Loader';
+import DashboardMenu from '../dashboard/DashboardMenu'
+import { InputField } from '../../components/common/InputField'
+import { CustomButton } from '../../components/common/Button'
+import Loader from '../../components/loader/Loader'
 
-import useHttp from '../../hooks/useHttp.hook';
-import useForm from '../../hooks/useForm.hook';
-import validate from '../../validationRules/confirmAccount';
+import useHttp from '../../hooks/useHttp.hook'
+import useForm from '../../hooks/useForm.hook'
+import validate from '../../validationRules/confirmAccount'
+import { useAuthContext } from '../../CheckAuthorization'
 
-import './AuthorizationPage.scss';
+import './AuthorizationPage.scss'
 
 const ConfirmAccountPage = props => {
   const confirmFields = {
     password: '',
-    password_confirmation: '',
     first_name: '',
     last_name: '',
-  };
-  const { loading, request } = useHttp();
-  const { values, errors, handleChange, handleSubmit } = useForm(confirmAccount, validate, confirmFields);
+  }
+
+  const { loading, request } = useHttp()
+  const { values, errors, handleChange, handleSubmit } = useForm(confirmAccount, validate, confirmFields)
+  const { logIn } = useAuthContext()
+
+  useEffect(() => {
+    const { token, isForgotPassword } = parseParams()
+    if (!token) props.history.push('/sign_in')
+    if (isForgotPassword) props.history.push(`/users/password-reset?reset_password_token=${token}`)
+  }, [])
 
   function confirmAccount() {
-    confirmAccountRequest();
+    confirmAccountRequest()
   }
 
   const confirmAccountRequest = async () => {
-    const resetToken = props.location.search.split('=')[1];
+    const { token } = parseParams()
+
     try {
-      const userData = await request(`/users/password`, 'PUT', { reset_password_token: resetToken, ...values });
-      localStorage.setItem('userData', JSON.stringify(userData));
-      props.history.push('/');
-    } catch (err) { }
+      const userData = await request(`/users/password`, 'PUT', { reset_password_token: token, ...values })
+      logIn(userData, values.keepSignedIn)
+    } catch (err) {
+      toastr.error('Something went wrong.', 'Error')
+    }
+  }
+
+  const parseParams = () => {
+    const params = new URLSearchParams(props.location.search)
+    const token = params.get('reset_password_token')
+    const isForgotPassword = params.get('forgot_password') === `'true'`
+
+    return {
+      token,
+      isForgotPassword,
+    }
   }
 
   return (
     <div className="auth-page">
-      <AuthLogo />
+      <DashboardMenu />
       <div className="auth-page-form">
         <form noValidate autoComplete="off" onSubmit={handleSubmit}>
           <h3 className="auth-page-form-title">Confirm Account</h3>
@@ -72,28 +93,24 @@ const ConfirmAccountPage = props => {
             error={errors.password}
             errorText={errors.password_message}
           />
-          <InputField
-            label="Repeat Password"
-            placeholder="Repeat your password"
-            type="password"
-            name="password_confirmation"
-            value={values.password_confirmation}
-            onChange={handleChange}
-            error={errors.password_confirmation}
-            errorText={errors.password_confirmation_message}
-          />
+          <div className="auth-page-form-keep-me-signed-in">
+            <InputField
+              onChange={handleChange}
+              value={values.keepSignedIn}
+              name="keepSignedIn"
+              type="checkbox"
+            />
+            <label className="auth-page-form-keep-me-signed-in-label">
+              Keep me signed in
+            </label>
+          </div>
           <CustomButton
             type="submit"
-            label="Sign Up"
+            label="Sign In"
+            className="auth-page-form-submit-btn"
             disabled={loading}
           />
         </form>
-        {/* <p className="auth-page-alternative">
-          <span>
-            Don’t remember your password?
-            <Link to="/reset_password" disabled>Reset Password</Link>
-          </span>
-        </p> */}
         {
           loading ? <Loader /> : null
         }

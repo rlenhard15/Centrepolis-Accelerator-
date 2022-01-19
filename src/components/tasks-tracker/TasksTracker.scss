@@ -14,26 +14,17 @@
 
     .button {
       width: 280px;
-      background-color: transparent;
-      border: 1.5px solid #4971FF;
-      color: #4971FF;
-
-      &:hover {
-        background-color: #4971FF;
-        color: #fff;
-      }
     }
   }
 
   &-content {
     display: flex;
     flex-direction: column;
-    background: #FFFFFF;
     border-radius: 2px;
-  }
 
-  .pagination-wrapper {
-    padding-left: 35px;
+    .task {
+      background: #fff;
+    }
   }
 }
 

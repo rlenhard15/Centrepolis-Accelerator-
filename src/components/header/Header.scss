@@ -34,6 +34,10 @@
     &-icon {
       position: relative;
 
+      svg path {
+        stroke: #0A0E2E;
+      }
+
       &.have-message {
         &:after {
           content: "";
@@ -145,15 +149,30 @@
         padding: 0 15px 0 20px;
         border-radius: 2px;
         cursor: pointer;
-
-        img {
-          margin-left: auto;
-        }
       }
     }
 
-    img {
+    &-user-icon {
       margin-right: 10px;
+      circle {
+        fill: #0A0E2E;
+      }
+    }
+
+    &-more-icon,
+    &-list-icon {
+      path {
+        stroke: #0A0E2E;
+      }
+    }
+
+    &-list-icon {
+      margin-right: 10px;
+    }
+
+    &-more-icon,
+    &-list-icon {
+      margin-left: auto;
     }
   }
 }

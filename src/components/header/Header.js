@@ -1,52 +1,52 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo } from 'react'
 
-import useHttp from '../../hooks/useHttp.hook';
+import useHttp from '../../hooks/useHttp.hook'
 
-import HeaderNotification from './HeaderNotification';
-import HeaderMenu from './HeaderMenu';
-import { PageLogo } from '../logos/PageLogos';
+import HeaderNotification from './HeaderNotification'
+import HeaderMenu from './HeaderMenu'
+import { PageLogo } from '../logos/PageLogos'
 
 import './Header.scss'
 
 const Header = memo(props => {
-  const { request } = useHttp();
-  const user = props.userData;
-  const [state, setState] = useState({
-    notifications: []
-  })
+  const { request } = useHttp()
+
+  const [page, setPage] = useState(1)
+  const [state, setState] = useState({ notifications: [] })
 
   const getNotificationRequest = async () => {
-    const notifications = await request('/api/notifications');
-    setState({ ...state, notifications: notifications.reverse() });
+    const { notifications, total_pages: totalPages } = await request(`/api/notifications?page=${page}`)
+
+    setState({
+      notifications: [...state.notifications, ...notifications],
+      totalPages,
+    })
   }
 
-  const updateNotificationsList = updatedList => setState({ ...state, notifications: updatedList });
+  const updateNotificationsList = updatedList => setState({ ...state, notifications: updatedList })
+
+  const handleChangePage = () => {
+    setPage(page + 1)
+  }
 
   useEffect(() => {
-    if (user.user_type === 'Customer') {
-      getNotificationRequest();
-    }
-  }, [])
+    getNotificationRequest()
+  }, [page])
 
   return (
     <header className={`header ${props.className}`}>
       <div className="header-block">
         <div className="header-block-logo">
-          {
-            props.className === 'page' ? <PageLogo type='page' /> : null
-          }
+          {props.className === 'page' ? <PageLogo type='page' /> : null}
         </div>
         <div className="header-navigation">
-          {
-            user.user_type === 'Customer' ?
-              <HeaderNotification
-                notifications={state.notifications}
-                updateNotificationsList={updateNotificationsList}
-              /> : null
-          }
-          <HeaderMenu
-            {...props}
+          <HeaderNotification
+            notifications={state.notifications}
+            updateNotificationsList={updateNotificationsList}
+            handleChangePage={handleChangePage}
+            hasMore={state.totalPages > page}
           />
+          <HeaderMenu {...props} />
         </div>
       </div>
     </header>

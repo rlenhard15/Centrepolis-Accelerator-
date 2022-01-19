@@ -1,54 +1,60 @@
-import React from 'react';
+import React from 'react'
 
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@material-ui/core/IconButton'
+import { useAuthContext } from '../../CheckAuthorization'
 
-import './AssessmentsStage.scss';
+import './AssessmentsStage.scss'
 
 const AssessmentsStage = props => {
+  const { isMember } = useAuthContext()
+
   const changeProgressByClick = () => {
-    props.handleChangeProgress(props.index);
-    props.updateProgressRequest(props.index);
+    props.handleChangeProgress(props.index)
+    props.updateProgressRequest(props.index)
   }
 
   const stageInfo = {
     category: props.categoryName,
     sub_category: props.subCategoryName,
     stage_title: props.title
-  };
+  }
 
-  const colorScheme = ['#FF5D54', '#FFD865', '#68B643'];
-  const stageTypeCount = 3;
-  const typesOfStageCount = Math.round(props.stagesCount / stageTypeCount);
+  const colorScheme = ['#FF5D54', '#FFD865', '#68B643']
+  const stageTypeCount = 3
+  const typesOfStageCount = Math.round(props.stagesCount / stageTypeCount)
 
   const setCircleBackground = (currentTypeNumber) => {
-    let firstColorSetting, secondColorSetting, thirdColorSetting;
-    let startPositionWithType = typesOfStageCount - props.index;
-    let middlePositionWithType = props.index - typesOfStageCount;
+    let firstColorSetting, secondColorSetting, thirdColorSetting
+    let startPositionWithType = typesOfStageCount - props.index
+    let middlePositionWithType = props.index - typesOfStageCount
 
     if (currentTypeNumber === 1) {
-      if (props.index === 0) return `${colorScheme[0]}`;
-      firstColorSetting     = `${colorScheme[0]} -50px,`;
-      secondColorSetting    = `${colorScheme[1]} ${100 * startPositionWithType}px`;
+      if (props.index === 0) return `${colorScheme[0]}`
+      firstColorSetting = `${colorScheme[0]} -50px,`
+      secondColorSetting = `${colorScheme[1]} ${100 * startPositionWithType}px`
     } else if (currentTypeNumber === 2) {
       if (props.stagesCount <= 6) {
-        firstColorSetting     = `${colorScheme[0]} -150px,`;
-        secondColorSetting    = `${colorScheme[1]} ${30 / props.index}px`;
-        thirdColorSetting     = `, ${colorScheme[2]} ${150 / props.index}px`;
+        firstColorSetting = `${colorScheme[0]} -150px,`
+        secondColorSetting = `${colorScheme[1]} ${30 / props.index}px`
+        thirdColorSetting = `, ${colorScheme[2]} ${150 / props.index}px`
       } else {
-        firstColorSetting     = `${colorScheme[0]} -150px,`;
-        secondColorSetting    = `${colorScheme[1]} ${100 / props.index}px`;
-        thirdColorSetting     = middlePositionWithType > 1 ? `, ${colorScheme[2]} ${100 / middlePositionWithType}px` : '';
+        firstColorSetting = `${colorScheme[0]} -150px,`
+        secondColorSetting = `${colorScheme[1]} ${100 / props.index}px`
+        thirdColorSetting = middlePositionWithType > 1 ? `, ${colorScheme[2]} ${100 / middlePositionWithType}px` : ''
       }
     } else {
-      if (props.index === props.stagesCount - 1) return `${colorScheme[2]}`;
-      firstColorSetting     = `${colorScheme[1]} -50px`;
-      secondColorSetting    = `, ${colorScheme[2]} ${100 / middlePositionWithType}px`;
+      if (props.index === props.stagesCount - 1) return `${colorScheme[2]}`
+      firstColorSetting = `${colorScheme[1]} -50px`
+      secondColorSetting = `, ${colorScheme[2]} ${100 / middlePositionWithType}px`
     }
     return `linear-gradient(90deg, ${firstColorSetting || ''} ${secondColorSetting || ''} ${thirdColorSetting || ''})`
   }
 
   const setCircleStyle = () => {
-    const style = {};
+    const style = {}
+
+    if (props.isCurrentStage) style.display = 'none'
+
     if (props.index < typesOfStageCount) {
       props.isActive ? style.background = setCircleBackground(1) : style.borderColor = colorScheme[0]
     } else if (props.index < typesOfStageCount * 2) {
@@ -72,11 +78,11 @@ const AssessmentsStage = props => {
               onClick={changeProgressByClick}
               style={setCircleStyle()}
             >
-            </span> 
+            </span>
             <span className="stages-item-line" style={{ 'width': props.trackWidth.clientWidth / props.stagesCount + 10 }}></span>
             <span className="stages-item-text">{props.title}</span>
             {
-              props.userType === 'Admin' ?
+              !isMember ?
                 <IconButton
                   className="stages-item-btn"
                   disabled={props.isActive}

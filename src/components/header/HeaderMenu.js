@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 
-import UserIcon from '../../images/icons/user-default.svg';
-import LogoutIcon from '../../images/icons/log-out.svg';
-import MoreIcon from '../../images/icons/more-vertical.svg';
+import { useAuthContext } from '../../CheckAuthorization'
+
+import { ReactComponent as LogoutIcon } from '../../images/icons/log-out.svg'
+import { ReactComponent as MoreIcon } from '../../images/icons/more-vertical.svg'
+import { ReactComponent as UserIcon } from '../../images/icons/user-default.svg'
+
 
 const HeaderMenu = props => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const logOut = () => {
-    localStorage.removeItem('userData');
-    props.history.push('/sign_in');
-  }
+  const [isOpen, setIsOpen] = useState(false)
+  const { logOut } = useAuthContext()
 
   return (
     <ClickAwayListener onClickAway={() => setIsOpen(false)}>
@@ -21,16 +20,16 @@ const HeaderMenu = props => {
           className="header-menu-open"
           onClick={() => setIsOpen(!isOpen)}
         >
-          <img src={UserIcon} alt="" />
+          <UserIcon className="header-menu-user-icon" />
           <span>{`Hi, ${props.userData.user.first_name}`}</span>
-          <img src={MoreIcon} alt="" className="more-btn" />
+          <MoreIcon className="header-menu-more-icon" />
         </button>
         {
           isOpen &&
           <ul className="header-menu-list">
             <li onClick={logOut}>
               <span>Log Out</span>
-              <img src={LogoutIcon} alt="" />
+              <LogoutIcon className="header-menu-list-icon" />
             </li>
           </ul>
         }

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import CustomSelect from '../common/Select';
+import React, { useState, useEffect } from 'react'
+import CustomSelect from '../common/Select'
 
 const TaskSelectGroup = props => {
 
@@ -10,43 +10,47 @@ const TaskSelectGroup = props => {
   })
 
   const setCategory = (selectedCategory, selectedSubCategory = null) => {
-    const currentCategory = props.currentAssessmentInfo.description_with_child_models.find(category => category.title === selectedCategory);
-    const riskSubcategories = currentCategory.sub_categories.map(subCategory => ({ value: subCategory.id, label: subCategory.title }));
+    const currentCategory = props.currentAssessmentInfo.description_with_child_models.find(category => category.title === selectedCategory)
+    const riskSubcategories = currentCategory.sub_categories.map(subCategory => ({ value: subCategory.id, label: subCategory.title }))
 
     // Set subcategory and stage for edit task or create task from update assessment page
     if (selectedSubCategory) {
-      const riskStages = getSubCategories(currentCategory, selectedSubCategory);
-      const subCategoryForTask = riskSubcategories.find(category => category.label === selectedSubCategory);
-      const stageForTask = riskStages.find(stage => stage.label === props.infoForTask.stage_title);
-      setState(state => ({ ...state, currentCategory, riskSubcategories, riskStages }));
-      props.setSubCategoryAndStage(subCategoryForTask, stageForTask);
+      const riskStages = getSubCategories(currentCategory, selectedSubCategory)
+      const subCategoryForTask = riskSubcategories.find(category => category.label === selectedSubCategory)
+      const stageForTask = riskStages.find(stage => stage.label === props.infoForTask.stage_title)
+      setState(state => ({ ...state, currentCategory, riskSubcategories, riskStages }))
+      props.setSubCategoryAndStage(subCategoryForTask, stageForTask)
       return
     }
-    setState({ ...state, currentCategory, riskSubcategories, riskStages: [] });
+    setState({ ...state, currentCategory, riskSubcategories, riskStages: [] })
   }
 
   const getSubCategories = (currentCategory, selectedSubCategory) => {
-    const currentSubCategory = currentCategory.sub_categories.find(sub_category => sub_category.title === selectedSubCategory);
-    return currentSubCategory.stages.map(stage => ({ value: stage.id, label: stage.title }));
+    const currentSubCategory = currentCategory.sub_categories.find(sub_category => sub_category.title === selectedSubCategory)
+    return currentSubCategory.stages.map(stage => ({ value: stage.id, label: stage.title }))
   }
 
   const setSubCategory = selectedSubCategory => {
-    const riskStages = getSubCategories(state.currentCategory, selectedSubCategory);
-    setState({ ...state, riskStages });
+    const riskStages = getSubCategories(state.currentCategory, selectedSubCategory)
+    setState({ ...state, riskStages })
+  }
+
+  const handleUserChange = e => {
+    props.handleChangeSelect(e, 'selectedUsers')
   }
 
   const handleCategoryChange = e => {
-    setCategory(e.label);
-    props.handleChangeSelect(e, 'selectedCategory');
+    setCategory(e.label)
+    props.handleChangeSelect(e, 'selectedCategory')
   }
 
   const handleSubCategoryChange = e => {
-    setSubCategory(e.label);
-    props.handleChangeSelect(e, 'selectedSubcategory');
+    setSubCategory(e.label)
+    props.handleChangeSelect(e, 'selectedSubcategory')
   }
 
   const handleStageChange = e => {
-    props.handleChangeSelect(e, 'selectedStage');
+    props.handleChangeSelect(e, 'selectedStage')
   }
 
   useEffect(() => {
@@ -58,12 +62,24 @@ const TaskSelectGroup = props => {
     }
 
     if (props.infoForTask && props.currentAssessmentInfo && !props.isChangeAssessment) {
-      setCategory(props.infoForTask.category, props.infoForTask.sub_category);
+      setCategory(props.infoForTask.category, props.infoForTask.sub_category)
     }
   }, [props.riskCategories, props.currentAssessmentInfo])
 
   return (
     <>
+      <CustomSelect
+        isDisable={true}
+        label="Assign to"
+        placeholder='Assign to'
+        options={props.userOptions}
+        onChange={handleUserChange}
+        value={props.selectedUsers}
+        isDisabled={!props.userOptions.length}
+        error={props.error && !props.selectedUsers}
+        getValue={console.log}
+        isMulti={true}
+      />
       <CustomSelect
         isDisable={true}
         label="Risk Category"

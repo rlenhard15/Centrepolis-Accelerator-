@@ -1,0 +1,109 @@
+import React, { useEffect, useState } from 'react'
+
+import { ReactComponent as DeleteIcon } from '../../images/icons/delete-icon.svg'
+import Table from '../common/Table'
+import { useAuthContext } from '../../CheckAuthorization'
+import useHttp from '../../hooks/useHttp.hook'
+
+import './AssessmentUsers.scss'
+
+const headers = [
+  {
+    title: 'User Name',
+    width: '150px',
+  },
+  {
+    title: 'Email',
+    width: '42%',
+  },
+  {
+    title: 'Member Status',
+    width: '20%',
+  },
+  {
+    title: 'Last Visit',
+    width: '10%',
+  },
+  {
+    title: 'Tasks',
+    width: '7%',
+  },
+  {
+    width: '3%'
+  }
+]
+
+export const AssessmentUsers = ({ members, teamLeads }) => {
+  const { isSuperAdmin, isAdmin } = useAuthContext()
+  const { request } = useHttp()
+  const [rows, setRows] = useState([])
+
+  useEffect(() => {
+    setRows(mapDataToRow())
+  }, [])
+
+  const mapDataToRow = () => {
+    return mapMembersData()
+      .concat(mapAdminsData())
+      .sort((userA, userB) => new Date(userA.createdAt) - new Date(userB.createdAt))
+  }
+
+  const mapMembersData = () => {
+    return members.map(member => ({
+      id: member.id,
+      createdAt: member.created_at,
+      row: [
+        getUserName(member),
+        member.email,
+        'Member',
+        member.last_visit ? formatDate(member.last_visit) : '--',
+        member.tasks_number,
+      ]
+    }))
+  }
+
+  const mapAdminsData = () => {
+    return teamLeads.map(admin => ({
+      id: admin.id,
+      createdAt: admin.created_at,
+      row: [
+        getUserName(admin),
+        admin.email,
+        'Team Lead',
+        admin.last_visit ? formatDate(admin.last_visit) : '--',
+        admin.tasks_number,
+      ]
+    }))
+  }
+
+  const getUserName = (user) => {
+    if (!user.first_name) return '--'
+    return `${user.first_name} ${user.last_name}`
+  }
+
+  const handleDeleteUser = (id) => async () => {
+    await request(`/api/users/${id}`, 'DELETE')
+    setRows(rows.filter(r => r.id !== id))
+  }
+
+  const formatDate = timestamp => {
+    const date = new Date(timestamp)
+    const day = date.getUTCDay()
+    const month = date.getUTCMonth() + 1
+    const year = date.getUTCFullYear().toString().slice(2)
+
+    return `${month < 10 ? `0${month}` : month}/${day < 10 ? `0${day}` : day}/${year}`
+  }
+
+  const rowsData = isSuperAdmin || isAdmin
+    ? rows.map(r => ({ ...r, row: [...r.row, <DeleteIcon className="delete-icon" onClick={handleDeleteUser(r.id)} />] }))
+    : rows
+
+  return (
+    <div className="assessment-users">
+      <Table headers={headers} rows={rowsData} itemsName="member" />
+    </div>
+  )
+}
+
+export default AssessmentUsers

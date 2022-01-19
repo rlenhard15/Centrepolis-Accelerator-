@@ -1,44 +1,44 @@
-import React from 'react';
+import React from 'react'
 
-import IconButton from '@material-ui/core/IconButton';
-import FirstPageRoundedIcon from '@material-ui/icons/FirstPageRounded';
-import ChevronLeftRoundedIcon from '@material-ui/icons/ChevronLeftRounded';
-import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded';
-import LastPageRoundedIcon from '@material-ui/icons/LastPageRounded';
+import IconButton from '@material-ui/core/IconButton'
+import FirstPageRoundedIcon from '@material-ui/icons/FirstPageRounded'
+import ChevronLeftRoundedIcon from '@material-ui/icons/ChevronLeftRounded'
+import ChevronRightRoundedIcon from '@material-ui/icons/ChevronRightRounded'
+import LastPageRoundedIcon from '@material-ui/icons/LastPageRounded'
 
-import './Pagination.scss';
+import './Pagination.scss'
 
 const Pagination = props => {
-  const { rows, page, rowsPerPage, handleChangePage } = props;
-  const count = rows.length;
+  const { rowsCount, page, rowsPerPage, handleChangePage, outlined } = props
+  const totalPages = Math.ceil(rowsCount / rowsPerPage) || props.totalPages
 
   const handleFirstPageButtonClick = event => {
-    handleChangePage(event, 0);
-  };
+    handleChangePage(event, 0)
+  }
 
   const handleBackButtonClick = event => {
-    handleChangePage(event, page - 1);
-  };
+    handleChangePage(event, page - 1)
+  }
 
   const handleNextButtonClick = event => {
-    handleChangePage(event, page + 1);
-  };
+    handleChangePage(event, page + 1)
+  }
 
   const handleLastPageButtonClick = event => {
-    handleChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
+    handleChangePage(event, Math.max(0, totalPages - 1))
+  }
 
   return (
-    <div className="pagination-wrapper">
+    <div className={`pagination-wrapper ${outlined ? 'outlined' : ''}`}>
       <div className="pagination-items-counter">
-        {rows.length} {rows.length > 1 ? props.itemsName + 's' : props.itemsName}
+        {rowsCount} {rowsCount > 1 ? props.itemsName + 's' : props.itemsName}
       </div>
       <div className="pagination-wrapper-common">
         {
-          rows.length > rowsPerPage ?
+          totalPages > 1 ?
             <>
               <div className="pagination-pages-counter">
-                {`${rows.length === 0 ? 0 : page + 1} of ${Math.ceil(count / rowsPerPage)}`}
+                {`${rowsCount === 0 ? 0 : page + 1} of ${totalPages}`}
               </div>
               <div className="pagination-arrows">
                 <IconButton
@@ -56,14 +56,14 @@ const Pagination = props => {
                 </IconButton>
                 <IconButton
                   onClick={handleNextButtonClick}
-                  disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                  disabled={page >= totalPages - 1}
                   aria-label="next page"
                 >
                   <ChevronRightRoundedIcon />
                 </IconButton>
                 <IconButton
                   onClick={handleLastPageButtonClick}
-                  disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                  disabled={page >= totalPages - 1}
                   aria-label="last page"
                 >
                   <LastPageRoundedIcon />
@@ -71,10 +71,9 @@ const Pagination = props => {
               </div>
             </> : null
         }
-
       </div>
     </div>
-  );
+  )
 }
 
 export default Pagination

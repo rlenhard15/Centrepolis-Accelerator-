@@ -20,11 +20,8 @@
     border-color: #FF5D54;
   }
 
-  &.open {
-    border-color: #4971FF;
-    svg path {
-      stroke: #FFA842;
-    }
+  svg path {
+    stroke: #70C497;
   }
 }
 
@@ -90,7 +87,7 @@
     top: 13px;
     height: 12px;
     border: none;
-    background: url('../../images/icons/arrow-left-blue.svg');
+    background: url('../../images/icons/arrow-left.svg');
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -109,11 +106,11 @@
 
 .react-datepicker__day.react-datepicker__day--selected,
 .react-datepicker__day.react-datepicker__day--keyboard-selected {
-  background-color: #FFA842;
+  background-color: #70C497;
   border-radius: 50%;
 
   &:hover {
-    background-color: #FFA842;
+    background-color: #70C497;
     border-radius: 50%;
   }
 }

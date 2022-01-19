@@ -18,6 +18,13 @@
   &-title {
     margin: 15px 0 0;
     font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .button {
+      width: 251px;
+    }
   }
 
   .back-btn {
@@ -30,7 +37,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 30px;
-    color: #0A0E2E;
+    color: #495368;
     font-size: 0.7778rem;
     font-weight: 400;
 
@@ -39,7 +46,7 @@
     }
 
     .active {
-      color: #4971FF;
+      color: #0A0E2E;
       cursor: pointer;
     }
   }
@@ -61,6 +68,10 @@
       pointer-events: none;
     }
   }
+
+  &.customer &-risks {
+    margin-bottom: 60px;
+  }
 }
 
 .assessment-risks {
@@ -78,12 +89,17 @@
   background-color: #fff;
   border-radius: 2px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
 
   &-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: #0A0E2E;
+    width: 100%;
   }
 
   &-name {
@@ -91,22 +107,49 @@
     font-weight: 700;
   }
 
-  &-type {
-    padding: 10px 30px;
-    background-color: #F5FAFF;
-    border-radius: 60px;
-    color: #355C97;
-    font-size: 0.8889rem;
-
-    &.in-progress {
-      background-color: #154EA5;
-      color: #FFF0BC;
-    }
-  }
-
   &-bottom {
     display: flex;
     justify-content: space-between;
+    width: 100%;
+  }
+
+  & &-button {
+    margin-top: 40px;
+    min-width: 161px;
+  }
+
+  &-learn-more {
+    color: #70C497;
+    text-decoration: underline;
+    margin-top: 15px;
+    cursor: pointer;
+  }
+
+  &-type {
+    display: flex;
+    align-items: center;
+
+    &::before {
+      content: '';
+      display: block;
+      background-color: #CED0D9;
+      width: 12px;
+      height: 12px;
+      border-radius: 60px;
+      margin-right: 10px;
+    }
+
+    &.low::before {
+      background-color: #3D821D;
+    }
+
+    &.medium::before {
+      background-color: #FFD865;
+    }
+
+    &.high::before {
+      background-color: #D32F2F;
+    }
   }
 
   &-risk {
@@ -121,28 +164,25 @@
       content: "";
       position: relative;
       display: inline-block;
-      width: 22px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       margin-right: 10px;
       border-radius: 12px;
       background-color: #F5FAFF;
     }
   }
 
-  .learn-more-btn {
-    width: 200px;
-    height: 40px;
-    margin: 10px auto 0;
-    background-color: transparent;
-    color: #4971FF;
-    font-size: 1rem;
-    font-weight: 400;
-    text-decoration: underline;
+  &.have-assessment &-risk {
+    &.low::before {
+      background-color: #68B643;
+    }
 
-    &:hover {
-      background-color: transparent;
-      text-decoration: underline;
-      color: #143cca;
+    &.medium::before {
+      background-color: #FFD865;
+    }
+
+    &.high::before {
+      background-color: #FF5D54;
     }
   }
 }
@@ -187,47 +227,6 @@
   }
 }
 
-.assessment-item.have-assessment {
-  .assessment-item-type {
-    background-color: #DCDCDC;
-
-    &.low {
-      background-color: #E2F5D9;
-      color: #3D821D;
-    }
-
-    &.medium {
-      background-color: #fff5d6;
-      color: #FFD865;
-    }
-
-    &.high {
-      background-color: #FEECEB;
-      color: #D32F2F;
-    }
-  }
-
-  .assessment-item-risk {
-    &.low:before {
-      background-color: #68B643;
-    }
-
-    &.medium:before {
-      background-color: #FFE143;
-    }
-
-    &.high:before {
-      background-color: #FF4B32;
-    }
-  }
-}
-
-.assessment.admin {
-  .assessment-link {
-    width: 160px;
-  }
-}
-
 .info-popup {
   max-height: 90vh;
   align-items: flex-start;
@@ -246,19 +245,17 @@
       line-height: 1.3333rem;
     }
   }
-
-  .assessment-link {
-    margin: 25px 0 0;
-  }
 }
 
 @media screen and (max-width: 1440px) {
   .assessment-item {
-    width: 300px;
+    width: 255px;
     padding: 15px;
+    margin-bottom: 10px;
 
+    &-name,
     &-type {
-      padding: 10px 20px;
+      font-size: 14px;
     }
   }
 
@@ -271,10 +268,6 @@
 
     .popup-content-title {
       margin-bottom: 20px;
-    }
-
-    .assessment-link {
-      margin: 15px 0 0;
     }
   }
 }

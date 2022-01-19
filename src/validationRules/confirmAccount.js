@@ -15,12 +15,5 @@ export default function validate(values) {
     errors.password = true;
     errors.password_message = 'Password must be 8 or more characters';
   }
-  if (!values.password_confirmation) {
-    errors.password_confirmation = true;
-    errors.password_confirmation_message = 'Password confirmation is required';
-  } else if (values.password !== values.password_confirmation) {
-    errors.password_confirmation = true;
-    errors.password_confirmation_message = 'Password do not match ';
-  }
   return errors;
 };

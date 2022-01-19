@@ -1,0 +1,32 @@
+.notifications-settings {
+  background: #FFF;
+  border-radius: 2px;
+  padding: 40px;
+
+  &-header {
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 24px;
+    color: #0A0E2E;
+    margin-bottom: 40px;
+    margin-top: 0;
+  }
+
+  .text-field {
+    width: 370px;
+  }
+
+  & &-submit {
+    width: 251px;
+    height: 55px;
+    background: #70C497;
+    border-radius: 60px;
+    margin-top: 14px;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .notifications-settings {
+    padding: 25px;
+  }
+}

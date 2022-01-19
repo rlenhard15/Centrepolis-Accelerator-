@@ -43,7 +43,7 @@
 
       &:focus {
         outline: none;
-        border-color: #4971FF;
+        border-color: #70C497;
       }
     }
   }
@@ -73,7 +73,7 @@
     }
 
     .MuiSvgIcon-root {
-      fill: #4971FF;
+      fill: #70C497;
     }
 
     .Mui-checked {
@@ -88,11 +88,11 @@
   }
 
   .button {
-    border: 1.5px solid #4971FF;
+    border: 1.5px solid #70C497;
 
     &:hover {
       background-color: transparent;
-      color: #4971FF;
+      color: #70C497;
     }
   }
 }

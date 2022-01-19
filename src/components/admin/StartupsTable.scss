@@ -1,0 +1,45 @@
+.startups-table {
+  .startups-link {
+    color: #70C497;
+  }
+
+  .st-admins {
+    padding-right: 10px;
+  }
+
+  .no-assessment,
+  .have-assessment {
+    font-size: 16px;
+    line-height: 24px;
+    color: #495368;
+    display: flex;
+    align-items: center;
+
+    &::before {
+      content: '';
+      display: block;
+      border-radius: 60px;
+      width: 12px;
+      height: 12px;
+      margin-right: 10px;
+    }
+  }
+
+  .no-assessment::before {
+    background-color: #CED0D9;
+  }
+
+  .have-assessment {
+    &.low::before {
+      background-color: #3D821D;
+    }
+
+    &.medium::before {
+      background-color: #FFD865;
+    }
+
+    &.high::before {
+      background-color: #D32F2F;
+    }
+  }
+}
