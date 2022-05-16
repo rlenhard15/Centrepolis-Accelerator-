@@ -1,72 +1,171 @@
-import React, { useState, memo } from 'react'
+import React, { memo, useState } from 'react';
 
-import { ReactComponent as EditIcon } from '../../images/icons/edit-icon.svg'
-import DeleteIcon from '../../images/icons/delete-icon.svg'
-import IconButton from '@material-ui/core/IconButton'
-import KeyboardArrowDownRoundedIcon from '@material-ui/icons/KeyboardArrowDownRounded'
-import { useAuthContext } from '../../CheckAuthorization'
+import { ReactComponent as EditIcon } from '../../images/icons/edit-icon.svg';
+import DeleteIcon from '../../images/icons/delete-icon.svg';
+import IconButton from '@material-ui/core/IconButton';
+import { useAuthContext } from '../../CheckAuthorization';
 
-import useHttp from '../../hooks/useHttp.hook'
+import useHttp from '../../hooks/useHttp.hook';
 
-import './TaskItem.scss'
+import './TaskItem.scss';
+import { fullNameOrEmail } from '../../utils/helpers';
+import { ListItemIcon, ListItemText, Menu, MenuItem, } from '@material-ui/core';
+import { MoreVert } from '@material-ui/icons';
+import toastr from 'toastr';
 
 const TaskItem = memo(props => {
-  const { request } = useHttp()
-  const { authData: { user }, isMember, isTeamLead } = useAuthContext()
+  const { request } = useHttp();
+  const {
+    authData: { user },
+    isMember,
+    isTeamLead
+  } = useAuthContext();
 
   const [state, setState] = useState({
     open: false,
     status: props.status,
-  })
+  });
 
   const handleCompleteTask = async () => {
     if (state.status === 'started') {
-      await request(`/api/tasks/${props.id}/mark_task_as_completed`, 'PUT')
-      setState({ ...state, open: !state.open, status: 'completed' })
+      await request(`/api/tasks/${props.id}/mark_task_as_completed`, 'PUT');
+      setState({
+        ...state,
+        open: !state.open,
+        status: 'completed'
+      });
     }
-  }
+  };
 
-  const formatDate = date => date.split('T')[0].split('-').reverse().join('/').replace(/\/20/g, '/')
+  const formatDate = date => date.split('T')[0].split('-')
+    .reverse()
+    .join('/')
+    .replace(/\/20/g, '/');
 
   const isAbleToUpdateTask = () => {
-    if (isTeamLead || isMember) return true
+    if (isTeamLead || isMember) return true;
 
-    return props.users_for_task.some(u => u.id === user.id)
-  }
+    return props.users_for_task.some(u => u.id === user.id);
+  };
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const renderUtilityButtons = () => {
-    if (isMember || !isAbleToUpdateTask()) return null
+    if (isMember || !isAbleToUpdateTask()) return null;
 
     return (
-      <div className="actions">
+      <div>
         <IconButton
-          onClick={() => props.handleShowPopup(props.id)}
-          className="actions-edit"
+          aria-label="more"
+          id="long-button"
+          aria-controls={open ? 'long-menu' : undefined}
+          aria-expanded={open ? 'true' : undefined}
+          aria-haspopup="true"
+          onClick={handleClick}
         >
-          <EditIcon />
+          <MoreVert />
         </IconButton>
-        <IconButton
-          onClick={() => props.handleDeleteTask(props.id)}
+        <Menu
+          id="long-menu"
+          MenuListProps={{
+            'aria-labelledby': 'long-button',
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            style: {
+              width: '20ch',
+            },
+          }}
         >
-          <img src={DeleteIcon} alt="Delete" />
-        </IconButton>
+          <MenuItem
+            key={'edit'} onClick={() => {
+            props.handleShowPopup(props.id);
+            handleClose();
+          }}
+          >
+            <ListItemIcon><EditIcon /></ListItemIcon>
+            <ListItemText>Edit</ListItemText>
+          </MenuItem>
+          <MenuItem
+            key={'edit'} onClick={() => {
+            props.handleDeleteTask(props.id);
+            handleClose();
+          }}
+          >
+            <ListItemIcon><img src={DeleteIcon} alt="Delete" /></ListItemIcon>
+            <ListItemText>Delete</ListItemText>
+          </MenuItem>
+          {isAbleToUpdateTask() && state.status !== 'completed' && [
+            <MenuItem
+              key={'edit'} onClick={() => {
+              handleCompleteTask();
+              handleClose();
+            }}
+            >
+              <ListItemText>Mark Completed</ListItemText>
+            </MenuItem>,
+            <MenuItem
+              key={'send-reminder'}
+              onClick={async () => {
+                await request(`api/tasks/${props.id}/send_task_reminder`)
+                toastr.success('Reminder has been sent!', 'Success')
+                handleClose();
+              }}>
+              <ListItemText>Send Reminders</ListItemText>
+            </MenuItem>
+          ]}
+        </Menu>
       </div>
-    )
-  }
+    );
+  };
 
   const assignedUsers = () => {
-    const users = isTeamLead || isMember ? props.members_for_task : props.users_for_task
+    const users = isTeamLead || isMember ? props.members_for_task : props.users_for_task;
 
     return users
-      .filter(u => u.user_type !== 'Admin' || u.user_type !== 'SuperAdmin')
-      .map(u => `${u.first_name} ${u.last_name}`)
-      .join(', ') || '--'
-  }
+      .map(u => fullNameOrEmail(u))
+      .join(', ') || '--';
+  };
 
   return (
     <div className="task">
-      <div className="task-main">
-        <p className={`task-main-title ${props.priority}-priority`}>{props.title}</p>
+      <div className="w-full">
+        <div className="flex flex-row justify-between items-center">
+          <div className="">
+            <p className={`task-main-title ${props.priority}-priority`}>{props.title}</p>
+          </div>
+          <div className="flex flex-row items-center space-x-4">
+            <div>
+              {
+                state.status === 'completed' ? (
+                  <span>
+                Completed
+              </span>
+                ) : (
+                  <span>
+                Incomplete
+              </span>
+                )
+              }
+            </div>
+            <div className="w-auto">
+              <p>
+                <span className="">Due Date: </span>
+                <span className="date">{formatDate(props.due_date)}</span>
+              </p>
+            </div>
+            {renderUtilityButtons()}
+          </div>
+        </div>
         <div className="task-main-info">
           <p>
             <span className="task-main-info-title">Assigned to</span>
@@ -86,51 +185,8 @@ const TaskItem = memo(props => {
           </p>
         </div>
       </div>
-      <div className="task-actions">
-        <div className="complete">
-          {
-            state.status === 'completed' ?
-              <span className="completed">
-                Completed
-              </span>
-              : isAbleToUpdateTask()
-                ? (
-                  <>
-                    <IconButton
-                      className="complete-open-btn"
-                      onClick={() => setState({ ...state, open: !state.open })}
-                    >
-                      Incomplete
-                      <KeyboardArrowDownRoundedIcon />
-                    </IconButton>
-                    {
-                      state.open ?
-                        <div className="complete-options">
-                          <span className="complete-option disable">Incomplete</span>
-                          <IconButton
-                            className="complete-option"
-                            onClick={handleCompleteTask}
-                          >
-                            Complete
-                          </IconButton>
-                        </div> : null
-                    }
-                  </>
-                ) : (
-                  <span>
-                    Incomplete
-                  </span>
-                )
-          }
-        </div>
-        <p className="due-date">
-          <span className="title">Due Date</span>
-          <span className="date">{formatDate(props.due_date)}</span>
-        </p>
-        {renderUtilityButtons()}
-      </div>
     </div>
-  )
-})
+  );
+});
 
-export default TaskItem
+export default TaskItem;

@@ -1,26 +1,31 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
-import { InputField } from '../common/InputField'
-import CustomSelect from '../common/Select'
+import { InputField } from '../common/InputField';
+import CustomSelect from '../common/Select';
 
-import { CustomButton } from '../common/Button'
+import { CustomButton } from '../common/Button';
 
-import useHttp from '../../hooks/useHttp.hook'
-import useForm from '../../hooks/useForm.hook'
-import validate from '../../validationRules/inviteTeam'
-import { useAuthContext } from '../../CheckAuthorization'
+import useHttp from '../../hooks/useHttp.hook';
+import useForm from '../../hooks/useForm.hook';
+import validate from '../../validationRules/inviteTeam';
+import { useAuthContext } from '../../CheckAuthorization';
 
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
-import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg';
 
-
-import './InviteTeamPopup.scss'
+import './InviteTeamPopup.scss';
 
 const InviteTeamPopup = props => {
-  const { isTeamLead, isAdmin, isSuperAdmin } = useAuthContext()
+  const {
+    isTeamLead,
+    isAdmin,
+    isSuperAdmin
+  } = useAuthContext();
 
   const inviteFields = {
+    firstName: '',
+    lastName: '',
     email: '',
     userType: isTeamLead ? {
       value: 'Member',
@@ -28,70 +33,95 @@ const InviteTeamPopup = props => {
       value: 'Admin'
     } : null,
     startupId: props.startupId,
-  }
-
-  const { loading, request } = useHttp()
-  const { values, errors, handleChange, setValues, handleSubmit } = useForm(inviteTeam, validate, inviteFields)
-  const [inviteErrors, setInviteErrors] = useState({
-    inviteEmailError: false,
-  })
-
-  function inviteTeam() {
-    inviteTeamRequest()
-  }
+  };
 
   const inviteTeamRequest = async () => {
     try {
       const user = {
         email: values.email,
         type: values.userType.value,
-        startup_id: values.startupId
-      }
+        startup_id: values.startupId,
+        first_name: values.firstName,
+        last_name: values.lastName,
+      };
 
-      const newCustomer = await request(`api/users`, 'POST', { user })
+      const newCustomer = await request(`api/users`, 'POST', { user });
 
-      props.addCustomers(newCustomer, values.userType.value)
-      props.handleClosePopup()
+      props.addCustomers(newCustomer, values.userType.value);
+      props.handleClosePopup();
 
     } catch (err) {
-      if (err.status === 422) return setInviteErrors({ inviteEmailError: true })
+      if (err.status === 422) return setInviteErrors({ inviteEmailError: true });
     }
-  }
+  };
+
+  const {
+    loading,
+    request
+  } = useHttp();
+  const {
+    values,
+    errors,
+    handleChange,
+    setValues,
+    handleSubmit
+  } = useForm(inviteTeamRequest, validate, inviteFields);
+  const [inviteErrors, setInviteErrors] = useState({
+    inviteEmailError: false,
+  });
 
   const handleUserTypeChange = option => {
-    setValues(v => ({ ...v, 'userType': option }))
-  }
+    setValues(v => ({
+      ...v,
+      'userType': option
+    }));
+  };
 
   const getModalTitle = () => {
-    if (isSuperAdmin && !props.startupId) return 'Invite Admin'
+    if (isSuperAdmin && !props.startupId) return 'Invite Admin';
     return isTeamLead
       ? 'Invite Member'
-      : 'Invite User'
-  }
+      : 'Invite User';
+  };
 
   const getUsersOptions = () => {
     if (isSuperAdmin) {
       return [
-        { label: 'Admin', value: 'Admin' },
-        { label: 'Member', value: 'Member' },
-      ]
+        {
+          label: 'Admin',
+          value: 'Admin'
+        },
+        {
+          label: 'Member',
+          value: 'Member'
+        },
+      ];
     }
 
     if (isAdmin) {
       return [
-        { label: 'Team Lead', value: 'TeamLead' },
-        { label: 'Member', value: 'Member' },
-      ]
+        {
+          label: 'Team Lead',
+          value: 'TeamLead'
+        },
+        {
+          label: 'Member',
+          value: 'Member'
+        },
+      ];
     }
 
     if (isTeamLead) {
       return [
-        { label: 'Member', value: 'Member' },
-      ]
+        {
+          label: 'Member',
+          value: 'Member'
+        },
+      ];
     }
-  }
+  };
 
-  const userOptions = getUsersOptions()
+  const userOptions = getUsersOptions();
 
   return (
     <div className="popup">
@@ -100,10 +130,31 @@ const InviteTeamPopup = props => {
           <p className="popup-content-title">{getModalTitle()}</p>
           <button
             className="popup-close-btn"
-            onClick={props.handleClosePopup}>
+            onClick={props.handleClosePopup}
+          >
             <CloseIcon />
           </button>
           <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+            <InputField
+              label="First Name"
+              placeholder="Enter user’s first name (optional)"
+              type="text"
+              name="firstName"
+              value={values.firstName}
+              onChange={handleChange}
+              error={errors.firstName}
+              errorText={errors.firstName}
+            />
+            <InputField
+              label="Last Name"
+              placeholder="Enter user’s last name (optional)"
+              type="text"
+              name="lastName"
+              value={values.lastName}
+              onChange={handleChange}
+              error={errors.lastName}
+              errorText={errors.lastName}
+            />
             <InputField
               label="Email Address"
               placeholder="Enter user’s email address"
@@ -115,18 +166,18 @@ const InviteTeamPopup = props => {
               errorText={errors.email_message || '* this email has already been taken'}
             />
             {(!isTeamLead && props.startupId) &&
-              <CustomSelect
-                label="User type"
-                placeholder="Select user type"
-                value={values.type}
-                options={userOptions}
-                onChange={handleUserTypeChange}
-                error={errors.userType}
-                errorText={errors.userTypeMsg}
-              />
+            <CustomSelect
+              label="User type"
+              placeholder="Select user type"
+              value={values.type}
+              options={userOptions}
+              onChange={handleUserTypeChange}
+              error={errors.userType}
+              errorText={errors.userTypeMsg}
+            />
             }
             <CustomButton
-              type='submit'
+              type="submit"
               label="Send Invite"
               disabled={loading}
             />
@@ -134,7 +185,7 @@ const InviteTeamPopup = props => {
         </div>
       </ClickAwayListener>
     </div>
-  )
-}
+  );
+};
 
-export default InviteTeamPopup
+export default InviteTeamPopup;

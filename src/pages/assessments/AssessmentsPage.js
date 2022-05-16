@@ -12,6 +12,7 @@ import ArrowRightSmallImg from '../../images/icons/arrow-right-small.svg'
 import useHttp from '../../hooks/useHttp.hook'
 
 import './AssessmentsPage.scss'
+import { nameOrEmail } from '../../utils/helpers';
 
 const AssessmentsPage = props => {
   const settingsBlockRef = useRef(null)
@@ -96,8 +97,8 @@ const AssessmentsPage = props => {
                   <h3 className="assessment-title">{type} Risk</h3>
                   {
                     isMember
-                      ? <p className="assessment-subtitle">Hi {user.first_name}, please complete this assessment on behalf of {user.company_name}.</p>
-                      : <p className="assessment-subtitle">Hi {user.first_name}, you can review assessment below.</p>
+                      ? <p className="assessment-subtitle">Hi {nameOrEmail(user.first_name)}, please complete this assessment on behalf of {user.company_name}.</p>
+                      : <p className="assessment-subtitle">Hi {nameOrEmail(user.first_name)}, you can review assessment below.</p>
                   }
                 </div>
                 <div className="assessment-settings-container">

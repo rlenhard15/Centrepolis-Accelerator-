@@ -1,29 +1,31 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from "react-router-dom"
-import { Link } from 'react-router-dom'
-import toastr from 'toastr'
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import toastr from 'toastr';
 
-import Loader from '../loader/Loader'
-import AssessmentsItem from './AssessmentItem'
-import TasksTracker from '../tasks-tracker/TasksTracker'
-import AssessmentInfoPopup from './AssessmentInfoPopup'
-import ArrowRightSmallImg from '../../images/icons/arrow-right-small.svg'
-import { Tab, Tabs } from '../common/Tabs'
-import { CustomButton } from '../common/Button'
-import InviteTeamPopup from '../admin/InviteTeamPopup'
-import AssessmentUsers from './AssessmentUsers'
+import Loader from '../loader/Loader';
+import AssessmentsItem from './AssessmentItem';
+import TasksTracker from '../tasks-tracker/TasksTracker';
+import AssessmentInfoPopup from './AssessmentInfoPopup';
+import ArrowRightSmallImg from '../../images/icons/arrow-right-small.svg';
+import { Tab, Tabs } from '../common/Tabs';
+import { CustomButton } from '../common/Button';
+import InviteTeamPopup from '../admin/InviteTeamPopup';
+import AssessmentUsers from './AssessmentUsers';
 
-import { useAuthContext } from '../../CheckAuthorization'
-import useHttp from '../../hooks/useHttp.hook'
+import { useAuthContext } from '../../CheckAuthorization';
+import useHttp from '../../hooks/useHttp.hook';
 
-import './Assessment.scss'
+import './Assessment.scss';
 
 const Assessments = props => {
-  const { request } = useHttp()
-  const { id } = useParams()
-  const { logOut, isMember } = useAuthContext()
+  const { request } = useHttp();
+  const { id } = useParams();
+  const {
+    logOut,
+    isMember
+  } = useAuthContext();
 
-  const pageBaseUrl = `/assessments/${id}`
+  const pageBaseUrl = `/assessments/${id}`;
 
   const [state, setState] = useState({
     customer: props.customer || null,
@@ -33,91 +35,103 @@ const Assessments = props => {
     assessmentForInfoPopup: '',
     showInfoPopup: false,
     showInvitePopup: false,
-  })
+  });
 
   const setAssessments = (assessmentsData, startup) => {
 
     const assessments = assessmentsData.map(assessment => {
-      const value = assessment.risk_value
-      const risk_name = assessment.name.split(' ')[0]
-      let risk_class = ''
-      let risk_type = ''
+      const value = assessment.risk_value;
+      const risk_name = assessment.name.split(' ')[0];
+      let risk_class = '';
+      let risk_type = '';
       if (value) {
         if (value <= 33) {
-          risk_type = 'High Risk'
-          risk_class = 'high'
+          risk_type = 'High Risk';
+          risk_class = 'high';
         } else if (value > 33 && value <= 66) {
-          risk_type = 'Medium Risk'
-          risk_class = 'medium'
+          risk_type = 'Medium Risk';
+          risk_class = 'medium';
         } else if (value > 66) {
-          risk_type = 'Low Risk'
-          risk_class = 'low'
+          risk_type = 'Low Risk';
+          risk_class = 'low';
         }
       } else {
-        risk_type = 'Incomplete'
+        risk_type = 'Incomplete';
       }
 
-      return { ...assessment, risk_type, risk_class, risk_name }
-    })
+      return {
+        ...assessment,
+        risk_type,
+        risk_class,
+        risk_name
+      };
+    });
 
-    setState(state => ({ ...state, assessments, startup, loading: false }))
-  }
+    setState(state => ({
+      ...state,
+      assessments,
+      startup,
+      loading: false
+    }));
+  };
 
   const getAssessmentsRequest = async () => {
     try {
-      const startup = await request(`api/startups/${id}`)
-      const assessments = await request(`api/assessments?startup_id=${id}`)
+      const startup = await request(`api/startups/${id}`);
+      const assessments = await request(`api/assessments?startup_id=${id}`);
 
-      setAssessments(assessments, startup)
+      setAssessments(assessments, startup);
     } catch (err) {
       if (err.status === 403 || err.status === 401) {
-        logOut()
+        logOut();
       }
     }
-  }
+  };
 
   const handleOpenInfoPopup = assessment => {
     setState(state => ({
       ...state,
       showInfoPopup: true,
       assessmentForInfoPopup: assessment
-    }))
-  }
+    }));
+  };
 
   useEffect(() => {
-    getAssessmentsRequest()
-  }, [])
+    getAssessmentsRequest();
+  }, []);
 
   const handleOpenInviteMemberPopup = () => {
     setState(state => ({
       ...state,
       showInvitePopup: true,
-    }))
-  }
+    }));
+  };
 
   const handleCloseInviteMemberPopup = () => {
     setState(state => ({
       ...state,
       showInvitePopup: false,
-    }))
-  }
+    }));
+  };
 
   const handleAddUser = (user, type) => {
     setState(state => ({
       ...state,
       startup: {
         ...state.startup,
-        ...type === 'TeamLead'
-          ? { team_leads: [user, ...state.startup.team_leads] }
-          : { members: [user, ...state.startup.members] }
+        members: [user, ...state.startup.members]
       }
-    }))
-    toastr.success('User has been invited', 'Success')
-  }
+    }));
+    toastr.success('User has been invited', 'Success');
+  };
 
-  if (state.loading) return <Loader />
+  if (state.loading) return <Loader />;
 
-  const { name: companyName, members, team_leads: teamLeads } = state.startup
+  const {
+    name: companyName,
+    members,
+    team_leads: teamLeads
+  } = state.startup;
 
   return (
     <div className={`assessment ${!isMember ? 'admin' : 'customer'}`}>
@@ -169,7 +183,7 @@ const Assessments = props => {
             />
           </Tab>
           <Tab tab="users" label="Users">
-            <AssessmentUsers members={members} teamLeads={teamLeads} />
+            <AssessmentUsers startupId={id} members={members} teamLeads={teamLeads} />
           </Tab>
         </Tabs>
       ) : (
@@ -192,23 +206,24 @@ const Assessments = props => {
         </>
       )}
 
-      {state.showInvitePopup &&
-        <InviteTeamPopup
-          handleClosePopup={handleCloseInviteMemberPopup}
-          startupId={id}
-          addCustomers={handleAddUser}
-        />
-      }
+      {state.showInvitePopup && (<InviteTeamPopup
+        handleClosePopup={handleCloseInviteMemberPopup}
+        startupId={id}
+        addCustomers={handleAddUser}
+      />)}
 
       {state.showInfoPopup ?
         <AssessmentInfoPopup
           startupId={id}
           currentAssessment={state.assessmentForInfoPopup}
-          handleCloseInfoPopup={() => setState(state => ({ ...state, showInfoPopup: false }))}
+          handleCloseInfoPopup={() => setState(state => ({
+            ...state,
+            showInfoPopup: false
+          }))}
         /> : null
       }
     </div>
-  )
-}
+  );
+};
 
-export default Assessments
+export default Assessments;

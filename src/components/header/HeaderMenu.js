@@ -7,6 +7,7 @@ import { useAuthContext } from '../../CheckAuthorization'
 import { ReactComponent as LogoutIcon } from '../../images/icons/log-out.svg'
 import { ReactComponent as MoreIcon } from '../../images/icons/more-vertical.svg'
 import { ReactComponent as UserIcon } from '../../images/icons/user-default.svg'
+import { nameOrEmail } from '../../utils/helpers';
 
 
 const HeaderMenu = props => {
@@ -21,7 +22,7 @@ const HeaderMenu = props => {
           onClick={() => setIsOpen(!isOpen)}
         >
           <UserIcon className="header-menu-user-icon" />
-          <span>{`Hi, ${props.userData.user.first_name}`}</span>
+          <span>{`Hi, ${nameOrEmail(props.userData.user)}`}</span>
           <MoreIcon className="header-menu-more-icon" />
         </button>
         {

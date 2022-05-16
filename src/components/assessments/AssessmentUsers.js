@@ -33,18 +33,17 @@ const headers = [
   }
 ]
 
-export const AssessmentUsers = ({ members, teamLeads }) => {
+export const AssessmentUsers = ({ members, teamLeads, startupId }) => {
   const { isSuperAdmin, isAdmin } = useAuthContext()
   const { request } = useHttp()
   const [rows, setRows] = useState([])
 
   useEffect(() => {
     setRows(mapDataToRow())
-  }, [])
+  }, [members, teamLeads])
 
   const mapDataToRow = () => {
     return mapMembersData()
-      .concat(mapAdminsData())
       .sort((userA, userB) => new Date(userA.createdAt) - new Date(userB.createdAt))
   }
 
@@ -55,23 +54,9 @@ export const AssessmentUsers = ({ members, teamLeads }) => {
       row: [
         getUserName(member),
         member.email,
-        'Member',
+        teamLeads.find(t => t.id === member.id) ? 'Team Lead' : 'Member',
         member.last_visit ? formatDate(member.last_visit) : '--',
         member.tasks_number,
-      ]
-    }))
-  }
-
-  const mapAdminsData = () => {
-    return teamLeads.map(admin => ({
-      id: admin.id,
-      createdAt: admin.created_at,
-      row: [
-        getUserName(admin),
-        admin.email,
-        'Team Lead',
-        admin.last_visit ? formatDate(admin.last_visit) : '--',
-        admin.tasks_number,
       ]
     }))
   }
@@ -82,7 +67,7 @@ export const AssessmentUsers = ({ members, teamLeads }) => {
   }
 
   const handleDeleteUser = (id) => async () => {
-    await request(`/api/users/${id}`, 'DELETE')
+    await request(`/api/users/${id}?startup_id=${startupId}`, 'DELETE')
     setRows(rows.filter(r => r.id !== id))
   }
 

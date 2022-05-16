@@ -1,4 +1,4 @@
-@import '~toastr/toastr';
+@import 'toastr';
 
 .toast-success {
   background-color: #70C497;

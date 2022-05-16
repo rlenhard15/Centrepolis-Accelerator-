@@ -12,6 +12,7 @@ import { useAuthContext } from '../../CheckAuthorization'
 import useHttp from '../../hooks/useHttp.hook'
 
 import Loader from '../loader/Loader'
+import { fullNameOrEmail } from '../../utils/helpers';
 
 const USER_INVITE_MODAL = 'USER_INVITE_MODAL'
 const STARTUP_MODAL = 'STARTUP_MODAL'
@@ -56,13 +57,12 @@ const Dashboard = () => {
 
   const getMembersRequest = async () => {
     try {
-      const startups = await request(`/api/startups?page=${page + 1}`)
-      if (startups.current_page > startups.total_pages) {
+      const startups = await request(`/api/startups?page=${page + 1}`);
+      if (startups.current_page > startups.total_pages && startups.total_pages !== 0) {
         setPage(page - 1)
       } else {
         setStartups(startups)
       }
-
     } catch (err) {
       if (err.status === 403 || err.status === 401) {
         logOut()
@@ -106,8 +106,7 @@ const Dashboard = () => {
 
   if (loading && !startupsData) return <Loader />
 
-  const displayName = [user.first_name, user.last_name].filter(Boolean).join(' ')
-
+  const displayName = fullNameOrEmail(user)
   return (
     <>
       {startupsData?.startups.length ? (
@@ -135,7 +134,7 @@ const Dashboard = () => {
             openEditStartupPopup={openEditStartupPopup}
             handleDeleteStartUp={handleDeleteStartUp}
           />
-          {startupsData.total_pages ?
+          {startupsData.total_pages > 1 ?
             <Pagination
               page={page}
               totalPages={startupsData.total_pages}

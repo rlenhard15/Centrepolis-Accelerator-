@@ -103,7 +103,7 @@ const TasksTracker = props => {
             <p className="no-tasks">No tasks yet</p>
         }
         {
-          state.tasks.length ?
+          state.tasks.length > 1 ?
             <Pagination
               page={state.page}
               totalPages={state.totalPages}

@@ -1,33 +1,45 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
 
-import CustomSelect from '../common/Select'
-import Radio from '@material-ui/core/Radio'
-import RadioGroup from '@material-ui/core/RadioGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Calendar from '../common/Calendar'
-import TaskSelectGroup from './TaskSelectGroup'
-import { CustomButton } from '../common/Button'
-import Loader from '../loader/Loader'
+import CustomSelect from '../common/Select';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Calendar from '../common/Calendar';
+import TaskSelectGroup from './TaskSelectGroup';
+import { CustomButton } from '../common/Button';
+import Loader from '../loader/Loader';
 
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
-import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg';
 
-import useHttp from '../../hooks/useHttp.hook'
-import { useAuthContext } from '../../CheckAuthorization'
+import useHttp from '../../hooks/useHttp.hook';
+import { useAuthContext } from '../../CheckAuthorization';
 
-import './TaskPopup.scss'
+import './TaskPopup.scss';
 
 const priority = [
-  { value: 'low', label: 'Low' },
-  { value: 'medium', label: 'Medium' },
-  { value: 'high', label: 'High' }
-]
+  {
+    value: 'low',
+    label: 'Low'
+  },
+  {
+    value: 'medium',
+    label: 'Medium'
+  },
+  {
+    value: 'high',
+    label: 'High'
+  }
+];
 
 const TaskPopup = props => {
-  const { isTeamLead } = useAuthContext()
+  const { isTeamLead } = useAuthContext();
 
-  const { loading, request } = useHttp()
+  const {
+    loading,
+    request
+  } = useHttp();
   const [state, setState] = useState({
     currentAssessment: props.assessments[0],
     selectedUsers: [],
@@ -42,17 +54,17 @@ const TaskPopup = props => {
     dueDate: setDate(),
     taskText: props.taskForEdit ? props.taskForEdit.title : '',
     error: false
-  })
+  });
 
   function setDate() {
     if (props.taskForEdit) {
-      return new Date(props.taskForEdit.due_date)
+      return new Date(props.taskForEdit.due_date);
     }
-    return ''
+    return '';
   }
 
   const handleChangeAssessment = (e) => {
-    const currentAssessment = props.assessments.find(assessment => assessment.risk_name === e.target.value)
+    const currentAssessment = props.assessments.find(assessment => assessment.risk_name === e.target.value);
     if (currentAssessment.risk_name !== state.currentAssessment.risk_name) {
       setState({
         ...state,
@@ -63,10 +75,10 @@ const TaskPopup = props => {
         selectedSubcategory: '',
         selectedStage: '',
         isChangeAssessment: true
-      })
+      });
     }
-    getAssessmentCategoriesInfo(currentAssessment.id)
-  }
+    getAssessmentCategoriesInfo(currentAssessment.id);
+  };
 
   const handleChangeSelect = (e, name) => {
     if (name === 'selectedCategory') {
@@ -75,21 +87,27 @@ const TaskPopup = props => {
         [name]: e,
         selectedSubcategory: '',
         selectedStage: ''
-      }))
+      }));
     } else if (name === 'selectedSubcategory') {
       setState(state => ({
         ...state,
         [name]: e,
         selectedStage: ''
-      }))
+      }));
     } else {
-      setState(state => ({ ...state, [name]: e }))
+      setState(state => ({
+        ...state,
+        [name]: e
+      }));
     }
-  }
+  };
 
   const handleDateChange = (newDate) => {
-    setState({ ...state, dueDate: newDate })
-  }
+    setState({
+      ...state,
+      dueDate: newDate
+    });
+  };
 
   // For checking form on empty fields
   // Field will have error if some of form fields is empty and this field will not have a value
@@ -100,39 +118,55 @@ const TaskPopup = props => {
       !state.taskPriority ||
       !state.dueDate ||
       !state.taskText) {
-      setState({ ...state, error: true })
-      return false
+      setState({
+        ...state,
+        error: true
+      });
+      return false;
     }
-    return true
-  }
+    return true;
+  };
 
-  const setSubCategoryAndStage = (selectedSubcategory, selectedStage) => setState({ ...state, selectedSubcategory, selectedStage })
+  const setSubCategoryAndStage = (selectedSubcategory, selectedStage) => setState({
+    ...state,
+    selectedSubcategory,
+    selectedStage
+  });
 
   const getAssessmentCategoriesInfo = async (assessmentId) => {
     if (assessmentId) {
-      const assessment = await request(`/api/assessments/${assessmentId}`)
-      const userOptions = await getUsersOptions()
-      const riskCategories = assessment.description_with_child_models.map(category => ({ value: category.id, label: category.title }))
-      setState(state => ({ ...state, currentAssessmentInfo: assessment, riskCategories, userOptions }))
+      const assessment = await request(`/api/assessments/${assessmentId}`);
+      const userOptions = await getUsersOptions();
+      const riskCategories = assessment.description_with_child_models.map(category => ({
+        value: category.id,
+        label: category.title
+      }));
+      setState(state => ({
+        ...state,
+        currentAssessmentInfo: assessment,
+        riskCategories,
+        userOptions
+      }));
     }
-  }
+  };
 
   const formSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (checkFields()) {
-      let task
+      let task;
       const data = {
         stage_id: state.selectedStage.value,
+        startup_id: props.startupId,
         title: state.taskText,
         priority: state.taskPriority.value,
         due_date: state.dueDate.toDateString(),
         task_users_attributes: state.selectedUsers.map(({ value }) => ({ user_id: value })),
-      }
+      };
 
       props.taskForEdit ?
         task = await request(`/api/tasks/${props.taskForEdit.id}`, 'PUT', { task: { ...data } }) :
-        task = await request('/api/tasks', 'POST', { task: { ...data } })
+        task = await request('/api/tasks', 'POST', { task: { ...data } });
 
       const taskForAdd = {
         ...task,
@@ -140,45 +174,54 @@ const TaskPopup = props => {
         sub_category: state.selectedSubcategory.label,
         master_assessment: state.currentAssessment.name,
         stage_title: state.selectedStage.label
-      }
+      };
 
       if (props.infoForCreateTaskFromStage) {
-        props.handleClosePopup()
+        props.handleClosePopup();
       } else {
         props.taskForEdit ?
           props.handleChangeTask(taskForAdd) :
-          props.handleAddTask(taskForAdd)
+          props.handleAddTask(taskForAdd);
       }
     }
-  }
+  };
 
   const getAssessments = name => {
-    const currentAssessmentForTask = props.assessments.find(assessment => assessment.risk_name === name)
-    return request(`/api/assessments/${currentAssessmentForTask.id}`)
-  }
+    const currentAssessmentForTask = props.assessments.find(assessment => assessment.risk_name === name);
+    return request(`/api/assessments/${currentAssessmentForTask.id}`);
+  };
 
   const getCategoriesAndSelectedCategory = (assessment, categoryName) => {
-    const riskCategories = assessment.description_with_child_models.map(category => ({ value: category.id, label: category.title }))
-    const selectedCategory = riskCategories.find(category => category.label === categoryName)
-    return { riskCategories, selectedCategory }
-  }
+    const riskCategories = assessment.description_with_child_models.map(category => ({
+      value: category.id,
+      label: category.title
+    }));
+    const selectedCategory = riskCategories.find(category => category.label === categoryName);
+    return {
+      riskCategories,
+      selectedCategory
+    };
+  };
 
   const setOptionsForEditTask = async () => {
-    const taskInfo = props.taskForEdit
-    const assessmentNameForTask = taskInfo.master_assessment.split(' ')[0]
-    const userOptions = await getUsersOptions()
-    const assessment = await getAssessments(assessmentNameForTask)
-    const { riskCategories, selectedCategory } = getCategoriesAndSelectedCategory(assessment, taskInfo.category)
-    const taskPriority = priority.find(p => p.value === taskInfo.priority)
+    const taskInfo = props.taskForEdit;
+    const assessmentNameForTask = taskInfo.master_assessment.split(' ')[0];
+    const userOptions = await getUsersOptions();
+    const assessment = await getAssessments(assessmentNameForTask);
+    const {
+      riskCategories,
+      selectedCategory
+    } = getCategoriesAndSelectedCategory(assessment, taskInfo.category);
+    const taskPriority = priority.find(p => p.value === taskInfo.priority);
 
     const assignedUsers = isTeamLead
       ? taskInfo.members_for_task
-      : taskInfo.users_for_task
+      : taskInfo.users_for_task;
 
     const selectedUsers = assignedUsers.map(u => ({
       value: u.id,
       label: `${u.first_name} ${u.last_name}`
-    }))
+    }));
 
     setState({
       ...state,
@@ -192,29 +235,27 @@ const TaskPopup = props => {
       riskCategories,
       selectedCategory,
       taskPriority
-    })
-  }
+    });
+  };
 
   const getUsersOptions = async () => {
-    const data = await request(`api/startups/${props.startupId}`)
-
-    const userOptions = data.members
-      .filter(member => member.first_name)
-      .map(member => ({ value: member.id, label: `${member.first_name} ${member.last_name}` }))
-
-    return isTeamLead ? userOptions : userOptions.concat(
-      data.team_leads
-        .filter(admin => admin.first_name)
-        .map(admin => ({ value: admin.id, label: `${admin.first_name} ${admin.last_name}` }))
-    )
-  }
+    const data = await request(`api/startups/${props.startupId}`);
+    return data.members
+      .map(member => ({
+        value: member.id,
+        label: member.first_name ? `${member.first_name} ${member.last_name}` : member.email
+      }));
+  };
 
   const setOptionsForCreateTaskFromStage = async () => {
-    const taskInfo = props.infoForCreateTaskFromStage
-    const assessmentNameForTask = props.assessmentName
-    const assessment = await getAssessments(assessmentNameForTask)
-    const userOptions = await getUsersOptions()
-    const { riskCategories, selectedCategory } = getCategoriesAndSelectedCategory(assessment, taskInfo.category)
+    const taskInfo = props.infoForCreateTaskFromStage;
+    const assessmentNameForTask = props.assessmentName;
+    const assessment = await getAssessments(assessmentNameForTask);
+    const userOptions = await getUsersOptions();
+    const {
+      riskCategories,
+      selectedCategory
+    } = getCategoriesAndSelectedCategory(assessment, taskInfo.category);
 
     setState({
       ...state,
@@ -225,18 +266,18 @@ const TaskPopup = props => {
       currentAssessmentInfo: assessment,
       riskCategories,
       selectedCategory
-    })
-  }
+    });
+  };
 
   useEffect(() => {
     if (props.taskForEdit) {
-      setOptionsForEditTask()
+      setOptionsForEditTask();
     } else if (props.infoForCreateTaskFromStage) {
-      setOptionsForCreateTaskFromStage()
+      setOptionsForCreateTaskFromStage();
     } else {
-      getAssessmentCategoriesInfo(props.assessments[0].id)
+      getAssessmentCategoriesInfo(props.assessments[0].id);
     }
-  }, [])
+  }, []);
 
   return (
     <div className="popup">
@@ -245,7 +286,8 @@ const TaskPopup = props => {
           <p className="popup-content-title">Assign New Task</p>
           <button
             className="popup-close-btn"
-            onClick={props.handleClosePopup}>
+            onClick={props.handleClosePopup}
+          >
             <CloseIcon />
           </button>
           <form onSubmit={formSubmit}>
@@ -262,7 +304,9 @@ const TaskPopup = props => {
                   props.assessments.map((assessment, i) =>
                     <FormControlLabel
                       key={i}
-                      className={`radio-field ${state.currentAssessment.risk_name === assessment.risk_name ? 'active' : ''}`}
+                      className={`radio-field ${state.currentAssessment.risk_name === assessment.risk_name
+                        ? 'active'
+                        : ''}`}
                       value={assessment.risk_name}
                       control={<Radio color="primary" />}
                       label={assessment.risk_name}
@@ -291,7 +335,7 @@ const TaskPopup = props => {
                 <CustomSelect
                   isDisable={true}
                   label="Task Priority"
-                  placeholder='Select priority'
+                  placeholder="Select priority"
                   options={priority}
                   value={state.taskPriority}
                   onChange={(e) => handleChangeSelect(e, 'taskPriority')}
@@ -312,11 +356,14 @@ const TaskPopup = props => {
               <textarea
                 className={`${state.error && !state.taskText ? 'error' : ''}`}
                 value={state.taskText}
-                onChange={(e) => setState({ ...state, taskText: e.target.value })}
+                onChange={(e) => setState({
+                  ...state,
+                  taskText: e.target.value
+                })}
               />
             </div>
             <CustomButton
-              type='submit'
+              type="submit"
               label={`${props.taskForEdit ? 'Update Task' : 'Submit Task'}`}
             />
           </form>
@@ -326,7 +373,7 @@ const TaskPopup = props => {
         </div>
       </ClickAwayListener>
     </div>
-  )
-}
+  );
+};
 
-export default TaskPopup
+export default TaskPopup;

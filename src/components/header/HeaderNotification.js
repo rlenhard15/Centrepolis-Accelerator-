@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton'
 import { ReactComponent as NotificationIcon } from '../../images/icons/notification-icon.svg'
 
 import useHttp from '../../hooks/useHttp.hook'
+import { fullNameOrEmail } from '../../utils/helpers';
 
 const intervals = [
   { label: 'second', seconds: 1 },
@@ -64,7 +65,7 @@ const HeaderNotification = props => {
 
   const assignedUsers = (task) => {
     const user = task.created_by
-    return user ? `${user.first_name} ${user.last_name}` : '--'
+    return user ? fullNameOrEmail(user) : '--'
   }
 
   return (

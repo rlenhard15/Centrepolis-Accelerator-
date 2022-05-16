@@ -65,7 +65,7 @@ const TaskSelectGroup = props => {
       setCategory(props.infoForTask.category, props.infoForTask.sub_category)
     }
   }, [props.riskCategories, props.currentAssessmentInfo])
-
+  console.log(props);
   return (
     <>
       <CustomSelect
