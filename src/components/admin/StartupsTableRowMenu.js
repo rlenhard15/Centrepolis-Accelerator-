@@ -1,17 +1,21 @@
-import React from 'react'
+import React from 'react';
 
-import { ReactComponent as ShowMoreIcon } from '../../images/icons/more-vertical.svg'
+import { ReactComponent as ShowMoreIcon } from '../../images/icons/more-vertical.svg';
 
-import './StartupsTableRowMenu.scss'
+import './StartupsTableRowMenu.scss';
 
-const StartupsTableRowMenu = ({ openEditStartupPopup, handleDeleteStartUp }) => {
-  const [showMenu, setShowMenu] = React.useState()
+function StartupsTableRowMenu({
+  openEditStartupPopup,
+  handleDeleteStartUp,
+}) {
+  const [showMenu, setShowMenu] = React.useState();
 
-  const toggleShowMenu = () => setShowMenu(!showMenu)
+  const toggleShowMenu = () => setShowMenu(!showMenu);
 
   return (
     <div className="menu-actions">
-      {showMenu &&
+      {showMenu
+      && (
         <div className="menu-actions-popup">
           <span onClick={openEditStartupPopup} className="menu-action">
             Edit
@@ -20,10 +24,10 @@ const StartupsTableRowMenu = ({ openEditStartupPopup, handleDeleteStartUp }) => 
             Delete
           </span>
         </div>
-      }
+      )}
       <ShowMoreIcon className="menu-actions-icon" onClick={toggleShowMenu} />
     </div>
-  )
+  );
 }
 
-export default StartupsTableRowMenu
+export default StartupsTableRowMenu;

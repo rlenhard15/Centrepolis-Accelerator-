@@ -1,5 +1,5 @@
 export default function validate(values) {
-  let errors = {};
+  const errors = {};
   if (!values.first_name) {
     errors.first_name = true;
     errors.first_name_message = 'First name is required';
@@ -16,4 +16,4 @@ export default function validate(values) {
     errors.password_message = 'Password must be 8 or more characters';
   }
   return errors;
-};
+}

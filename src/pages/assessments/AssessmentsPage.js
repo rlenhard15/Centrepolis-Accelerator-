@@ -1,58 +1,73 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-import Header from '../../components/header/Header'
-import AssessmentsSettings from './AssessmentsSettings'
-import AssessmentsSteps from './AssessmentsSteps'
-import Loader from '../../components/loader/Loader'
-import { useAuthContext } from '../../CheckAuthorization'
+import Header from '../../components/header/Header';
+import AssessmentsSettings from './AssessmentsSettings';
+import AssessmentsSteps from './AssessmentsSteps';
+import Loader from '../../components/loader/Loader';
+import { useAuthContext } from '../../utils/context';
 
-import ArrowRightSmallImg from '../../images/icons/arrow-right-small.svg'
+import ArrowRightSmallImg from '../../images/icons/arrow-right-small.svg';
 
-import useHttp from '../../hooks/useHttp.hook'
+import useHttp from '../../hooks/useHttp.hook';
 
-import './AssessmentsPage.scss'
+import './AssessmentsPage.scss';
 import { nameOrEmail } from '../../utils/helpers';
 
-const AssessmentsPage = props => {
-  const settingsBlockRef = useRef(null)
-  const { id, type, startupid: startupId } = props.match.params
-  const { authData: { user }, isMember, isSuperAdmin, isAdmin, logOut } = useAuthContext()
+function AssessmentsPage(props) {
+  const settingsBlockRef = useRef(null);
+  const {
+    id,
+    type,
+    startupid: startupId,
+  } = props.match.params;
+  const {
+    authData: { user },
+    isMember,
+    isSuperAdmin,
+    isAdmin,
+    logOut,
+  } = useAuthContext();
 
-  const { request } = useHttp()
+  const { request } = useHttp();
   const [state, setState] = useState({
     activeCategory: 1,
     assessments: [],
     categories: [],
     subCategories: [],
-    loading: true
-  })
+    loading: true,
+  });
 
-  const subCategoriesUrl = categoryId => isMember ?
-    `${categoryId}` :
-    `${categoryId}?startup_id=${startupId}`
+  const subCategoriesUrl = categoryId => (isMember
+    ? `${categoryId}`
+    : `${categoryId}?startup_id=${startupId}`);
 
   const changeSubCategory = async activeCategory => {
     if (activeCategory !== state.activeCategory) {
-      const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(activeCategory)}`)
+      const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(activeCategory)}`);
       setState(state => ({
         ...state,
         subCategories,
-        activeCategory
-      }))
+        activeCategory,
+      }));
     }
-    if (settingsBlockRef.current.offsetTop > 100) {
-      settingsBlockRef.current.scrollIntoView({ behavior: 'smooth' })
+    if (settingsBlockRef.current?.offsetTop > 100) {
+      settingsBlockRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }
+  };
 
   const fetchAssessmentSettings = async () => {
     try {
-      const categories = await request(`/api/assessments/${id}/categories`)
-      const getAssessmentsResponse = await request(`/api/assessments/?startup_id=${startupId}`)
-      const assessments = getAssessmentsResponse.map(ass => ({ ...ass, risk_name: ass.name.split(' ')[0] }))
-      const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(categories[0].id)}`)
-      const startup = (isAdmin || isSuperAdmin) && (state.startup ? state.startup : await request(`api/startups/${startupId}`))
+      const categories = await request(`/api/assessments/${id}/categories`);
+      const getAssessmentsResponse = await request(`/api/assessments/?startup_id=${startupId}`);
+      const assessments = getAssessmentsResponse.map(ass => ({
+        ...ass,
+        risk_name: ass.name.split(' ')[0],
+      }));
+      const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(categories[0].id)}`);
+      const startup = (isAdmin || isSuperAdmin) && (state.startup
+        ? state.startup
+        : await request(`api/startups/${startupId}`));
 
       setState({
         ...state,
@@ -61,22 +76,22 @@ const AssessmentsPage = props => {
         subCategories,
         activeCategory: categories[0].id,
         startup,
-        loading: false
-      })
+        loading: false,
+      });
     } catch (err) {
       if (err.status === 403 || err.status === 401) {
-        logOut()
+        logOut();
       }
     }
-  }
+  };
 
   useEffect(() => {
-    fetchAssessmentSettings()
-  }, [])
+    fetchAssessmentSettings();
+  }, []);
 
   return (
     <div className={`assessment-page ${isMember ? 'customer' : 'admin'}`}>
-      <Header className='page' {...props} />
+      <Header className="page" {...props} />
       <div className="assessment-page-container">
         {
           !state.loading ? (
@@ -87,19 +102,28 @@ const AssessmentsPage = props => {
                     <Link to="/" className="active">Dashboard</Link>
                     <img src={ArrowRightSmallImg} alt="" />
                     {(isAdmin || isSuperAdmin) && (
-                      <>
-                        <Link to={`/assessments/${startupId}`} className="active">{state.startup?.name}</Link>
-                        <img src={ArrowRightSmallImg} alt="" />
-                      </>
+                    <>
+                      <Link
+                        to={`/assessments/${startupId}`}
+                        className="active"
+                      >{state.startup?.name}</Link>
+                      <img src={ArrowRightSmallImg} alt="" />
+                    </>
                     )}
                     <span>{type} Risk</span>
                   </div>
                   <h3 className="assessment-title">{type} Risk</h3>
                   {
-                    isMember
-                      ? <p className="assessment-subtitle">Hi {nameOrEmail(user.first_name)}, please complete this assessment on behalf of {user.company_name}.</p>
-                      : <p className="assessment-subtitle">Hi {nameOrEmail(user.first_name)}, you can review assessment below.</p>
-                  }
+                      isMember
+                        ? (
+                          <p className="assessment-subtitle">Hi {nameOrEmail(user)}, please complete
+                            this assessment on behalf of {user.company_name}.</p>
+                        )
+                        : (
+                          <p className="assessment-subtitle">Hi {nameOrEmail(user)}, you can review
+                            assessment below.</p>
+                        )
+                    }
                 </div>
                 <div className="assessment-settings-container">
                   <AssessmentsSteps
@@ -113,6 +137,7 @@ const AssessmentsPage = props => {
                       assessmentId={id}
                       assessmentName={type}
                       startupId={startupId}
+                      changeSubCategory={changeSubCategory}
                       activeCategory={state.activeCategory}
                       assessments={state.assessments}
                       categories={state.categories}
@@ -122,12 +147,12 @@ const AssessmentsPage = props => {
                 </div>
               </div>
             </div>
-          ) :
-            <Loader />
+          )
+            : <Loader />
         }
       </div>
     </div>
-  )
+  );
 }
 
-export default AssessmentsPage
+export default AssessmentsPage;

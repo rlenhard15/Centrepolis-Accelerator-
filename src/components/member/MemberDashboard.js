@@ -2,6 +2,8 @@ import React from 'react';
 
 import Assessments from '../assessments/Assessments';
 
-const MemberDashboard = props => <Assessments {...props} />
+function MemberDashboard(props) {
+  return <Assessments {...props} />;
+}
 
-export default MemberDashboard
+export default MemberDashboard;

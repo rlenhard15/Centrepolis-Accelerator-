@@ -1,63 +1,71 @@
-import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
-import toastr from 'toastr'
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import toastr from 'toastr';
 
-import DashboardMenu from '../dashboard/DashboardMenu'
-import { InputField } from '../../components/common/InputField'
-import { CustomButton } from '../../components/common/Button'
-import Loader from '../../components/loader/Loader'
-import SuccessIcon from '../../components/common/SuccessIcon'
+import DashboardMenu from '../dashboard/DashboardMenu';
+import { InputField } from '../../components/common/InputField';
+import { CustomButton } from '../../components/common/Button';
+import Loader from '../../components/loader/Loader';
+import SuccessIcon from '../../components/common/SuccessIcon';
 
-import useHttp from '../../hooks/useHttp.hook'
-import useForm from '../../hooks/useForm.hook'
-import validate from '../../validationRules/resetPassword'
+import useHttp from '../../hooks/useHttp.hook';
+import useForm from '../../hooks/useForm.hook';
+import validate from '../../validationRules/resetPassword';
 
-import './AuthorizationPage.scss'
+import './AuthorizationPage.scss';
 
-const ResetPasswordPage = props => {
+function ResetPasswordPage(props) {
   const fields = {
     password: '',
-  }
+  };
 
-  const history = useHistory()
-  const { loading, request } = useHttp()
-  const { values, errors, handleChange, handleSubmit } = useForm(() => handleResetPassword(), validate, fields)
-  const [isSuccess, setIsSuccess] = useState(false)
+  const history = useHistory();
+  const {
+    loading,
+    request,
+  } = useHttp();
+  const {
+    values,
+    errors,
+    handleChange,
+    handleSubmit,
+  } = useForm(() => handleResetPassword(), validate, fields);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    const { token } = parseParams()
+    const { token } = parseParams();
 
     if (!token) {
-      history.push('/sign_in')
+      history.push('/sign_in');
     }
-  }, [])
+  }, []);
 
-  const handleResetPassword = async (_e) => {
-    const { token } = parseParams()
+  const handleResetPassword = async _e => {
+    const { token } = parseParams();
     try {
-      await request(`/users/password`, 'PUT', {
+      await request('/users/password', 'PUT', {
         reset_password_token: token,
         password: values.password,
-      })
+      });
 
-      setIsSuccess(true)
+      setIsSuccess(true);
     } catch (err) {
-      toastr.error('Something went wrong', 'Error')
+      toastr.error('Something went wrong', 'Error');
     }
-  }
+  };
 
   const handleSignInClick = () => {
-    history.push('/sign_in')
-  }
+    history.push('/sign_in');
+  };
 
   const parseParams = () => {
-    const params = new URLSearchParams(props.location.search)
-    const token = params.get('reset_password_token')
+    const params = new URLSearchParams(props.location.search);
+    const token = params.get('reset_password_token');
 
     return {
       token,
-    }
-  }
+    };
+  };
 
   return (
     <div className="auth-page">
@@ -70,7 +78,8 @@ const ResetPasswordPage = props => {
                 <SuccessIcon />
               </div>
               <h3 className="auth-page-form-title">Success!</h3>
-              <h4 className="auth-page-form-subtitle">You have successfully changed the password</h4>
+              <h4 className="auth-page-form-subtitle">You have successfully changed the
+                password</h4>
               <CustomButton
                 handleClick={handleSignInClick}
                 className="auth-page-form-sign-in"
@@ -81,7 +90,8 @@ const ResetPasswordPage = props => {
           ) : (
             <>
               <h3 className="auth-page-form-title">Reset Password</h3>
-              <h4 className="auth-page-form-subtitle">Please enter your new password to login into your account</h4>
+              <h4 className="auth-page-form-subtitle">Please enter your new password to login into
+                your account</h4>
               <InputField
                 label="New password"
                 placeholder="New password"
@@ -104,7 +114,7 @@ const ResetPasswordPage = props => {
         {loading ? <Loader /> : null}
       </div>
     </div>
-  )
+  );
 }
 
-export default ResetPasswordPage
+export default ResetPasswordPage;

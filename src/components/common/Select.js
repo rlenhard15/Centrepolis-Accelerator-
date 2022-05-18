@@ -1,19 +1,19 @@
 import React from 'react';
 
-import Select from 'react-select'
+import Select from 'react-select';
 
 import './Select.scss';
 
-const CustomSelect = props => {
+function CustomSelect(props) {
   const customStyles = {
     indicatorSeparator: () => ({
-      display: 'none'
+      display: 'none',
     }),
     placeholder: () => ({
       paddingLeft: 5,
-      color: props.isDisable ? 'rgba(10, 14, 46, 0.5)' : '#0A0E2E'
+      color: props.isDisable ? 'rgba(10, 14, 46, 0.5)' : '#0A0E2E',
     }),
-    menu: (provided) => ({
+    menu: provided => ({
       ...provided,
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
@@ -21,30 +21,30 @@ const CustomSelect = props => {
       marginBottom: 0,
       boxShadow: 'none',
       border: '1px solid #D3D3D3',
-      zIndex: 10
+      zIndex: 10,
     }),
-    option: (provided) => ({
+    option: provided => ({
       ...provided,
       padding: '10px 13px',
       borderBottom: '1px solid #D3D3D3',
-      fontSize: '0.8889rem'
+      fontSize: '0.8889rem',
     }),
-    singleValue: (provided) => ({
+    singleValue: provided => ({
       ...provided,
-      marginLeft: 5
+      marginLeft: 5,
     }),
 
     dropdownIndicator: (provided, state) => ({
       ...provided,
       paddingRight: 10,
       transition: 'all .2s ease',
-      transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : null
+      transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : null,
     }),
-    input: (provided) => ({
+    input: provided => ({
       ...provided,
-      marginLeft: 5
-    })
-  }
+      marginLeft: 5,
+    }),
+  };
 
   return (
     <div className="custom-select">
@@ -61,11 +61,13 @@ const CustomSelect = props => {
         isMulti={props.isMulti}
         maxMenuHeight={props.maxMenuHeight}
       />
-      {props.errorText && <p className="error-text">
-        {props.errorText}
-      </p>}
+      {props.errorText && (
+        <p className="error-text">
+          {props.errorText}
+        </p>
+      )}
     </div>
-  )
+  );
 }
 
-export default CustomSelect
+export default CustomSelect;

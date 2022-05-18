@@ -1,10 +1,10 @@
 export default function validate(values) {
-  let errors = {}
+  const errors = {};
 
   if (!values.startupName) {
-    errors.startupName = true
-    errors.startupNameMessage = 'Startup name is required'
+    errors.startupName = true;
+    errors.startupNameMessage = 'Startup name is required';
   }
 
-  return errors
-};
+  return errors;
+}

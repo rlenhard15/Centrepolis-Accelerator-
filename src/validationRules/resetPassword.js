@@ -1,13 +1,13 @@
 export default function validate(values) {
-  let errors = {}
+  const errors = {};
 
   if (!values.password) {
-    errors.password = true
-    errors.passwordError = '* is required'
+    errors.password = true;
+    errors.passwordError = '* is required';
   } else if (values.password.length < 6) {
-    errors.password = true
-    errors.passwordError = 'Password must be 8 or more characters'
+    errors.password = true;
+    errors.passwordError = 'Password must be 8 or more characters';
   }
 
-  return errors
-};
+  return errors;
+}

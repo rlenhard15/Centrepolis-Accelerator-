@@ -7,23 +7,22 @@ import LeanRocketLabLogo from '../../images/logos/lean_rocket_lab_logo.png';
 const acceleratorId = Number(process.env.REACT_APP_ACCELERATOR_ID);
 
 const getAcceleratorLogo = (type = undefined) => {
-
-  //Centrepolis
+  // Centrepolis
   if (acceleratorId === 1) {
     if (type === 'page') {
-      return LogoBlack
-    } else if (type === 'dashboard') {
-      return LogoWhite
-    } else {
-      return MainLogo;
+      return LogoBlack;
     }
+    if (type === 'dashboard') {
+      return LogoWhite;
+    }
+    return MainLogo;
   }
 
-  //LeanRocketLab
+  // LeanRocketLab
   if (acceleratorId === 2) return LeanRocketLabLogo;
 
-  //FuzeHub
-  if (acceleratorId === 3) return FuseHubLogo
-}
+  // FuzeHub
+  if (acceleratorId === 3) return FuseHubLogo;
+};
 
-export { getAcceleratorLogo }
+export { getAcceleratorLogo };

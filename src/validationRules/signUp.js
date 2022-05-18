@@ -1,5 +1,5 @@
 export default function validate(values) {
-  let errors = {};
+  const errors = {};
   if (!values.first_name) {
     errors.first_name = true;
     errors.first_name_message = 'First name is required';
@@ -11,7 +11,7 @@ export default function validate(values) {
   if (!values.email) {
     errors.email = true;
     errors.email_message = 'Email is required';
-  } else if (!/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test(values.email)) {
+  } else if (!/^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/.test(values.email)) {
     errors.email = true;
     errors.email_message = 'Email address is invalid';
   }
@@ -30,4 +30,4 @@ export default function validate(values) {
     errors.password_confirmation_message = 'Password do not match ';
   }
   return errors;
-};
+}

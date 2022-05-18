@@ -1,24 +1,24 @@
 import React, { memo, useState } from 'react';
 
+import IconButton from '@material-ui/core/IconButton';
+import toastr from 'toastr';
+import { MoreVert } from '@material-ui/icons';
+import { ListItemIcon, ListItemText, Menu, MenuItem } from '@material-ui/core';
 import { ReactComponent as EditIcon } from '../../images/icons/edit-icon.svg';
 import DeleteIcon from '../../images/icons/delete-icon.svg';
-import IconButton from '@material-ui/core/IconButton';
-import { useAuthContext } from '../../CheckAuthorization';
+import { useAuthContext } from '../../utils/context';
 
 import useHttp from '../../hooks/useHttp.hook';
 
 import './TaskItem.scss';
 import { fullNameOrEmail } from '../../utils/helpers';
-import { ListItemIcon, ListItemText, Menu, MenuItem, } from '@material-ui/core';
-import { MoreVert } from '@material-ui/icons';
-import toastr from 'toastr';
 
 const TaskItem = memo(props => {
   const { request } = useHttp();
   const {
     authData: { user },
     isMember,
-    isTeamLead
+    isTeamLead,
   } = useAuthContext();
 
   const [state, setState] = useState({
@@ -32,7 +32,7 @@ const TaskItem = memo(props => {
       setState({
         ...state,
         open: !state.open,
-        status: 'completed'
+        status: 'completed',
       });
     }
   };
@@ -50,7 +50,7 @@ const TaskItem = memo(props => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (event) => {
+  const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -87,41 +87,45 @@ const TaskItem = memo(props => {
           }}
         >
           <MenuItem
-            key={'edit'} onClick={() => {
-            props.handleShowPopup(props.id);
-            handleClose();
-          }}
+            key="edit"
+            onClick={() => {
+              props.handleShowPopup(props.id);
+              handleClose();
+            }}
           >
             <ListItemIcon><EditIcon /></ListItemIcon>
             <ListItemText>Edit</ListItemText>
           </MenuItem>
           <MenuItem
-            key={'edit'} onClick={() => {
-            props.handleDeleteTask(props.id);
-            handleClose();
-          }}
+            key="edit"
+            onClick={() => {
+              props.handleDeleteTask(props.id);
+              handleClose();
+            }}
           >
             <ListItemIcon><img src={DeleteIcon} alt="Delete" /></ListItemIcon>
             <ListItemText>Delete</ListItemText>
           </MenuItem>
           {isAbleToUpdateTask() && state.status !== 'completed' && [
             <MenuItem
-              key={'edit'} onClick={() => {
-              handleCompleteTask();
-              handleClose();
-            }}
+              key="edit"
+              onClick={() => {
+                handleCompleteTask();
+                handleClose();
+              }}
             >
               <ListItemText>Mark Completed</ListItemText>
             </MenuItem>,
             <MenuItem
-              key={'send-reminder'}
+              key="send-reminder"
               onClick={async () => {
-                await request(`api/tasks/${props.id}/send_task_reminder`)
-                toastr.success('Reminder has been sent!', 'Success')
+                await request(`api/tasks/${props.id}/send_task_reminder`);
+                toastr.success('Reminder has been sent!', 'Success');
                 handleClose();
-              }}>
+              }}
+            >
               <ListItemText>Send Reminders</ListItemText>
-            </MenuItem>
+            </MenuItem>,
           ]}
         </Menu>
       </div>
@@ -148,12 +152,12 @@ const TaskItem = memo(props => {
               {
                 state.status === 'completed' ? (
                   <span>
-                Completed
-              </span>
+                    Completed
+                  </span>
                 ) : (
                   <span>
-                Incomplete
-              </span>
+                    Incomplete
+                  </span>
                 )
               }
             </div>

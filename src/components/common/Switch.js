@@ -1,17 +1,17 @@
-import React from 'react'
+import React from 'react';
 
-import Switch from '@material-ui/core/Switch'
+import Switch from '@material-ui/core/Switch';
 
-import './Switch.scss'
+import './Switch.scss';
 
-export const CustomSwitch = props => {
+export function CustomSwitch(props) {
   const {
     className = '',
     checked = false,
     disabled = false,
     handleClick,
     label,
-  } = props
+  } = props;
 
   return (
     <>
@@ -24,5 +24,5 @@ export const CustomSwitch = props => {
       />
       {label && <label className="switch-label">{label}</label>}
     </>
-  )
+  );
 }

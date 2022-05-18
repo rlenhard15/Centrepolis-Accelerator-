@@ -4,7 +4,7 @@ import checkIcon from '../../images/icons/check.svg';
 
 import './SuccessIcon.scss';
 
-const SuccessIcon = () => {
+function SuccessIcon() {
   return (
     <div className="success-icon">
       <div className="success-icon-inner-cnt">
@@ -12,6 +12,6 @@ const SuccessIcon = () => {
       </div>
     </div>
   );
-};
+}
 
 export default SuccessIcon;

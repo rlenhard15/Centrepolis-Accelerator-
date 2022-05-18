@@ -1,43 +1,51 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
-import { AuthLogo } from '../../components/logos/AuthLogo'
-import { InputField } from '../../components/common/InputField'
-import { CustomButton } from '../../components/common/Button'
-import Loader from '../../components/loader/Loader'
+import { AuthLogo } from '../../components/logos/AuthLogo';
+import { InputField } from '../../components/common/InputField';
+import { CustomButton } from '../../components/common/Button';
+import Loader from '../../components/loader/Loader';
 
-import useHttp from '../../hooks/useHttp.hook'
-import useForm from '../../hooks/useForm.hook'
-import validate from '../../validationRules/signUp'
+import useHttp from '../../hooks/useHttp.hook';
+import useForm from '../../hooks/useForm.hook';
+import validate from '../../validationRules/signUp';
 
-import './AuthorizationPage.scss'
+import './AuthorizationPage.scss';
 
-const SignUpPage = props => {
+function SignUpPage(props) {
   const signUpFields = {
     first_name: '',
     last_name: '',
     email: '',
     password: '',
     password_confirmation: '',
-    accelerator_id: Number(process.env.REACT_APP_ACCELERATOR_ID)
-  }
-  const { loading, request } = useHttp()
-  const { values, errors, handleChange, handleSubmit } = useForm(singUp, validate, signUpFields)
-  const [emailHasTaken, setEmailHasTaken] = useState(false)
+    accelerator_id: Number(process.env.REACT_APP_ACCELERATOR_ID),
+  };
+  const {
+    loading,
+    request,
+  } = useHttp();
+  const {
+    values,
+    errors,
+    handleChange,
+    handleSubmit,
+  } = useForm(singUp, validate, signUpFields);
+  const [emailHasTaken, setEmailHasTaken] = useState(false);
 
   function singUp() {
-    signUpRequest()
-  };
+    signUpRequest();
+  }
 
   const signUpRequest = async () => {
     try {
-      const userData = await request(`/users/sign_up`, 'POST', { user: { ...values } })
-      localStorage.setItem('userData', JSON.stringify(userData))
-      props.history.push('/')
+      const userData = await request('/users/sign_up', 'POST', { user: { ...values } });
+      localStorage.setItem('userData', JSON.stringify(userData));
+      props.history.push('/');
     } catch (err) {
-      if (err.status === 400) setEmailHasTaken(true)
+      if (err.status === 400) setEmailHasTaken(true);
     }
-  }
+  };
 
   return (
     <div className="auth-page">
@@ -113,7 +121,7 @@ const SignUpPage = props => {
         }
       </div>
     </div>
-  )
+  );
 }
 
-export default SignUpPage
+export default SignUpPage;

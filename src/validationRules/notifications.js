@@ -1,3 +1,3 @@
 export default function validate(_values) {
-  return {}
-};
+  return { _values };
+}

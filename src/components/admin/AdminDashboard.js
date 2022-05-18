@@ -1,79 +1,93 @@
-import React, { useState, useEffect } from 'react'
-import toastr from 'toastr'
+import React, { useEffect, useState } from 'react';
+import toastr from 'toastr';
 
-import EmptyDashboard from './EmptyDashboard'
-import StartupsTable from './StartupsTable'
-import InviteTeamPopup from './InviteTeamPopup'
-import StartupPopup from '../startup/StartupPopup'
-import { CustomButton } from '../common/Button'
-import Pagination from '../common/Pagination'
+import EmptyDashboard from './EmptyDashboard';
+import StartupsTable from './StartupsTable';
+import InviteTeamPopup from './InviteTeamPopup';
+import StartupPopup from '../startup/StartupPopup';
+import { CustomButton } from '../common/Button';
+import Pagination from '../common/Pagination';
 
-import { useAuthContext } from '../../CheckAuthorization'
-import useHttp from '../../hooks/useHttp.hook'
+import { useAuthContext } from '../../utils/context';
+import useHttp from '../../hooks/useHttp.hook';
 
-import Loader from '../loader/Loader'
+import Loader from '../loader/Loader';
 import { fullNameOrEmail } from '../../utils/helpers';
 
-const USER_INVITE_MODAL = 'USER_INVITE_MODAL'
-const STARTUP_MODAL = 'STARTUP_MODAL'
+const USER_INVITE_MODAL = 'USER_INVITE_MODAL';
+const STARTUP_MODAL = 'STARTUP_MODAL';
 
-const Dashboard = () => {
-  const { authData: { user }, isSuperAdmin, logOut, isAdmin } = useAuthContext()
-  const { loading, request } = useHttp()
+function Dashboard() {
+  const {
+    authData: { user },
+    isSuperAdmin,
+    logOut,
+    isAdmin,
+  } = useAuthContext();
+  const {
+    loading,
+    request,
+  } = useHttp();
 
-  const [page, setPage] = useState(0)
-  const [modal, setModal] = useState(null)
-  const [startupsData, setStartups] = useState(null)
+  const [page, setPage] = useState(0);
+  const [modal, setModal] = useState(null);
+  const [startupsData, setStartups] = useState(null);
 
   const handleCloseModal = () => {
-    setModal(null)
-  }
+    setModal(null);
+  };
 
   const openCreateStartupPopup = () => {
-    setModal({ type: STARTUP_MODAL })
-  }
+    setModal({ type: STARTUP_MODAL });
+  };
 
   const openEditStartupPopup = (id, startupName) => {
-    setModal({ type: STARTUP_MODAL, data: { startupId: id, startupName } })
-  }
+    setModal({
+      type: STARTUP_MODAL,
+      data: {
+        startupId: id,
+        startupName,
+      },
+    });
+  };
 
   const openShowInvitePopup = () => {
-    setModal({ type: USER_INVITE_MODAL })
-  }
+    setModal({ type: USER_INVITE_MODAL });
+  };
 
   const handleIviteAdmin = _admin => {
-    getMembersRequest()
-    toastr.success('Admin has been invited', 'Success')
-  }
+    getMembersRequest();
+    toastr.success('Admin has been invited', 'Success');
+  };
 
   const handleCreateStartup = _startup => {
-    getMembersRequest()
-    toastr.success('Startup has been created', 'Success')
-  }
+    getMembersRequest();
+    toastr.success('Startup has been created', 'Success');
+  };
 
   const handleChangePage = (_event, newPage) => {
-    setPage(newPage)
-  }
+    setPage(newPage);
+  };
 
   const getMembersRequest = async () => {
     try {
       const startups = await request(`/api/startups?page=${page + 1}`);
       if (startups.current_page > startups.total_pages && startups.total_pages !== 0) {
-        setPage(page - 1)
+        setPage(page - 1);
       } else {
-        setStartups(startups)
+        setStartups(startups);
       }
     } catch (err) {
       if (err.status === 403 || err.status === 401) {
-        logOut()
+        logOut();
       }
     }
-  }
+  };
 
-  const handleDeleteStartUp = async (id) => {
-    await request(`/api/startups/${id}`, 'DELETE')
-    await getMembersRequest()
-  }
+  const handleDeleteStartUp = async id => {
+    await request(`/api/startups/${id}`, 'DELETE');
+    await getMembersRequest();
+  };
 
   const renderModal = () => {
     switch (modal?.type) {
@@ -83,7 +97,7 @@ const Dashboard = () => {
             handleClosePopup={handleCloseModal}
             addCustomers={handleIviteAdmin}
           />
-        )
+        );
       case STARTUP_MODAL:
         return (
           <StartupPopup
@@ -92,21 +106,21 @@ const Dashboard = () => {
             startupId={modal.data?.startupId}
             startupName={modal.data?.startupName}
           />
-        )
+        );
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   useEffect(() => {
     if (isAdmin || isSuperAdmin) {
-      getMembersRequest()
+      getMembersRequest();
     }
-  }, [page])
+  }, [page]);
 
-  if (loading && !startupsData) return <Loader />
+  if (loading && !startupsData) return <Loader />;
 
-  const displayName = fullNameOrEmail(user)
+  const displayName = fullNameOrEmail(user);
   return (
     <>
       {startupsData?.startups.length ? (
@@ -121,12 +135,13 @@ const Dashboard = () => {
                 variant="outlined"
                 handleClick={openCreateStartupPopup}
               />
-              {isSuperAdmin &&
-                <CustomButton
-                  label="Add New Admin"
-                  handleClick={openShowInvitePopup}
-                />
-              }
+              {isSuperAdmin
+                && (
+                  <CustomButton
+                    label="Add New Admin"
+                    handleClick={openShowInvitePopup}
+                  />
+                )}
             </div>
           </div>
           <StartupsTable
@@ -134,27 +149,27 @@ const Dashboard = () => {
             openEditStartupPopup={openEditStartupPopup}
             handleDeleteStartUp={handleDeleteStartUp}
           />
-          {startupsData.total_pages > 1 ?
-            <Pagination
-              page={page}
-              totalPages={startupsData.total_pages}
-              handleChangePage={handleChangePage}
-              itemsName='Startups'
-              outlined={true}
-            /> : null
-          }
+          {startupsData.total_pages > 1
+            ? (
+              <Pagination
+                page={page}
+                totalPages={startupsData.total_pages}
+                handleChangePage={handleChangePage}
+                itemsName="Startups"
+                outlined
+              />
+            ) : null}
         </>
-      ) :
-        (
+      )
+        : (
           <EmptyDashboard
             openCreateStartupPopup={openCreateStartupPopup}
             openShowInvitePopup={openShowInvitePopup}
           />
-        )
-      }
+        )}
       {renderModal()}
     </>
-  )
+  );
 }
 
-export default Dashboard
+export default Dashboard;

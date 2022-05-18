@@ -4,7 +4,7 @@ import RiscProgressImg from '../../images/risk-progress.svg';
 import IncompleteRiskImg from '../../images/risk-incomplete.png';
 import Loader from '../loader/Loader';
 
-const RiskProgress = props => {
+function RiskProgress(props) {
   const { riskType } = props;
   const [imgLoading, setImgLoading] = useState(true);
 
@@ -19,8 +19,8 @@ const RiskProgress = props => {
     } else {
       initial.transform = `rotate(${180 - value * coeff}deg)`;
     }
-    return initial
-  }
+    return initial;
+  };
 
   const handleImgLoaded = () => setImgLoading(false);
 
@@ -30,17 +30,18 @@ const RiskProgress = props => {
         riskType === 'Incomplete' ? (
           <img src={IncompleteRiskImg} alt="" />
         ) : (
-            <div className="risk-block">
-              <img src={RiscProgressImg} alt="" onLoad={handleImgLoaded} />
-              {
-                !imgLoading ?
-                  <span className={`risk-circle ${props.riskClass}`} style={positionCounting()}></span> : <Loader />
-              }
-            </div>
-          )
+          <div className="risk-block">
+            <img src={RiscProgressImg} alt="" onLoad={handleImgLoaded} />
+            {
+              !imgLoading
+                ? <span className={`risk-circle ${props.riskClass}`} style={positionCounting()} />
+                : <Loader />
+            }
+          </div>
+        )
       }
     </div>
-  )
+  );
 }
 
-export default RiskProgress
+export default RiskProgress;

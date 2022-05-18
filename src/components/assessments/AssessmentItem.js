@@ -1,11 +1,20 @@
-import React from 'react'
+import React from 'react';
 
-import AssessmentLink from './AssessmentLink'
-import RiskProgress from './AssessmentsRiskProgress'
+import AssessmentLink from './AssessmentLink';
+import RiskProgress from './AssessmentsRiskProgress';
 
-const AssessmentsItem = props => {
-  const { startupId, assessment, handleOpenInfoPopup } = props
-  const { risk_name, risk_type, risk_class, risk_value } = assessment
+function AssessmentsItem(props) {
+  const {
+    startupId,
+    assessment,
+    handleOpenInfoPopup,
+  } = props;
+  const {
+    risk_name,
+    risk_type,
+    risk_class,
+    risk_value,
+  } = assessment;
 
   return (
     <div className={`assessment-item ${risk_type !== 'Incomplete' ? 'have-assessment' : ''}`}>
@@ -30,7 +39,7 @@ const AssessmentsItem = props => {
         Learn more
       </div>
     </div>
-  )
+  );
 }
 
-export default AssessmentsItem
+export default AssessmentsItem;

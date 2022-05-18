@@ -1,107 +1,121 @@
-import React, { useEffect, useState, useRef } from 'react'
-import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import React, { useEffect, useRef, useState } from 'react';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
-import { InputField } from '../common/InputField'
-import CustomSelect from '../common/Select'
-import { CustomButton } from '../common/Button'
+import { InputField } from '../common/InputField';
+import CustomSelect from '../common/Select';
+import { CustomButton } from '../common/Button';
 
-import useHttp from '../../hooks/useHttp.hook'
-import useForm from '../../hooks/useForm.hook'
-import { useAuthContext } from '../../CheckAuthorization'
-import validate from '../../validationRules/createStartup'
+import useHttp from '../../hooks/useHttp.hook';
+import useForm from '../../hooks/useForm.hook';
+import { useAuthContext } from '../../utils/context';
+import validate from '../../validationRules/createStartup';
 
-import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg';
 
-const StartupPopup = props => {
+function StartupPopup(props) {
+  const [admins, setAdmins] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+  const [currentAdmins, setCurrentAdmins] = useState([]);
 
-  const [admins, setAdmins] = useState([])
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPage, setTotalPage] = useState(1)
-  const [currentAdmins, setCurrentAdmins] = useState([])
-
-  const { handleClosePopup, handleCreateStartup, startupId, startupName } = props
+  const {
+    handleClosePopup,
+    handleCreateStartup,
+    startupId,
+    startupName,
+  } = props;
 
   const formData = {
     startupName: startupName || '',
-  }
+  };
 
-  const { isSuperAdmin } = useAuthContext()
-  const observer = useRef()
+  const { isSuperAdmin } = useAuthContext();
+  const observer = useRef();
 
-  const { loading, request } = useHttp()
-  const { loading: startupLoading, request: startupRequest } = useHttp()
+  const {
+    loading,
+    request,
+  } = useHttp();
+  const {
+    loading: startupLoading,
+    request: startupRequest,
+  } = useHttp();
 
-  const { values, errors, handleChange, handleSubmit } = useForm(() => createStartup(), validate, formData)
+  const {
+    values,
+    errors,
+    handleChange,
+    handleSubmit,
+  } = useForm(() => createStartup(), validate, formData);
 
   useEffect(() => {
     if (startupId) {
-      getInitStartupData()
+      getInitStartupData();
     }
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (isSuperAdmin) {
-      fetchAdmins()
+      fetchAdmins();
     }
-  }, [currentPage])
+  }, [currentPage]);
 
   async function getInitStartupData() {
-    const { admins } = await startupRequest(`api/startups/${startupId}`)
+    const { admins } = await startupRequest(`api/startups/${startupId}`);
     setCurrentAdmins(admins.map(admin => ({
       value: admin.id,
-      label: `${admin.first_name} ${admin.last_name}`
-    })))
+      label: `${admin.first_name} ${admin.last_name}`,
+    })));
   }
 
   async function fetchAdmins() {
-    const response = await request(`api/admins?page=${currentPage}`)
-    setTotalPage(response.total_pages)
-    setAdmins(admins => admins.concat(response.admins))
+    const response = await request(`api/admins?page=${currentPage}`);
+    setTotalPage(response.total_pages);
+    setAdmins(admins => admins.concat(response.admins));
   }
 
   const createStartup = async () => {
-
     const startup = isSuperAdmin
       ? {
-          name: values.startupName,
-          admins_startups_attributes: currentAdmins.map(({ value }) => ({ admin_id: value }))
-      } : { name: values.startupName }
+        name: values.startupName,
+        admins_startups_attributes: currentAdmins.map(({ value }) => ({ admin_id: value })),
+      } : { name: values.startupName };
 
     if (startupId) {
-      const updatedStartup = await request(`api/startups/${startupId}`, 'PUT', { startup })
-      handleCreateStartup(updatedStartup)
+      const updatedStartup = await request(`api/startups/${startupId}`, 'PUT', { startup });
+      handleCreateStartup(updatedStartup);
     } else {
-      const newStartup = await request(`api/startups`, 'POST', { startup })
-      handleCreateStartup(newStartup)
+      const newStartup = await request('api/startups', 'POST', { startup });
+      handleCreateStartup(newStartup);
     }
 
-    handleClosePopup()
-  }
+    handleClosePopup();
+  };
 
-  const handleChangeSelect = (e) => {
-    setCurrentAdmins(e)
-  }
+  const handleChangeSelect = e => {
+    setCurrentAdmins(e);
+  };
 
   const ref = node => {
-    if (loading) return
-    if (observer.current) observer.current.disconnect()
+    if (loading) return;
+    if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && totalPage > currentPage) {
-        setCurrentPage(page => page + 1)
+        setCurrentPage(page => page + 1);
       }
-    })
+    });
 
-    if (node) observer.current.observe(node)
-  }
+    if (node) observer.current.observe(node);
+  };
 
   const adminOptions = admins
     .map((admin, i) => ({
-        value: admin.id,
-        label:
-          <div ref={i + 1 === admins.length ? ref : null}>
-            {admin.first_name} {admin.last_name}
-          </div>
-      }))
+      value: admin.id,
+      label:
+  <div ref={i + 1 === admins.length ? ref : null}>
+    {admin.first_name} {admin.last_name}
+  </div>,
+    }));
 
   return (
     <div className="popup">
@@ -110,7 +124,8 @@ const StartupPopup = props => {
           <p className="popup-content-title">{startupId ? 'Update' : 'Create'} Startup</p>
           <button
             className="popup-close-btn"
-            onClick={handleClosePopup}>
+            onClick={handleClosePopup}
+          >
             <CloseIcon />
           </button>
           <form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -128,15 +143,15 @@ const StartupPopup = props => {
                 label="Assigned User"
                 isDisabled={adminOptions.length === 0 || startupLoading}
                 options={adminOptions}
-                placeholder='List of admins'
+                placeholder="List of admins"
                 value={currentAdmins}
                 onChange={handleChangeSelect}
                 maxMenuHeight={180}
-                isMulti={true}
+                isMulti
               />
             )}
             <CustomButton
-              type='submit'
+              type="submit"
               label={startupId ? 'Save' : 'Create'}
               disabled={loading}
             />
@@ -144,7 +159,7 @@ const StartupPopup = props => {
         </div>
       </ClickAwayListener>
     </div>
-  )
+  );
 }
 
-export default StartupPopup
+export default StartupPopup;

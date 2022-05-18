@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import { InputField } from '../common/InputField';
 import CustomSelect from '../common/Select';
 
@@ -8,19 +9,17 @@ import { CustomButton } from '../common/Button';
 import useHttp from '../../hooks/useHttp.hook';
 import useForm from '../../hooks/useForm.hook';
 import validate from '../../validationRules/inviteTeam';
-import { useAuthContext } from '../../CheckAuthorization';
-
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import { useAuthContext } from '../../utils/context';
 
 import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg';
 
 import './InviteTeamPopup.scss';
 
-const InviteTeamPopup = props => {
+function InviteTeamPopup(props) {
   const {
     isTeamLead,
     isAdmin,
-    isSuperAdmin
+    isSuperAdmin,
   } = useAuthContext();
 
   const inviteFields = {
@@ -30,7 +29,7 @@ const InviteTeamPopup = props => {
     userType: isTeamLead ? {
       value: 'Member',
     } : isSuperAdmin ? {
-      value: 'Admin'
+      value: 'Admin',
     } : null,
     startupId: props.startupId,
   };
@@ -45,11 +44,10 @@ const InviteTeamPopup = props => {
         last_name: values.lastName,
       };
 
-      const newCustomer = await request(`api/users`, 'POST', { user });
+      const newCustomer = await request('api/users', 'POST', { user });
 
       props.addCustomers(newCustomer, values.userType.value);
       props.handleClosePopup();
-
     } catch (err) {
       if (err.status === 422) return setInviteErrors({ inviteEmailError: true });
     }
@@ -57,14 +55,14 @@ const InviteTeamPopup = props => {
 
   const {
     loading,
-    request
+    request,
   } = useHttp();
   const {
     values,
     errors,
     handleChange,
     setValues,
-    handleSubmit
+    handleSubmit,
   } = useForm(inviteTeamRequest, validate, inviteFields);
   const [inviteErrors, setInviteErrors] = useState({
     inviteEmailError: false,
@@ -73,7 +71,7 @@ const InviteTeamPopup = props => {
   const handleUserTypeChange = option => {
     setValues(v => ({
       ...v,
-      'userType': option
+      userType: option,
     }));
   };
 
@@ -89,11 +87,11 @@ const InviteTeamPopup = props => {
       return [
         {
           label: 'Admin',
-          value: 'Admin'
+          value: 'Admin',
         },
         {
           label: 'Member',
-          value: 'Member'
+          value: 'Member',
         },
       ];
     }
@@ -102,11 +100,15 @@ const InviteTeamPopup = props => {
       return [
         {
           label: 'Team Lead',
-          value: 'TeamLead'
+          value: 'TeamLead',
         },
         {
           label: 'Member',
-          value: 'Member'
+          value: 'Member',
+        },
+        {
+          label: 'Admin',
+          value: 'Admin',
         },
       ];
     }
@@ -115,7 +117,7 @@ const InviteTeamPopup = props => {
       return [
         {
           label: 'Member',
-          value: 'Member'
+          value: 'Member',
         },
       ];
     }
@@ -165,17 +167,18 @@ const InviteTeamPopup = props => {
               error={errors.email || inviteErrors.inviteEmailError}
               errorText={errors.email_message || '* this email has already been taken'}
             />
-            {(!isTeamLead && props.startupId) &&
-            <CustomSelect
-              label="User type"
-              placeholder="Select user type"
-              value={values.type}
-              options={userOptions}
-              onChange={handleUserTypeChange}
-              error={errors.userType}
-              errorText={errors.userTypeMsg}
-            />
-            }
+            {(!isTeamLead && props.startupId)
+            && (
+              <CustomSelect
+                label="User type"
+                placeholder="Select user type"
+                value={values.type}
+                options={userOptions}
+                onChange={handleUserTypeChange}
+                error={errors.userType}
+                errorText={errors.userTypeMsg}
+              />
+            )}
             <CustomButton
               type="submit"
               label="Send Invite"
@@ -186,6 +189,6 @@ const InviteTeamPopup = props => {
       </ClickAwayListener>
     </div>
   );
-};
+}
 
 export default InviteTeamPopup;

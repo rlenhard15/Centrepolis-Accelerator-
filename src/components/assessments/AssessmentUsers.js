@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 
-import { ReactComponent as DeleteIcon } from '../../images/icons/delete-icon.svg'
-import Table from '../common/Table'
-import { useAuthContext } from '../../CheckAuthorization'
-import useHttp from '../../hooks/useHttp.hook'
+import { ReactComponent as DeleteIcon } from '../../images/icons/delete-icon.svg';
+import Table from '../common/Table';
+import { useAuthContext } from '../../utils/context';
+import useHttp from '../../hooks/useHttp.hook';
 
-import './AssessmentUsers.scss'
+import './AssessmentUsers.scss';
 
 const headers = [
   {
@@ -29,66 +29,74 @@ const headers = [
     width: '7%',
   },
   {
-    width: '3%'
-  }
-]
+    width: '3%',
+  },
+];
 
-export const AssessmentUsers = ({ members, teamLeads, startupId }) => {
-  const { isSuperAdmin, isAdmin } = useAuthContext()
-  const { request } = useHttp()
-  const [rows, setRows] = useState([])
+export function AssessmentUsers({
+  members,
+  teamLeads,
+  startupId,
+}) {
+  const {
+    isSuperAdmin,
+    isAdmin,
+  } = useAuthContext();
+  const { request } = useHttp();
+  const [rows, setRows] = useState([]);
 
   useEffect(() => {
-    setRows(mapDataToRow())
-  }, [members, teamLeads])
+    setRows(mapDataToRow());
+  }, [members, teamLeads]);
 
-  const mapDataToRow = () => {
-    return mapMembersData()
-      .sort((userA, userB) => new Date(userA.createdAt) - new Date(userB.createdAt))
-  }
+  const mapDataToRow = () => mapMembersData()
+    .sort((userA, userB) => new Date(userA.createdAt) - new Date(userB.createdAt));
 
-  const mapMembersData = () => {
-    return members.map(member => ({
-      id: member.id,
-      createdAt: member.created_at,
-      row: [
-        getUserName(member),
-        member.email,
-        teamLeads.find(t => t.id === member.id) ? 'Team Lead' : 'Member',
-        member.last_visit ? formatDate(member.last_visit) : '--',
-        member.tasks_number,
-      ]
-    }))
-  }
+  const mapMembersData = () => members.map(member => ({
+    id: member.id,
+    createdAt: member.created_at,
+    row: [
+      getUserName(member),
+      member.email,
+      teamLeads.find(t => t.id === member.id) ? 'Team Lead' : 'Member',
+      member.last_visit ? formatDate(member.last_visit) : '--',
+      member.tasks_number,
+    ],
+  }));
 
-  const getUserName = (user) => {
-    if (!user.first_name) return '--'
-    return `${user.first_name} ${user.last_name}`
-  }
+  const getUserName = user => {
+    if (!user.first_name) return '--';
+    return `${user.first_name} ${user.last_name}`;
+  };
 
-  const handleDeleteUser = (id) => async () => {
-    await request(`/api/users/${id}?startup_id=${startupId}`, 'DELETE')
-    setRows(rows.filter(r => r.id !== id))
-  }
+  const handleDeleteUser = id => async () => {
+    await request(`/api/users/${id}?startup_id=${startupId}`, 'DELETE');
+    setRows(rows.filter(r => r.id !== id));
+  };
 
   const formatDate = timestamp => {
-    const date = new Date(timestamp)
-    const day = date.getUTCDay()
-    const month = date.getUTCMonth() + 1
-    const year = date.getUTCFullYear().toString().slice(2)
+    const date = new Date(timestamp);
+    const day = date.getUTCDay();
+    const month = date.getUTCMonth() + 1;
+    const year = date.getUTCFullYear()
+      .toString()
+      .slice(2);
 
-    return `${month < 10 ? `0${month}` : month}/${day < 10 ? `0${day}` : day}/${year}`
-  }
+    return `${month < 10 ? `0${month}` : month}/${day < 10 ? `0${day}` : day}/${year}`;
+  };
 
   const rowsData = isSuperAdmin || isAdmin
-    ? rows.map(r => ({ ...r, row: [...r.row, <DeleteIcon className="delete-icon" onClick={handleDeleteUser(r.id)} />] }))
-    : rows
+    ? rows.map(r => ({
+      ...r,
+      row: [...r.row, <DeleteIcon className="delete-icon" onClick={handleDeleteUser(r.id)} />],
+    }))
+    : rows;
 
   return (
     <div className="assessment-users">
       <Table headers={headers} rows={rowsData} itemsName="member" />
     </div>
-  )
+  );
 }
 
-export default AssessmentUsers
+export default AssessmentUsers;

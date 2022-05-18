@@ -1,19 +1,15 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-import Table from '../common/Table'
-import RowMenu from './StartupsTableRowMenu'
+import Table from '../common/Table';
+import RowMenu from './StartupsTableRowMenu';
 
-import './StartupsTable.scss'
+import './StartupsTable.scss';
 
 const headers = [
   {
-    title: 'Admins',
-    width: '18%',
-  },
-  {
     title: 'Company Name',
-    width: '16%',
+    width: '26%',
   },
   {
     title: 'Team Leads',
@@ -32,17 +28,18 @@ const headers = [
     width: '15%',
   },
   {
-    width: '4%'
-  }
-]
+    width: '4%',
+  },
+];
 
-
-const StartupsTable = ({ startupsData, openEditStartupPopup, handleDeleteStartUp }) => {
-
+function StartupsTable({
+  startupsData,
+  openEditStartupPopup,
+  handleDeleteStartUp,
+}) {
   const mapStartupsToRow = () => startupsData.startups.map(startup => ({
     id: startup.id,
     row: [
-      getUsersNames(startup.admins),
       <Link to={`/assessments/${startup.id}`} className="startups-link">
         {startup.name}
       </Link>,
@@ -56,40 +53,40 @@ const StartupsTable = ({ startupsData, openEditStartupPopup, handleDeleteStartUp
         openEditStartupPopup={() => openEditStartupPopup(startup.id, startup.name)}
         handleDeleteStartUp={() => handleDeleteStartUp(startup.id)}
       />,
-    ]
-  }))
+    ],
+  }));
 
-  const rows = mapStartupsToRow()
+  const rows = mapStartupsToRow();
 
   return (
     <div className="startups-table">
       <Table headers={headers} rows={rows} itemsName="companies" />
     </div>
-  )
+  );
 }
 
 const getUsersNames = users => {
-  if (!users.length) return '--'
+  if (!users.length) return '--';
 
   return users
     .filter(u => u.first_name)
-    .map(u => <React.Fragment key={u.id}><span>{u.first_name} {u.last_name}</span><br /></React.Fragment>)
-}
+    .map(u => <React.Fragment key={u.id}><span>{u.first_name} {u.last_name}</span><br /></React.Fragment>);
+};
 
 const formAssessmentRisk = (assessmentsRiskList, riskName) => {
   const riskValue = assessmentsRiskList
     ?.find(risk => risk.assessment.split(' ')[0] === riskName)
-    ?.risk_value
+    ?.risk_value;
 
-  if (!riskValue) return <span className="no-assessment">Incomplete</span>
+  if (!riskValue) return <span className="no-assessment">Incomplete</span>;
 
   if (riskValue <= 33) {
-    return <span className="have-assessment high">High risk</span>
-  } else if (riskValue > 33 && riskValue <= 66) {
-    return <span className="have-assessment medium">Medium risk</span>
-  } else {
-    return <span className="have-assessment low">Low risk</span>
+    return <span className="have-assessment high">High risk</span>;
   }
-}
+  if (riskValue > 33 && riskValue <= 66) {
+    return <span className="have-assessment medium">Medium risk</span>;
+  }
+  return <span className="have-assessment low">Low risk</span>;
+};
 
-export default StartupsTable
+export default StartupsTable;

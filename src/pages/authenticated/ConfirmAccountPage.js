@@ -1,60 +1,71 @@
-import React, { useEffect } from 'react'
-import toastr from 'toastr'
+import React, { useEffect } from 'react';
+import toastr from 'toastr';
 
-import DashboardMenu from '../dashboard/DashboardMenu'
-import { InputField } from '../../components/common/InputField'
-import { CustomButton } from '../../components/common/Button'
-import Loader from '../../components/loader/Loader'
+import DashboardMenu from '../dashboard/DashboardMenu';
+import { InputField } from '../../components/common/InputField';
+import { CustomButton } from '../../components/common/Button';
+import Loader from '../../components/loader/Loader';
 
-import useHttp from '../../hooks/useHttp.hook'
-import useForm from '../../hooks/useForm.hook'
-import validate from '../../validationRules/confirmAccount'
-import { useAuthContext } from '../../CheckAuthorization'
+import useHttp from '../../hooks/useHttp.hook';
+import useForm from '../../hooks/useForm.hook';
+import validate from '../../validationRules/confirmAccount';
+import { useAuthContext } from '../../utils/context';
 
-import './AuthorizationPage.scss'
+import './AuthorizationPage.scss';
 
-const ConfirmAccountPage = props => {
+function ConfirmAccountPage(props) {
   const confirmFields = {
     password: '',
     first_name: '',
     last_name: '',
-  }
+  };
 
-  const { loading, request } = useHttp()
-  const { values, errors, handleChange, handleSubmit } = useForm(confirmAccount, validate, confirmFields)
-  const { logIn } = useAuthContext()
+  const {
+    loading,
+    request,
+  } = useHttp();
+  const {
+    values,
+    errors,
+    handleChange,
+    handleSubmit,
+  } = useForm(confirmAccount, validate, confirmFields);
+  const { logIn } = useAuthContext();
 
   useEffect(() => {
-    const { token, isForgotPassword } = parseParams()
-    if (!token) props.history.push('/sign_in')
-    if (isForgotPassword) props.history.push(`/users/password-reset?reset_password_token=${token}`)
-  }, [])
+    const {
+      token,
+      isForgotPassword,
+    } = parseParams();
+    if (!token) props.history.push('/sign_in');
+    if (isForgotPassword) props.history.push(`/users/password-reset?reset_password_token=${token}`);
+  }, []);
 
   function confirmAccount() {
-    confirmAccountRequest()
+    confirmAccountRequest();
   }
 
   const confirmAccountRequest = async () => {
-    const { token } = parseParams()
+    const { token } = parseParams();
 
     try {
-      const userData = await request(`/users/password`, 'PUT', { reset_password_token: token, ...values })
-      logIn(userData, values.keepSignedIn)
+      const userData = await request('/users/password', 'PUT', { reset_password_token: token, ...values });
+      logIn(userData, values.keepSignedIn);
     } catch (err) {
-      toastr.error('Something went wrong.', 'Error')
+      toastr.error('Something went wrong.', 'Error');
     }
-  }
+  };
 
   const parseParams = () => {
-    const params = new URLSearchParams(props.location.search)
-    const token = params.get('reset_password_token')
-    const isForgotPassword = params.get('forgot_password') === `'true'`
+    const params = new URLSearchParams(props.location.search);
+    const token = params.get('reset_password_token');
+    const isForgotPassword = params.get('forgot_password') === '\'true\'';
 
     return {
       token,
       isForgotPassword,
-    }
-  }
+    };
+  };
 
   return (
     <div className="auth-page">
@@ -93,7 +104,7 @@ const ConfirmAccountPage = props => {
             error={errors.password}
             errorText={errors.password_message}
           />
-          <div className="auth-page-form-keep-me-signed-in">
+          <div className="flex flex-row items-center">
             <InputField
               onChange={handleChange}
               value={values.keepSignedIn}
@@ -116,7 +127,7 @@ const ConfirmAccountPage = props => {
         }
       </div>
     </div>
-  )
+  );
 }
 
-export default ConfirmAccountPage
+export default ConfirmAccountPage;

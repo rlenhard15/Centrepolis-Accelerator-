@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 
 import './Button.scss';
 
-export const CustomButton = props => {
+export function CustomButton(props) {
   return (
     <Button
       className={`button ${props.className}`}
@@ -15,5 +15,5 @@ export const CustomButton = props => {
     >
       {props.label}
     </Button>
-  )
+  );
 }

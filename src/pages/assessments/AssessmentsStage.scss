@@ -148,7 +148,7 @@
       &:before {
         content: url('../../images/icons/check.svg');
         position: relative;
-        top: 10px;
+        top: 8px;
       }
     }
 
@@ -215,11 +215,11 @@
 
       .add-icon {
         transition: .3s ease;
-  
+
         &:before {
           background-color: #4971FF;
         }
-  
+
         &:after {
           background-color: #4971FF;
         }

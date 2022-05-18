@@ -1,0 +1,48 @@
+env:
+  browser: true
+  es2021: true
+extends:
+  - 'plugin:react/recommended'
+  - airbnb
+parser: '@typescript-eslint/parser'
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  ecmaVersion: 12
+  sourceType: module
+plugins:
+  - react
+  - '@typescript-eslint'
+rules:
+  react/react-in-jsx-scope: off
+  react/jsx-filename-extension: off
+  no-unused-vars: off
+  no-param-reassign: off
+  '@typescript-eslint/no-unused-vars': error
+  no-use-before-define: off
+  consistent-return: off
+  object-curly-newline: off
+  react/jsx-closing-tag-location: off
+  '@typescript-eslint/no-use-before-define': off
+  import/no-extraneous-dependencies: off
+  react/destructuring-assignment: off
+  react/prop-types: off
+  no-shadow: off
+  arrow-parens:
+    - error
+    - as-needed
+  '@typescript-eslint/no-shadow':
+    - error
+  import/extensions: off
+  react/jsx-props-no-spreading: off
+  react/require-default-props: off
+  react/jsx-one-expression-per-line: off
+settings:
+  import/resolver:
+    node:
+      extensions:
+        - .js
+        - .tsx
+        - .ts
+        - .jsx
+
