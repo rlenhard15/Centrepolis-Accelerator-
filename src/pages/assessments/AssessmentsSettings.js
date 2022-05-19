@@ -22,9 +22,6 @@ function AssessmentsSettings(props) {
       className="assessment-setting"
       ref={props.settingsBlockRef}
     >
-      <div className="flex flex-row justify-between items-center">
-        <p className="assessment-setting-title">{props.subCategories.title} Assessment</p>
-      </div>
       <AssessmentCategory
         {...category}
         index={currentStep}

@@ -160,6 +160,7 @@ function TaskPopup(props) {
         title: state.taskText,
         priority: state.taskPriority.value,
         due_date: state.dueDate.toDateString(),
+        sub_category_id: state.selectedSubcategory.value,
         task_users_attributes: state.selectedUsers.map(({ value }) => ({ user_id: value })),
       };
 

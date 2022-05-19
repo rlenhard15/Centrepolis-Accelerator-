@@ -80,8 +80,6 @@ function AssessmentCategory(props) {
     });
   };
 
-  const getTitle = title => (title ? `${index + 1}. ${title}` : null);
-
   const handleClosePopup = () => {
     setState({
       ...state,
@@ -105,12 +103,15 @@ function AssessmentCategory(props) {
       key={category_id}
     >
       <div className="flex flex-row items-center h-10 justify-between">
-        <p className="assessment-setting-subtitle">
-          {getTitle(sub_category_title)}
+        <p className="assessment-setting-title">
+          {categoryName} - {sub_category_title}
         </p>
         {
           state.saved ? <span className="saved">Changes saved</span> : null
         }
+      </div>
+      <div>
+        <p className="text-xs">Please click on the appropriate circle below</p>
       </div>
       <div className="assessment-stage-scroll-container">
         <div className="assessment-setting-stages">

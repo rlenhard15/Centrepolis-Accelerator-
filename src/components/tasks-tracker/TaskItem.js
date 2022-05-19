@@ -1,9 +1,5 @@
 import React, { memo, useState } from 'react';
-
-import IconButton from '@material-ui/core/IconButton';
 import toastr from 'toastr';
-import { MoreVert } from '@material-ui/icons';
-import { ListItemIcon, ListItemText, Menu, MenuItem } from '@material-ui/core';
 import { ReactComponent as EditIcon } from '../../images/icons/edit-icon.svg';
 import DeleteIcon from '../../images/icons/delete-icon.svg';
 import { useAuthContext } from '../../utils/context';
@@ -12,6 +8,7 @@ import useHttp from '../../hooks/useHttp.hook';
 
 import './TaskItem.scss';
 import { fullNameOrEmail } from '../../utils/helpers';
+import ThreeDotMenu from '../common/ThreeDotMenu';
 
 const TaskItem = memo(props => {
   const { request } = useHttp();
@@ -48,88 +45,36 @@ const TaskItem = memo(props => {
     return props.users_for_task.some(u => u.id === user.id);
   };
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = event => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const renderUtilityButtons = () => {
     if (isMember || !isAbleToUpdateTask()) return null;
-
-    return (
-      <div>
-        <IconButton
-          aria-label="more"
-          id="long-button"
-          aria-controls={open ? 'long-menu' : undefined}
-          aria-expanded={open ? 'true' : undefined}
-          aria-haspopup="true"
-          onClick={handleClick}
-        >
-          <MoreVert />
-        </IconButton>
-        <Menu
-          id="long-menu"
-          MenuListProps={{
-            'aria-labelledby': 'long-button',
-          }}
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          PaperProps={{
-            style: {
-              width: '20ch',
-            },
-          }}
-        >
-          <MenuItem
-            key="edit"
-            onClick={() => {
-              props.handleShowPopup(props.id);
-              handleClose();
-            }}
-          >
-            <ListItemIcon><EditIcon /></ListItemIcon>
-            <ListItemText>Edit</ListItemText>
-          </MenuItem>
-          <MenuItem
-            key="edit"
-            onClick={() => {
-              props.handleDeleteTask(props.id);
-              handleClose();
-            }}
-          >
-            <ListItemIcon><img src={DeleteIcon} alt="Delete" /></ListItemIcon>
-            <ListItemText>Delete</ListItemText>
-          </MenuItem>
-          {isAbleToUpdateTask() && state.status !== 'completed' && [
-            <MenuItem
-              key="edit"
-              onClick={() => {
-                handleCompleteTask();
-                handleClose();
-              }}
-            >
-              <ListItemText>Mark Completed</ListItemText>
-            </MenuItem>,
-            <MenuItem
-              key="send-reminder"
-              onClick={async () => {
-                await request(`api/tasks/${props.id}/send_task_reminder`);
-                toastr.success('Reminder has been sent!', 'Success');
-                handleClose();
-              }}
-            >
-              <ListItemText>Send Reminders</ListItemText>
-            </MenuItem>,
-          ]}
-        </Menu>
-      </div>
-    );
+    const menuItems = [
+      {
+        text: 'Edit',
+        icon: <EditIcon />,
+        onClick: () => props.handleShowPopup(props.id),
+      },
+      {
+        text: 'Delete',
+        icon: <img src={DeleteIcon} alt="Delete" />,
+        onClick: () => props.handleDeleteTask(props.id),
+      },
+    ];
+    if (isAbleToUpdateTask() && state.status !== 'completed') {
+      menuItems.push(
+        {
+          text: 'Mark Completed',
+          onClick: () => handleCompleteTask(),
+        },
+        {
+          text: 'Send Reminder',
+          onClick: async () => {
+            await request(`api/tasks/${props.id}/send_task_reminder`);
+            toastr.success('Reminder has been sent!', 'Success');
+          },
+        },
+      );
+    }
+    return <ThreeDotMenu menuItems={menuItems} />;
   };
 
   const assignedUsers = () => {
