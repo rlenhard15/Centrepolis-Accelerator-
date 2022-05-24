@@ -16,6 +16,7 @@ import useHttp from '../../hooks/useHttp.hook';
 import { useAuthContext } from '../../utils/context';
 
 import './TaskPopup.scss';
+import { uniqBy } from 'lodash'
 
 const priority = [
   {
@@ -238,9 +239,9 @@ function TaskPopup(props) {
     });
   };
 
-  const getUsersOptions = async () => {
+  const getUsersOptions = async () => {a
     const data = await request(`api/startups/${props.startupId}`);
-    return data.members
+    return uniqBy(data.members.concat(data.admins), 'id')
       .map(member => ({
         value: member.id,
         label: member.first_name ? `${member.first_name} ${member.last_name}` : member.email,

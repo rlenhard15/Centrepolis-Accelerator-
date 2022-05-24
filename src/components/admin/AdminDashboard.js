@@ -13,9 +13,11 @@ import useHttp from '../../hooks/useHttp.hook';
 
 import Loader from '../loader/Loader';
 import { fullNameOrEmail } from '../../utils/helpers';
+import AcceleatorPopup from '../startup/AcceleatorPopup';
 
 const USER_INVITE_MODAL = 'USER_INVITE_MODAL';
 const STARTUP_MODAL = 'STARTUP_MODAL';
+const ACCELERATOR_MODAL = 'CREATE_ACCELERATOR_MODAL';
 
 function Dashboard() {
   const {
@@ -24,6 +26,7 @@ function Dashboard() {
     logOut,
     isAdmin,
   } = useAuthContext();
+  console.log(user, isSuperAdmin);
   const {
     loading,
     request,
@@ -32,6 +35,7 @@ function Dashboard() {
   const [page, setPage] = useState(0);
   const [modal, setModal] = useState(null);
   const [startupsData, setStartups] = useState(null);
+  const [accelerators, setAccelerators] = useState(null);
 
   const handleCloseModal = () => {
     setModal(null);
@@ -39,6 +43,10 @@ function Dashboard() {
 
   const openCreateStartupPopup = () => {
     setModal({ type: STARTUP_MODAL });
+  };
+
+  const openCreateAcceleratorPopup = () => {
+    setModal({ type: ACCELERATOR_MODAL });
   };
 
   const openEditStartupPopup = (id, startupName) => {
@@ -65,6 +73,11 @@ function Dashboard() {
     toastr.success('Startup has been created', 'Success');
   };
 
+  const handleCreateAccelerator = _accelerator => {
+    getAcceleratorsRequest();
+    toastr.success('Accelerator has been created', 'Success');
+  };
+
   const handleChangePage = (_event, newPage) => {
     setPage(newPage);
   };
@@ -77,6 +90,17 @@ function Dashboard() {
       } else {
         setStartups(startups);
       }
+    } catch (err) {
+      if (err.status === 403 || err.status === 401) {
+        logOut();
+      }
+    }
+  };
+
+  const getAcceleratorsRequest = async () => {
+    try {
+      const accels = await request(`/api/accelerators`);
+      setAccelerators(accels);
     } catch (err) {
       if (err.status === 403 || err.status === 401) {
         logOut();
@@ -107,6 +131,15 @@ function Dashboard() {
             startupName={modal.data?.startupName}
           />
         );
+      case ACCELERATOR_MODAL:
+        return (
+          <AcceleatorPopup
+            handleClosePopup={handleCloseModal}
+            handleCreateStartup={handleCreateAccelerator}
+            startupId={modal.data?.startupId}
+            startupName={modal.data?.startupName}
+          />
+        );
       default:
         return null;
     }
@@ -124,43 +157,47 @@ function Dashboard() {
   return (
     <>
       {startupsData?.startups.length ? (
-        <>
-          <div className="dashboard-content-header">
-            <h3 className="dashboard-title">
-              {displayName ? `Welcome, ${displayName}!` : 'Welcome!'}
-            </h3>
-            <div className="dashboard-content-buttons">
-              <CustomButton
-                label="Add Startup"
-                variant="outlined"
-                handleClick={openCreateStartupPopup}
-              />
-              {isSuperAdmin
-                && (
+          <>
+            <div className="dashboard-content-header">
+              <h3 className="dashboard-title">
+                {displayName ? `Welcome, ${displayName}!` : 'Welcome!'}
+              </h3>
+              <div className="dashboard-content-buttons">
+                <CustomButton
+                  label="Add Startup"
+                  variant="outlined"
+                  handleClick={openCreateStartupPopup}
+                />
+                {isSuperAdmin
+                && [
+                  <CustomButton
+                    label="Add Accelerator"
+                    handleClick={openCreateAcceleratorPopup}
+                  />,
                   <CustomButton
                     label="Add New Admin"
                     handleClick={openShowInvitePopup}
                   />
-                )}
+                ]}
+              </div>
             </div>
-          </div>
-          <StartupsTable
-            startupsData={startupsData}
-            openEditStartupPopup={openEditStartupPopup}
-            handleDeleteStartUp={handleDeleteStartUp}
-          />
-          {startupsData.total_pages > 1
-            ? (
-              <Pagination
-                page={page}
-                totalPages={startupsData.total_pages}
-                handleChangePage={handleChangePage}
-                itemsName="Startups"
-                outlined
-              />
-            ) : null}
-        </>
-      )
+            <StartupsTable
+              startupsData={startupsData}
+              openEditStartupPopup={openEditStartupPopup}
+              handleDeleteStartUp={handleDeleteStartUp}
+            />
+            {startupsData.total_pages > 1
+              ? (
+                <Pagination
+                  page={page}
+                  totalPages={startupsData.total_pages}
+                  handleChangePage={handleChangePage}
+                  itemsName="Startups"
+                  outlined
+                />
+              ) : null}
+          </>
+        )
         : (
           <EmptyDashboard
             openCreateStartupPopup={openCreateStartupPopup}
