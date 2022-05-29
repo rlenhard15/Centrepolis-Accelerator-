@@ -62,8 +62,8 @@ function StartupPopup(props) {
   }, [currentPage]);
 
   async function getInitStartupData() {
-    const { admins } = await startupRequest(`api/startups/${startupId}`);
-    setCurrentAdmins(admins.map(admin => ({
+    const { admins: newAdmins } = await startupRequest(`api/startups/${startupId}`);
+    setCurrentAdmins(newAdmins.map(admin => ({
       value: admin.id,
       label: `${admin.first_name} ${admin.last_name}`,
     })));
@@ -72,7 +72,7 @@ function StartupPopup(props) {
   async function fetchAdmins() {
     const response = await request(`api/admins?page=${currentPage}`);
     setTotalPage(response.total_pages);
-    setAdmins(admins => admins.concat(response.admins));
+    setAdmins(newAdmins => newAdmins.concat(response.admins));
   }
 
   const createStartup = async () => {
@@ -151,6 +151,7 @@ function StartupPopup(props) {
             {isSuperAdmin && [
               <CustomSelect
                 label="Accelerator"
+                key="Accelerator"
                 name="accelerator"
                 isDisabled={acceleratorOptions.length === 0 || startupLoading}
                 options={acceleratorOptions}
@@ -161,6 +162,7 @@ function StartupPopup(props) {
               />,
               <CustomSelect
                 label="Assigned User"
+                key="Assigned User"
                 isDisabled={adminOptions.length === 0 || startupLoading}
                 options={adminOptions}
                 placeholder="List of admins"

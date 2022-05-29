@@ -20,8 +20,8 @@ function TaskSelectGroup(props) {
       const riskStages = getSubCategories(currentCategory, selectedSubCategory);
       const subCategoryForTask = riskSubcategories.find(category => category.label === selectedSubCategory);
       const stageForTask = riskStages.find(stage => stage.label === props.infoForTask.stage_title);
-      setState(state => ({
-        ...state,
+      setState(oldState => ({
+        ...oldState,
         currentCategory,
         riskSubcategories,
         riskStages,

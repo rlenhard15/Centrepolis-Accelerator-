@@ -54,6 +54,7 @@ export function AssessmentUsers({
 
   const mapMembersData = () => members.map(member => ({
     id: member.id,
+    key: member.id,
     createdAt: member.created_at,
     row: [
       getUserName(member),
@@ -88,7 +89,7 @@ export function AssessmentUsers({
   const rowsData = isSuperAdmin || isAdmin
     ? rows.map(r => ({
       ...r,
-      row: [...r.row, <DeleteIcon className="delete-icon" onClick={handleDeleteUser(r.id)} />],
+      row: [...r.row, <DeleteIcon key={r.id} className="delete-icon" onClick={handleDeleteUser(r.id)} />],
     }))
     : rows;
 

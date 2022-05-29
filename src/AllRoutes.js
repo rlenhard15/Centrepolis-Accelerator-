@@ -46,11 +46,13 @@ export const useRoutes = (isAuthenticated, authData) => {
             />,
           ] : [
             <Route
+              key={'assessments'}
               exact
               path="/assessments/:id"
               render={props => <DashBoardPage userData={authData} {...props} />}
             />,
             <Route
+              key={'assessment type'}
               exact
               path="/assessments/:id/:type"
               render={props => <AssessmentsPage userData={authData} {...props} />}

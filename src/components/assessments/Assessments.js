@@ -21,7 +21,6 @@ function Assessments(props) {
   const { request } = useHttp();
   const { id } = useParams();
   const {
-    logOut,
     isMember,
   } = useAuthContext();
 
@@ -66,8 +65,8 @@ function Assessments(props) {
       };
     });
 
-    setState(state => ({
-      ...state,
+    setState(oldState => ({
+      ...oldState,
       assessments,
       startup,
       loading: false,
@@ -88,8 +87,8 @@ function Assessments(props) {
   };
 
   const handleOpenInfoPopup = assessment => {
-    setState(state => ({
-      ...state,
+    setState(oldState => ({
+      ...oldState,
       showInfoPopup: true,
       assessmentForInfoPopup: assessment,
     }));
@@ -100,25 +99,25 @@ function Assessments(props) {
   }, []);
 
   const handleOpenInviteMemberPopup = () => {
-    setState(state => ({
-      ...state,
+    setState(oldState => ({
+      ...oldState,
       showInvitePopup: true,
     }));
   };
 
   const handleCloseInviteMemberPopup = () => {
-    setState(state => ({
-      ...state,
+    setState(oldState => ({
+      ...oldState,
       showInvitePopup: false,
     }));
   };
 
-  const handleAddUser = (user, type) => {
+  const handleAddUser = user => {
     const oldMembers = state.startup.members.filter(m => m.id !== user.id);
-    setState(state => ({
-      ...state,
+    setState(oldState => ({
+      ...oldState,
       startup: {
-        ...state.startup,
+        ...oldState.startup,
         members: [user, ...oldMembers],
       },
     }));
@@ -219,8 +218,8 @@ function Assessments(props) {
           <AssessmentInfoPopup
             startupId={id}
             currentAssessment={state.assessmentForInfoPopup}
-            handleCloseInfoPopup={() => setState(state => ({
-              ...state,
+            handleCloseInfoPopup={() => setState(oldState => ({
+              ...oldState,
               showInfoPopup: false,
             }))}
           />

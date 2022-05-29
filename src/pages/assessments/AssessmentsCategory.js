@@ -17,7 +17,6 @@ function AssessmentCategory(props) {
   const { startupId } = props;
 
   const {
-    index,
     stages,
     category_id,
     current_stage_id,
@@ -42,15 +41,15 @@ function AssessmentCategory(props) {
     ? 'full-width'
     : '');
 
-  const handleChangeProgress = index => {
+  const handleChangeProgress = indexOfChanges => {
     const updatedStages = [...state.stages];
-    updatedStages.forEach((stage, i) => (i <= +index
+    updatedStages.forEach((stage, i) => (i <= +indexOfChanges
       ? stage.isActive = true
       : stage.isActive = false));
     setState({
       ...state,
       stages: updatedStages,
-      activeStageIndex: index,
+      activeStageIndex: indexOfChanges,
     });
   };
 
@@ -62,12 +61,12 @@ function AssessmentCategory(props) {
     } = props;
     const currentStage = state.stages.find(stage => stage.position === position + 1);
     await request(`/api/assessments/${assessmentId}/categories/${categoryId}/sub_categories/${subCategoryId}/update_progress?current_stage_id=${currentStage.id}&startup_id=${startupId}`, 'POST');
-    setState(state => ({
-      ...state,
+    setState(newState => ({
+      ...newState,
       saved: true,
     }));
-    setTimeout(() => setState(state => ({
-      ...state,
+    setTimeout(() => setState(newState => ({
+      ...newState,
       saved: false,
     })), 2000);
   };
@@ -91,8 +90,8 @@ function AssessmentCategory(props) {
   useEffect(() => {
     const activeStageIndex = stages.findIndex(stage => current_stage_id === stage.id);
     handleChangeProgress(activeStageIndex);
-    setTimeout(() => setState(state => ({
-      ...state,
+    setTimeout(() => setState(newState => ({
+      ...newState,
       loading: false,
       activeStageIndex,
     })), 100);

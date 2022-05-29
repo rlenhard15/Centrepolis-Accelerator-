@@ -10,7 +10,7 @@ import './TaskItem.scss';
 import { fullNameOrEmail } from '../../utils/helpers';
 import ThreeDotMenu from '../common/ThreeDotMenu';
 
-const TaskItem = memo(props => {
+const TaskItem = props => {
   const { request } = useHttp();
   const {
     authData: { user },
@@ -136,6 +136,6 @@ const TaskItem = memo(props => {
       </div>
     </div>
   );
-});
+};
 
-export default TaskItem;
+export default memo(TaskItem);

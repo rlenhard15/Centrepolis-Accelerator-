@@ -19,8 +19,8 @@ const useForm = (callback, validate, initialValues) => {
 
   const handleChange = e => {
     e.persist();
-    setValues(values => ({
-      ...values,
+    setValues(oldValues => ({
+      ...oldValues,
       [e.target.name]: e.target.value,
     }));
   };

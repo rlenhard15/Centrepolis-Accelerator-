@@ -7,7 +7,7 @@ import { ReactComponent as UserIcon } from '../../images/icons/user-default.svg'
 import { ReactComponent as LogoutIcon } from '../../images/icons/log-out.svg';
 import { useAuthContext } from '../../utils/context';
 
-const Header = memo(props => {
+const Header = props => {
   const { request } = useHttp();
 
   const [page, setPage] = useState(1);
@@ -56,6 +56,6 @@ const Header = memo(props => {
       </div>
     </header>
   );
-});
+};
 
-export default Header;
+export default memo(Header);

@@ -40,7 +40,7 @@ function ResetPasswordPage(props) {
     }
   }, []);
 
-  const handleResetPassword = async _e => {
+  const handleResetPassword = async () => {
     const { token } = parseParams();
     try {
       await request('/users/password', 'PUT', {

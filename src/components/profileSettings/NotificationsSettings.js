@@ -46,8 +46,8 @@ function NotificationsSettings() {
   };
 
   const handleToggleNotifications = (_e, value) => {
-    setValues(values => ({
-      ...values,
+    setValues(oldValues => ({
+      ...oldValues,
       notificationsEnabled: value,
     }));
   };

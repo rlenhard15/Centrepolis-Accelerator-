@@ -45,8 +45,8 @@ function AssessmentsPage(props) {
   const changeSubCategory = async activeCategory => {
     if (activeCategory !== state.activeCategory) {
       const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(activeCategory)}`);
-      setState(state => ({
-        ...state,
+      setState(oldState => ({
+        ...oldState,
         subCategories,
         activeCategory,
       }));

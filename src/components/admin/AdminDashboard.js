@@ -12,7 +12,6 @@ import { useAuthContext } from '../../utils/context';
 import useHttp from '../../hooks/useHttp.hook';
 
 import Loader from '../loader/Loader';
-import { fullNameOrEmail } from '../../utils/helpers';
 import AcceleatorPopup from '../startup/AcceleatorPopup';
 
 const USER_INVITE_MODAL = 'USER_INVITE_MODAL';
@@ -21,7 +20,6 @@ const ACCELERATOR_MODAL = 'CREATE_ACCELERATOR_MODAL';
 
 function Dashboard() {
   const {
-    authData: { user },
     isSuperAdmin,
     logOut,
     isAdmin,
@@ -62,17 +60,17 @@ function Dashboard() {
     setModal({ type: USER_INVITE_MODAL });
   };
 
-  const handleIviteAdmin = _admin => {
+  const handleIviteAdmin = () => {
     getMembersRequest();
     toastr.success('Admin has been invited', 'Success');
   };
 
-  const handleCreateStartup = _startup => {
+  const handleCreateStartup = () => {
     getMembersRequest();
     toastr.success('Startup has been created', 'Success');
   };
 
-  const handleCreateAccelerator = _accelerator => {
+  const handleCreateAccelerator = () => {
     getAcceleratorsRequest();
     toastr.success('Accelerator has been created', 'Success');
   };

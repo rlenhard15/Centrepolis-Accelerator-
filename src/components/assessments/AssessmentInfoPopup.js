@@ -36,7 +36,7 @@ function AssessmentInfo(props) {
         the acquisition phase of a program, developed at NASA during the 1970s. The use of TRLs
         enables consistent, uniform discussions of technical maturity across different types of
         technology.</p>
-      <p>A technology's TRL is determined during a Technology Readiness Assessment (TRA) that
+      <p>A technology&apos;s TRL is determined during a Technology Readiness Assessment (TRA) that
         examines program concepts, technology requirements, and demonstrated technology
         capabilities. TRLs are based on a scale from 1 to 9 with 9 being the most mature
         technology.</p>

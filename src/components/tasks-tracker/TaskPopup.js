@@ -82,21 +82,21 @@ function TaskPopup(props) {
 
   const handleChangeSelect = (e, name) => {
     if (name === 'selectedCategory') {
-      setState(state => ({
-        ...state,
+      setState(oldState => ({
+        ...oldState,
         [name]: e,
         selectedSubcategory: '',
         selectedStage: '',
       }));
     } else if (name === 'selectedSubcategory') {
-      setState(state => ({
-        ...state,
+      setState(oldState => ({
+        ...oldState,
         [name]: e,
         selectedStage: '',
       }));
     } else {
-      setState(state => ({
-        ...state,
+      setState(oldState => ({
+        ...oldState,
         [name]: e,
       }));
     }
@@ -141,8 +141,8 @@ function TaskPopup(props) {
         value: category.id,
         label: category.title,
       }));
-      setState(state => ({
-        ...state,
+      setState(oldState => ({
+        ...oldState,
         currentAssessmentInfo: assessment,
         riskCategories,
         userOptions,

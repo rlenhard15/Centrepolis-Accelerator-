@@ -2,7 +2,7 @@ import React from 'react';
 
 import './Loader.scss';
 
-function Loader(props) {
+function Loader() {
   return (
     <div className="loader">
       <div className="loader-block">

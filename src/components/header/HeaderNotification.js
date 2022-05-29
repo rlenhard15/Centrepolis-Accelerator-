@@ -121,11 +121,11 @@ function HeaderNotification(props) {
                         ref={i + 1 === props.notifications.length ? ref : null}
                       >
                         <span>{assignedUsers(notification.task)} </span>
-                        has created new task for you "{notification.task?.title}"
+                        has created new task for you &ldquo;{notification.task?.title}&ldquo;
                         <p>{formatTime(notification.created_at)}</p>
                       </li>
                     ))
-                    : <span className="notification-message">You don't have notifications</span>
+                    : <span className="notification-message">You don&apos;t have notifications</span>
                 }
               </ul>
             ) : null

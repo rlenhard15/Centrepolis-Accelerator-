@@ -40,16 +40,17 @@ function StartupsTable({
   const mapStartupsToRow = () => startupsData.startups.map(startup => ({
     id: startup.id,
     row: [
-      <Link to={`/assessments/${startup.id}`} className="startups-link">
+      <Link key="link" to={`/assessments/${startup.id}`} className="startups-link">
         {startup.name}
       </Link>,
-      <div className="startups-st-admins">
+      <div key="admin" className="startups-st-admins">
         {getUsersNames(startup.team_leads)}
       </div>,
       formAssessmentRisk(startup.assessments_risk_list, 'CRL'),
       formAssessmentRisk(startup.assessments_risk_list, 'TRL'),
       formAssessmentRisk(startup.assessments_risk_list, 'MRL'),
       <RowMenu
+        key="menu"
         openEditStartupPopup={() => openEditStartupPopup(startup.id, startup.name)}
         handleDeleteStartUp={() => handleDeleteStartUp(startup.id)}
       />,

@@ -26,25 +26,25 @@ function TasksTracker(props) {
 
   const handleChangePage = async (_event, newPage) => {
     await getAllTasksRequest(newPage + 1);
-    setState(state => ({
-      ...state,
+    setState(oldState => ({
+      ...oldState,
       page: newPage,
     }));
   };
 
-  const addTask = async _newTask => {
+  const addTask = async () => {
     await getAllTasksRequest(state.page + 1);
-    setState(state => ({
-      ...state,
+    setState(oldState => ({
+      ...oldState,
       showPopup: false,
     }));
     toastr.success('Task has been created', 'Success');
   };
 
-  const changeTask = async _updatedTask => {
+  const changeTask = async () => {
     await getAllTasksRequest(state.page + 1);
-    setState(state => ({
-      ...state,
+    setState(oldState => ({
+      ...oldState,
       showPopup: false,
     }));
     toastr.success('Task has been updated', 'Success');
@@ -65,8 +65,8 @@ function TasksTracker(props) {
       total_pages: totalPages,
       tasks,
     } = await request(`/api/tasks?startup_id=${props.startupId}&page=${page}`);
-    setState(state => ({
-      ...state,
+    setState(oldState => ({
+      ...oldState,
       tasks,
       totalPages,
       loading: false,
