@@ -21,6 +21,7 @@ function InviteTeamPopup(props) {
     isAdmin,
     isSuperAdmin,
   } = useAuthContext();
+  const [accelerator, setAccelerator] = useState(null);
 
   const inviteFields = {
     firstName: '',
@@ -34,7 +35,15 @@ function InviteTeamPopup(props) {
     startupId: props.startupId,
   };
 
+  const acceleratorOptions = (props.accelerators || []).map(accel => ({
+    value: accel.id,
+    label: accel.name,
+  }));
+
   const inviteTeamRequest = async () => {
+    if (isSuperAdmin && !accelerator) {
+      setErrors({ accelerator: 'This Field is Required' });
+    }
     try {
       const user = {
         email: values.email,
@@ -42,6 +51,7 @@ function InviteTeamPopup(props) {
         startup_id: values.startupId,
         first_name: values.firstName,
         last_name: values.lastName,
+        accelerator_id: accelerator.value,
       };
 
       const newCustomer = await request('api/users', 'POST', { user });
@@ -57,13 +67,16 @@ function InviteTeamPopup(props) {
     loading,
     request,
   } = useHttp();
+  
   const {
     values,
     errors,
     handleChange,
     setValues,
     handleSubmit,
+    setErrors
   } = useForm(inviteTeamRequest, validate, inviteFields);
+
   const [inviteErrors, setInviteErrors] = useState({
     inviteEmailError: false,
   });
@@ -167,8 +180,20 @@ function InviteTeamPopup(props) {
               error={errors.email || inviteErrors.inviteEmailError}
               errorText={errors.email_message || '* this email has already been taken'}
             />
-            {(!isTeamLead && props.startupId)
-            && (
+            {isSuperAdmin && (
+              <CustomSelect
+                label="Accelerator"
+                name="accelerator"
+                isDisabled={acceleratorOptions.length === 0}
+                options={acceleratorOptions}
+                placeholder="List of accelerators"
+                value={accelerator}
+                onChange={setAccelerator}
+                error={errors.accelerator}
+                maxMenuHeight={180}
+              />
+            )}
+            {(!isTeamLead && props.startupId) && (
               <CustomSelect
                 label="User type"
                 placeholder="Select user type"

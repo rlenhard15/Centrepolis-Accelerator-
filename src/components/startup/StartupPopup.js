@@ -17,6 +17,7 @@ function StartupPopup(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [currentAdmins, setCurrentAdmins] = useState([]);
+  const [accelerator, setAccelerator] = useState(null);
 
   const {
     handleClosePopup,
@@ -80,12 +81,16 @@ function StartupPopup(props) {
         name: values.startupName,
         admins_startups_attributes: currentAdmins.map(({ value }) => ({ admin_id: value })),
       } : { name: values.startupName };
+    const accelerator_id = isSuperAdmin ? accelerator.value : null;
 
     if (startupId) {
       const updatedStartup = await request(`api/startups/${startupId}`, 'PUT', { startup });
       handleCreateStartup(updatedStartup);
     } else {
-      const newStartup = await request('api/startups', 'POST', { startup });
+      const newStartup = await request('api/startups', 'POST', {
+        accelerator_id,
+        startup
+      });
       handleCreateStartup(newStartup);
     }
 
@@ -112,10 +117,15 @@ function StartupPopup(props) {
     .map((admin, i) => ({
       value: admin.id,
       label:
-  <div ref={i + 1 === admins.length ? ref : null}>
-    {admin.first_name} {admin.last_name}
-  </div>,
+        <div ref={i + 1 === admins.length ? ref : null}>
+          {admin.first_name} {admin.last_name}
+        </div>,
     }));
+
+  const acceleratorOptions = (props.accelerators || []).map(accel => ({
+    value: accel.id,
+    label: accel.name,
+  }));
 
   return (
     <div className="popup">
@@ -138,7 +148,17 @@ function StartupPopup(props) {
               error={errors.startupName}
               errorText={errors.startupNameMessage}
             />
-            {isSuperAdmin && (
+            {isSuperAdmin && [
+              <CustomSelect
+                label="Accelerator"
+                name="accelerator"
+                isDisabled={acceleratorOptions.length === 0 || startupLoading}
+                options={acceleratorOptions}
+                placeholder="List of accelerators"
+                value={accelerator}
+                onChange={setAccelerator}
+                maxMenuHeight={180}
+              />,
               <CustomSelect
                 label="Assigned User"
                 isDisabled={adminOptions.length === 0 || startupLoading}
@@ -149,7 +169,7 @@ function StartupPopup(props) {
                 maxMenuHeight={180}
                 isMulti
               />
-            )}
+            ]}
             <CustomButton
               type="submit"
               label={startupId ? 'Save' : 'Create'}

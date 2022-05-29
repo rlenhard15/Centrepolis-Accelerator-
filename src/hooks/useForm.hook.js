@@ -31,6 +31,7 @@ const useForm = (callback, validate, initialValues) => {
     setValues,
     values,
     errors,
+    setErrors,
   };
 };
 

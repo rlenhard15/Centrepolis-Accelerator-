@@ -6,7 +6,7 @@ import { CustomButton } from '../common/Button';
 
 import useHttp from '../../hooks/useHttp.hook';
 import useForm from '../../hooks/useForm.hook';
-import validate from '../../validationRules/createStartup';
+import validate from '../../validationRules/createAccelerator';
 
 import { ReactComponent as CloseIcon } from '../../images/icons/close-icon.svg';
 

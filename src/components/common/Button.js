@@ -7,7 +7,7 @@ import './Button.scss';
 export function CustomButton(props) {
   return (
     <Button
-      className={`button ${props.className}`}
+      className={`${props.className} button`}
       type={props.type}
       variant={props.variant}
       disabled={props.disabled}

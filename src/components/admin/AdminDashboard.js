@@ -26,7 +26,6 @@ function Dashboard() {
     logOut,
     isAdmin,
   } = useAuthContext();
-  console.log(user, isSuperAdmin);
   const {
     loading,
     request,
@@ -99,8 +98,8 @@ function Dashboard() {
 
   const getAcceleratorsRequest = async () => {
     try {
-      const accels = await request(`/api/accelerators`);
-      setAccelerators(accels);
+      const response = await request(`/api/accelerators`);
+      setAccelerators(response.accelerators);
     } catch (err) {
       if (err.status === 403 || err.status === 401) {
         logOut();
@@ -118,6 +117,7 @@ function Dashboard() {
       case USER_INVITE_MODAL:
         return (
           <InviteTeamPopup
+            accelerators={accelerators}
             handleClosePopup={handleCloseModal}
             addCustomers={handleIviteAdmin}
           />
@@ -125,6 +125,7 @@ function Dashboard() {
       case STARTUP_MODAL:
         return (
           <StartupPopup
+            accelerators={accelerators}
             handleClosePopup={handleCloseModal}
             handleCreateStartup={handleCreateStartup}
             startupId={modal.data?.startupId}
@@ -134,8 +135,9 @@ function Dashboard() {
       case ACCELERATOR_MODAL:
         return (
           <AcceleatorPopup
+            accelerators={accelerators}
             handleClosePopup={handleCloseModal}
-            handleCreateStartup={handleCreateAccelerator}
+            handleCreateAccelerator={handleCreateAccelerator}
             startupId={modal.data?.startupId}
             startupName={modal.data?.startupName}
           />
@@ -148,38 +150,36 @@ function Dashboard() {
   useEffect(() => {
     if (isAdmin || isSuperAdmin) {
       getMembersRequest();
+      getAcceleratorsRequest();
     }
   }, [page]);
 
-  if (loading && !startupsData) return <Loader />;
-
-  const displayName = fullNameOrEmail(user);
+  if (loading && !startupsData) {
+    return <Loader />;
+  }
   return (
     <>
       {startupsData?.startups.length ? (
           <>
-            <div className="dashboard-content-header">
-              <h3 className="dashboard-title">
-                {displayName ? `Welcome, ${displayName}!` : 'Welcome!'}
-              </h3>
-              <div className="dashboard-content-buttons">
+            <div className="dashboard-content-buttons space-x-5 justify-center mb-5">
+              <CustomButton
+                label="Add Startup"
+                handleClick={openCreateStartupPopup}
+              />
+              {isSuperAdmin
+              && [
                 <CustomButton
-                  label="Add Startup"
-                  variant="outlined"
-                  handleClick={openCreateStartupPopup}
+                  key='accelerator'
+                  label="Add Accelerator"
+                  className="ml-5"
+                  handleClick={openCreateAcceleratorPopup}
+                />,
+                <CustomButton
+                  key='admin'
+                  label="Add New Admin"
+                  handleClick={openShowInvitePopup}
                 />
-                {isSuperAdmin
-                && [
-                  <CustomButton
-                    label="Add Accelerator"
-                    handleClick={openCreateAcceleratorPopup}
-                  />,
-                  <CustomButton
-                    label="Add New Admin"
-                    handleClick={openShowInvitePopup}
-                  />
-                ]}
-              </div>
+              ]}
             </div>
             <StartupsTable
               startupsData={startupsData}
@@ -202,6 +202,7 @@ function Dashboard() {
           <EmptyDashboard
             openCreateStartupPopup={openCreateStartupPopup}
             openShowInvitePopup={openShowInvitePopup}
+            openCreateAcceleratorPopup={openCreateAcceleratorPopup}
           />
         )}
       {renderModal()}

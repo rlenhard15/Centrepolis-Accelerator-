@@ -82,7 +82,7 @@ function Assessments(props) {
       setAssessments(assessments, startup);
     } catch (err) {
       if (err.status === 403 || err.status === 401) {
-        logOut();
+       // logOut();
       }
     }
   };
