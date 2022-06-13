@@ -37,7 +37,7 @@ function PasswordSettings() {
         password: values.newPassword,
       };
 
-      await request('api/users/change_password', 'PUT', { user });
+      await request('/api/users/change_password', 'PUT', { user });
       toastr.success('Your password has been updated', 'Success');
     } catch (err) {
       const currentPasswordError = err.body?.current_password?.[0];

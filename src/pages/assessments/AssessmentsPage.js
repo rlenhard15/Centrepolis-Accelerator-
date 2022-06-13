@@ -67,7 +67,7 @@ function AssessmentsPage(props) {
       const subCategories = await request(`/api/assessments/${id}/categories/${subCategoriesUrl(categories[0].id)}`);
       const startup = (isAdmin || isSuperAdmin) && (state.startup
         ? state.startup
-        : await request(`api/startups/${startupId}`));
+        : await request(`/api/startups/${startupId}`));
 
       setState({
         ...state,

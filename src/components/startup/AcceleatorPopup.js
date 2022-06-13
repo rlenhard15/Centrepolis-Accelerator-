@@ -37,7 +37,7 @@ function AcceleratorPopup(props) {
   const createAccelerator = async () => {
     const name = values.name;
 
-    const accelerator = await request('api/accelerators', 'POST', { name });
+    const accelerator = await request('/api/accelerators', 'POST', { name });
     handleCreateAccelerator(accelerator);
     handleClosePopup();
   };

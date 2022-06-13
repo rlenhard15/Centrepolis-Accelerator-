@@ -35,7 +35,7 @@ function NotificationsSettings() {
 
   const changePassword = async () => {
     try {
-      const user = await request('api/users/update_email_notification', 'PUT', {
+      const user = await request('/api/users/update_email_notification', 'PUT', {
         email_notification: values.notificationsEnabled.toString(),
       });
       handleUpdateUser(user);

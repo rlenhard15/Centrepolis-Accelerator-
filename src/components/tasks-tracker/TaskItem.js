@@ -68,7 +68,7 @@ const TaskItem = props => {
         {
           text: 'Send Reminder',
           onClick: async () => {
-            await request(`api/tasks/${props.id}/send_task_reminder`);
+            await request(`/api/tasks/${props.id}/send_task_reminder`);
             toastr.success('Reminder has been sent!', 'Success');
           },
         },

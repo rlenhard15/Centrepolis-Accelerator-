@@ -38,7 +38,7 @@ function PersonSettings() {
 
   const updateUser = async () => {
     try {
-      const user = await request('api/users/update_profile', 'PUT', {
+      const user = await request('/api/users/update_profile', 'PUT', {
         user: {
           first_name: values.firstName,
           last_name: values.lastName,

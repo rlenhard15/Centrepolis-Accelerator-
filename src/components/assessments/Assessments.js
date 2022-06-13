@@ -75,8 +75,8 @@ function Assessments(props) {
 
   const getAssessmentsRequest = async () => {
     try {
-      const startup = await request(`api/startups/${id}`);
-      const assessments = await request(`api/assessments?startup_id=${id}`);
+      const startup = await request(`/api/startups/${id}`);
+      const assessments = await request(`/api/assessments?startup_id=${id}`);
 
       setAssessments(assessments, startup);
     } catch (err) {

@@ -54,7 +54,7 @@ function InviteTeamPopup(props) {
         accelerator_id: accelerator.value,
       };
 
-      const newCustomer = await request('api/users', 'POST', { user });
+      const newCustomer = await request('/api/users', 'POST', { user });
 
       props.addCustomers(newCustomer, values.userType.value);
       props.handleClosePopup();

@@ -62,7 +62,7 @@ function StartupPopup(props) {
   }, [currentPage]);
 
   async function getInitStartupData() {
-    const { admins: newAdmins } = await startupRequest(`api/startups/${startupId}`);
+    const { admins: newAdmins } = await startupRequest(`/api/startups/${startupId}`);
     setCurrentAdmins(newAdmins.map(admin => ({
       value: admin.id,
       label: `${admin.first_name} ${admin.last_name}`,
@@ -70,7 +70,7 @@ function StartupPopup(props) {
   }
 
   async function fetchAdmins() {
-    const response = await request(`api/admins?page=${currentPage}`);
+    const response = await request(`/api/admins?page=${currentPage}`);
     setTotalPage(response.total_pages);
     setAdmins(newAdmins => newAdmins.concat(response.admins));
   }
@@ -84,10 +84,10 @@ function StartupPopup(props) {
     const accelerator_id = isSuperAdmin ? accelerator.value : null;
 
     if (startupId) {
-      const updatedStartup = await request(`api/startups/${startupId}`, 'PUT', { startup });
+      const updatedStartup = await request(`/api/startups/${startupId}`, 'PUT', { startup });
       handleCreateStartup(updatedStartup);
     } else {
-      const newStartup = await request('api/startups', 'POST', {
+      const newStartup = await request('/api/startups', 'POST', {
         accelerator_id,
         startup
       });

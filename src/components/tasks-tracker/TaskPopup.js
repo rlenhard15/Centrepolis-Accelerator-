@@ -240,7 +240,7 @@ function TaskPopup(props) {
   };
 
   const getUsersOptions = async () => {a
-    const data = await request(`api/startups/${props.startupId}`);
+    const data = await request(`/api/startups/${props.startupId}`);
     return uniqBy(data.members.concat(data.admins), 'id')
       .map(member => ({
         value: member.id,
