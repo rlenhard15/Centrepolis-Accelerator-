@@ -41,7 +41,7 @@ function InviteTeamPopup(props) {
   }));
 
   const inviteTeamRequest = async () => {
-    if (isSuperAdmin && !accelerator) {
+    if (isSuperAdmin && !accelerator && !props.acceleratorId) {
       setErrors({ accelerator: 'This Field is Required' });
     }
     try {
@@ -51,7 +51,7 @@ function InviteTeamPopup(props) {
         startup_id: values.startupId,
         first_name: values.firstName,
         last_name: values.lastName,
-        accelerator_id: accelerator.value,
+        accelerator_id: accelerator?.value || props.acceleratorId,
       };
 
       const newCustomer = await request('/api/users', 'POST', { user });
@@ -67,7 +67,7 @@ function InviteTeamPopup(props) {
     loading,
     request,
   } = useHttp();
-  
+
   const {
     values,
     errors,
@@ -180,7 +180,7 @@ function InviteTeamPopup(props) {
               error={errors.email || inviteErrors.inviteEmailError}
               errorText={errors.email_message || '* this email has already been taken'}
             />
-            {isSuperAdmin && (
+            {isSuperAdmin && !props.acceleratorId && (
               <CustomSelect
                 label="Accelerator"
                 name="accelerator"

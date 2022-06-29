@@ -21,6 +21,7 @@ const useHttp = () => {
       if (authData) {
         headers.Authorization = `Bearer ${authData.auth_token}`;
       }
+      console.log(process.env.REACT_APP_BACKEND_URL);
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}${endpoint}`, {
         method,
         body,

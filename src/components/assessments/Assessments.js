@@ -131,7 +131,6 @@ function Assessments(props) {
     members,
     team_leads: teamLeads,
   } = state.startup;
-
   return (
     <div className={`assessment ${!isMember ? 'admin' : 'customer'}`}>
       <div className="assessment-header">
@@ -209,6 +208,7 @@ function Assessments(props) {
         <InviteTeamPopup
           handleClosePopup={handleCloseInviteMemberPopup}
           startupId={id}
+          acceleratorId={state.startup.accelerator_id}
           addCustomers={handleAddUser}
         />
       )}

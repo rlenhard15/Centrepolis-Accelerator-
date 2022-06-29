@@ -34,7 +34,7 @@ const priority = [
 ];
 
 function TaskPopup(props) {
-  const { isTeamLead } = useAuthContext();
+  const { isTeamLead, isAdmin, isSuperAdmin } = useAuthContext();
 
   const {
     loading,
@@ -215,7 +215,7 @@ function TaskPopup(props) {
     } = getCategoriesAndSelectedCategory(assessment, taskInfo.category);
     const taskPriority = priority.find(p => p.value === taskInfo.priority);
 
-    const assignedUsers = isTeamLead
+    const assignedUsers = isTeamLead || isAdmin || isSuperAdmin
       ? taskInfo.members_for_task
       : taskInfo.users_for_task;
 
@@ -239,7 +239,7 @@ function TaskPopup(props) {
     });
   };
 
-  const getUsersOptions = async () => {a
+  const getUsersOptions = async () => {
     const data = await request(`/api/startups/${props.startupId}`);
     return uniqBy(data.members.concat(data.admins), 'id')
       .map(member => ({
@@ -278,7 +278,7 @@ function TaskPopup(props) {
     } else {
       getAssessmentCategoriesInfo(props.assessments[0].id);
     }
-  }, []);
+  }, [props.taskForEdit, props.infoForCreateTaskFromStage]);
 
   return (
     <div className="popup">
