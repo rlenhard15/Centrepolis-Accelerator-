@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-
-import { ReactComponent as DeleteIcon } from '../../images/icons/delete-icon.svg';
 import Table from '../common/Table';
 import { useAuthContext } from '../../utils/context';
 import useHttp from '../../hooks/useHttp.hook';
 
 import './AssessmentUsers.scss';
+import AssessmentUsersRowMenu from './AssessmentUsersRowMenu';
 
 const headers = [
   {
@@ -75,6 +74,10 @@ export function AssessmentUsers({
     setRows(rows.filter(r => r.id !== id));
   };
 
+  const handleResendInvite = id => async () => {
+    await request(`/api/users/resend_invite?user_id=${id}`, 'GET');
+  };
+
   const formatDate = timestamp => {
     const date = new Date(timestamp);
     const day = date.getUTCDay();
@@ -89,7 +92,11 @@ export function AssessmentUsers({
   const rowsData = isSuperAdmin || isAdmin
     ? rows.map(r => ({
       ...r,
-      row: [...r.row, <DeleteIcon key={r.id} className="delete-icon" onClick={handleDeleteUser(r.id)} />],
+      row: [...r.row, <AssessmentUsersRowMenu
+        key={r.id}
+        handleResendInvite={handleResendInvite(r.id)}
+        handleDeleteUser={handleDeleteUser(r.id)}
+      />],
     }))
     : rows;
 
