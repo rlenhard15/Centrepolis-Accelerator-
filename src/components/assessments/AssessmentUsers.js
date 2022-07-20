@@ -75,7 +75,7 @@ export function AssessmentUsers({
   };
 
   const handleResendInvite = id => async () => {
-    await request(`/api/users/resend_invite?user_id=${id}`, 'GET');
+    await request(`/users/resend_invite?user_id=${id}`, 'GET');
   };
 
   const formatDate = timestamp => {
