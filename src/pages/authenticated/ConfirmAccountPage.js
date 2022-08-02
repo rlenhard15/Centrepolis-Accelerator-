@@ -12,6 +12,7 @@ import validate from '../../validationRules/confirmAccount';
 import { useAuthContext } from '../../utils/context';
 
 import './AuthorizationPage.scss';
+import { useHistory } from 'react-router-dom';
 
 function ConfirmAccountPage(props) {
   const confirmFields = {
@@ -19,7 +20,7 @@ function ConfirmAccountPage(props) {
     first_name: '',
     last_name: '',
   };
-
+  const history = useHistory();
   const {
     loading,
     request,
@@ -51,6 +52,7 @@ function ConfirmAccountPage(props) {
     try {
       const userData = await request('/users/password', 'PUT', { reset_password_token: token, ...values });
       logIn(userData, values.keepSignedIn);
+      history.push('/.');
     } catch (err) {
       toastr.error('Something went wrong.', 'Error');
     }
@@ -104,7 +106,7 @@ function ConfirmAccountPage(props) {
             error={errors.password}
             errorText={errors.password_message}
           />
-          <div className="flex flex-row items-center">
+          <div className="flex flex-row items-center w-full">
             <InputField
               onChange={handleChange}
               value={values.keepSignedIn}
