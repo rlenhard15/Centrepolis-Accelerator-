@@ -146,10 +146,8 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    if (isAdmin || isSuperAdmin) {
-      getMembersRequest();
-      getAcceleratorsRequest();
-    }
+    getMembersRequest();
+    getAcceleratorsRequest();
   }, [page]);
 
   if (loading && !startupsData) {
@@ -160,24 +158,24 @@ function Dashboard() {
       {startupsData?.startups.length ? (
           <>
             <div className="dashboard-content-buttons space-x-5 justify-center mb-5">
-              <CustomButton
+              {(isAdmin || isSuperAdmin) && <CustomButton
                 label="Add Startup"
                 handleClick={openCreateStartupPopup}
-              />
+              />}
               {isSuperAdmin
-              && [
-                <CustomButton
-                  key='accelerator'
-                  label="Add Accelerator"
-                  className="ml-5"
-                  handleClick={openCreateAcceleratorPopup}
-                />,
-                <CustomButton
-                  key='admin'
-                  label="Add New Admin"
-                  handleClick={openShowInvitePopup}
-                />
-              ]}
+                && [
+                  <CustomButton
+                    key="accelerator"
+                    label="Add Accelerator"
+                    className="ml-5"
+                    handleClick={openCreateAcceleratorPopup}
+                  />,
+                  <CustomButton
+                    key="admin"
+                    label="Add New Admin"
+                    handleClick={openShowInvitePopup}
+                  />
+                ]}
             </div>
             <StartupsTable
               startupsData={startupsData}
