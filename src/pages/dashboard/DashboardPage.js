@@ -4,15 +4,11 @@ import { Route } from 'react-router-dom';
 import Header from '../../components/header/Header';
 import DashboardMenu from './DashboardMenu';
 import AdminDashboard from '../../components/admin/AdminDashboard';
-import MemberDashboard from '../../components/member/MemberDashboard';
 import Assessments from '../../components/assessments/Assessments';
-import { useAuthContext } from '../../utils/context';
 
 import './DashboardPage.scss';
 
 function DashboardPage(props) {
-  const { isMember } = useAuthContext();
-
   return (
     <div className="dashboard-page">
       <DashboardMenu />
