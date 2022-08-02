@@ -61,6 +61,11 @@ export const useRoutes = (isAuthenticated, authData) => {
         }
         <Route path="/settings" render={() => <ProfileSettings />} />
         <Route path="/forgot-password" component={ForgotPasswordPage} />
+        <Route path="/sign_in" component={SignInPage} />
+        <Route path="/forgot-password" component={ForgotPasswordPage} />
+        <Route path="/users/password" component={ConfirmAccountPage} />
+        <Route path="/users/password-reset" component={ResetPasswordPage} />
+        <Redirect to="/sign_in" />
         <Redirect to="/" />
       </Switch>
     );
