@@ -16,13 +16,7 @@ export const useRoutes = (isAuthenticated, authData) => {
         <Route
           exact
           path="/"
-          render={props => {
-            if (authData.user_type === 'Member' || authData.user_type === 'TeamLead') {
-              return <Redirect to={`/assessments/${authData.user.startup_id}`} />;
-            }
-
-            return <DashBoardPage userData={authData} {...props} />;
-          }}
+          render={props =>  <DashBoardPage userData={authData} {...props} />}
         />
         {
           authData.user_type !== 'Member' ? [
