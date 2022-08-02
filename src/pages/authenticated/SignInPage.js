@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import DashboardMenu from '../dashboard/DashboardMenu';
 import { InputField } from '../../components/common/InputField';
@@ -19,6 +19,7 @@ function SignInPage() {
     password: '',
     accelerator_id: Number(process.env.REACT_APP_ACCELERATOR_ID),
   };
+  const history = useHistory();
   const {
     loading,
     request,
@@ -41,6 +42,7 @@ function SignInPage() {
     try {
       const userData = await request('/users/sign_in', 'POST', { user: { ...values } });
       logIn(userData, values.keepSignedIn);
+      history.push('/');
     } catch (err) {
       if (err.status === 401) setAuthorizationError(true);
     }
