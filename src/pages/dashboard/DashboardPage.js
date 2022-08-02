@@ -19,30 +19,17 @@ function DashboardPage(props) {
       <div className="dashboard">
         <Header className="board" {...props} />
         <div className="dashboard-content">
-          {
-            !isMember ? (
-              <>
-                <Route exact path="/" render={() => <AdminDashboard />} />
-                <Route
-                  path="/assessments/:id/"
-                  render={() => (
-                    <Assessments
-                      {...props}
-                      isPage={false}
-                      userType={props.userData.user_type}
-                    />
-                  )}
-                />
-              </>
-            )
-              : (
-                <MemberDashboard
-                  userType={props.userData.user_type}
-                  userData={props.userData}
-                  customer={props.userData.user}
-                />
-              )
-          }
+          <Route exact path="/" render={() => <AdminDashboard />} />
+          <Route
+            path="/assessments/:id/"
+            render={() => (
+              <Assessments
+                {...props}
+                isPage={false}
+                userType={props.userData.user_type}
+              />
+            )}
+          />
         </div>
       </div>
     </div>
