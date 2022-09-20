@@ -99,11 +99,15 @@ function InviteTeamPopup(props) {
     if (isSuperAdmin) {
       return [
         {
-          label: 'Admin',
+          label: 'Startup Team Lead',
+          value: 'TeamLead',
+        },
+        {
+          label: 'Accelerator Admin',
           value: 'Admin',
         },
         {
-          label: 'Member',
+          label: 'Startup Member',
           value: 'Member',
         },
       ];
@@ -112,15 +116,15 @@ function InviteTeamPopup(props) {
     if (isAdmin) {
       return [
         {
-          label: 'Team Lead',
+          label: 'Startup Team Lead',
           value: 'TeamLead',
         },
         {
-          label: 'Member',
+          label: 'Startup Member',
           value: 'Member',
         },
         {
-          label: 'Admin',
+          label: 'Accelerator Admin',
           value: 'Admin',
         },
       ];
@@ -129,7 +133,11 @@ function InviteTeamPopup(props) {
     if (isTeamLead) {
       return [
         {
-          label: 'Member',
+          label: 'Startup Team Lead',
+          value: 'TeamLead',
+        },
+        {
+          label: 'Startup Member',
           value: 'Member',
         },
       ];
