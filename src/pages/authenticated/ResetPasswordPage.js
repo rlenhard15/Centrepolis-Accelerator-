@@ -51,8 +51,10 @@ function ResetPasswordPage(props) {
 
       setIsSuccess(true);
     } catch (err) {
-      console.log(err, tokenError);
-      setTokenError(true);
+      if (err.body.errors?.[0]?.detail?.reset_password_token?.[0] === 'is invalid') {
+        setTokenError(true);
+      }
+      console.log(err.body.errors?.[0]?.detail, tokenError);
       toastr.error('Something went wrong', 'Error');
     }
   };
@@ -102,8 +104,8 @@ function ResetPasswordPage(props) {
                 name="password"
                 value={values.password}
                 onChange={handleChange}
-                error={errors.password}
-                errorText={errors.passwordError}
+                error={tokenError || errors.password}
+                errorText={tokenError ? 'Reset password token has expired.' : errors.passwordError}
               />
               <CustomButton
                 className="auth-page-form-submit-btn"

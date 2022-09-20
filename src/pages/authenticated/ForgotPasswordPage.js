@@ -29,7 +29,6 @@ function ForgotPasswordPage() {
     handleSubmit,
   } = useForm(() => handleForgotPassword(), validate, fields);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [tokenError, setTokenError] = useState(false);
 
   const handleForgotPassword = async () => {
     try {
@@ -41,8 +40,6 @@ function ForgotPasswordPage() {
 
       setIsSuccess(true);
     } catch (err) {
-      console.log(err, tokenError);
-      setTokenError(true);
       toastr.error('Something went wrong', 'Error');
     }
   };
