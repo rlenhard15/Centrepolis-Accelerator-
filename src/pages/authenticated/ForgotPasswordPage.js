@@ -41,7 +41,8 @@ function ForgotPasswordPage() {
 
       setIsSuccess(true);
     } catch (err) {
-      console.log(err);
+      console.log(err, tokenError);
+      setTokenError(true);
       toastr.error('Something went wrong', 'Error');
     }
   };
